@@ -1,4 +1,7 @@
+# Ignore all files in application/config but keep index.html
 application/config/*
 !application/config/index.html
 
+# Ignore everything in logs
 application/logs/*
+!application/logs/index.html  # (if you want to keep an index.html)
