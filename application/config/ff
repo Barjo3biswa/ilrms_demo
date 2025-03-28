@@ -1,0 +1,223 @@
+87,109d86
+< 
+< #############################################################################################
+< define('BASU_URL','http://141.148.207.152/');
+< define('DHAR_URL','http://144.24.127.231/');
+< define('LANDHUB_URL','http://144.24.127.231/');
+< define('CHITHA_URL','http://141.148.199.72/');
+< define('GET_API_IP', '144.24.127.231');
+< 
+< define('DHAR_APP',DHAR_URL.'dharitree_oci/');
+< define('RTPS1_APP',BASU_URL.'rtpsdemo/');
+< define('RTPS2_APP',BASU_URL.'rtpsmb2demo/');
+< define('ILRMS_APP',BASU_URL.'ilrmsdemo/');
+< define('LANDHUB_APP',LANDHUB_URL.'ilrmsdemo/');
+< define('CHITHA_APP',CHITHA_URL.'chithaentry/');
+< 
+< defined('BASE_UPLOAD_DIR') OR define('BASE_UPLOAD_DIR', '/u02/demo/ilrmsdemo/');
+< if (is_dir(BASE_UPLOAD_DIR) === false) mkdir(BASE_UPLOAD_DIR,0777,true);
+< 
+< defined('BASE_UPLOAD_DIR_OLD_1') OR define('BASE_UPLOAD_OLD_1', '/u01/demo/ilrmsdemo/');
+< if (is_dir(BASE_UPLOAD_OLD_1) === false) mkdir(BASE_UPLOAD_OLD_1,0777,true);
+< #############################################################################################
+< 
+< 
+119,120c96,97
+< defined('BACKUP_JSON_DIR')     OR define('BACKUP_JSON_DIR', BASE_UPLOAD_DIR.'backup_json/');
+< if (is_dir(BACKUP_JSON_DIR) === false) mkdir(BACKUP_JSON_DIR,0777,true);
+---
+> defined('BACKUP_JSON_DIR')     OR define('BACKUP_JSON_DIR', '/u01/ilrms/');
+> 
+144c121
+< define('EKHAJANA_JAMAWASIL_VIEW_API', DHAR_APP.'index.php/dharitreeApi/getJamaWasil');
+---
+> define('EKHAJANA_JAMAWASIL_VIEW_API', '10.177.0.53/Dharitree_bhrigu/index.php/dharitreeApi/getJamaWasil');
+210c187
+< defined('SEND_TO_SDLAC_NOTICE_PATH') or define('SEND_TO_SDLAC_NOTICE_PATH', BASE_UPLOAD_DIR.'uploads/dc_to_sdlac_notice/');
+---
+> defined('SEND_TO_SDLAC_NOTICE_PATH') or define('SEND_TO_SDLAC_NOTICE_PATH', 'uploads/dc_to_sdlac_notice/');
+238c215
+< define('AADHAR_APPLICATION_API_LINK', RTPS2_APP.'Api/applicantAppliedForSettlementServicesByAadhaarNo');
+---
+> define('AADHAR_APPLICATION_API_LINK', 'https://basundhara.assam.gov.in/rtpsmb2demo/Api/applicantAppliedForSettlementServicesByAadhaarNo');
+244c221
+< defined('SEND_TO_SDLAC_NOTICE_PATH') or define('SEND_TO_SDLAC_NOTICE_PATH', BASE_UPLOAD_DIR.'uploads/dc_to_sdlac_notice/');
+---
+> defined('SEND_TO_SDLAC_NOTICE_PATH') or define('SEND_TO_SDLAC_NOTICE_PATH', 'uploads/dc_to_sdlac_notice/');
+388,390c365,367
+< define('AADHAARREGURL', RTPS2_APP."AadhaarAuthentication/verifyAadhaar/");
+< define('AADHAAR_USER_CREATE_FORM', ILRMS_APP."userCreation");
+< define('AADHAAR_REDIRECT_URL',ILRMS_APP."Basundhara/sdlacUserRegistration");
+---
+> define('AADHAARREGURL', "https://basundhara.assam.gov.in/rtpsmb/AadhaarAuthentication/verifyAadhaar/");
+> define('AADHAAR_USER_CREATE_FORM', "https://basundhara.assam.gov.in/ilrmsdemo/userCreation");
+> define('AADHAAR_REDIRECT_URL',"https://basundhara.assam.gov.in/ilrmsdemo/Basundhara/sdlacUserRegistration");
+394,395c371,372
+< define('LINK_AADHAAR_WITH_USER_ACCOUNT', ILRMS_APP."linkAadhaarForm");
+< define('DHAR_SDLAC_ACCOUNT_API', DHAR_APP."index.php/dharitreeApi/createsdlcAccount");
+---
+> define('LINK_AADHAAR_WITH_USER_ACCOUNT', "https://basundhara.assam.gov.in/ilrmsdemo/linkAadhaarForm");
+> define('DHAR_SDLAC_ACCOUNT_API', "http://10.177.0.53/dharitree_bhrigu/index.php/dharitreeApi/createsdlcAccount");
+400,401c377,378
+< define('EKHAJANA_DOWNLOAD_DOCUMENT_API_FOR_MOUZADAR', RTPS2_APP.'Ekhajana/downloadDocumentForCo');
+< define('EKHAJNA_MOUZADAR_PENDING_COUNT_API',RTPS2_APP.'Ekhajana/getMouzdarPendingCount');
+---
+> define('EKHAJANA_DOWNLOAD_DOCUMENT_API_FOR_MOUZADAR', 'https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/downloadDocumentForCo');
+> define('EKHAJNA_MOUZADAR_PENDING_COUNT_API','https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/getMouzdarPendingCount');
+403,404c380,381
+< define('EKHAJNA_MOUZADAR_PENDING_LIST_API',RTPS2_APP.'Ekhajana/getPendingListForMouzadar');
+< define('EKHAJANA_PENDING_CASE_DETAILS_API', RTPS2_APP.'Ekhajana/getEkhajanaPendingCaseDetails');
+---
+> define('EKHAJNA_MOUZADAR_PENDING_LIST_API','https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/getPendingListForMouzadar');
+> define('EKHAJANA_PENDING_CASE_DETAILS_API', 'https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/getEkhajanaPendingCaseDetails');
+407,409c384,386
+< define('API_LINK_MB2', RTPS2_APP.'Api/');
+< define('BASUNDHARA_LOCAL_API', RTPS2_APP.'LocalAPI/');
+< define('BASUNDHARA_PRODUCTION_API', RTPS2_APP.'Api/');
+---
+> define('API_LINK_MB2', 'https://basundhara.assam.gov.in/rtpsmb2demo/Api/');
+> define('BASUNDHARA_LOCAL_API', 'https://basundhara.assam.gov.in/rtpsmb2demo/LocalAPI/');
+> define('BASUNDHARA_PRODUCTION_API', 'https://basundhara.assam.gov.in/rtpsmb/Api/');
+411c388
+< define('API_LINK', RTPS2_APP.'Api/');
+---
+> define('API_LINK', 'https://basundhara.assam.gov.in/rtpsmb2demo/Api/');
+419c396
+< define('EKHAJANA_LAND_DETAILS_UPDATE_MOUZADAR_API', RTPS2_APP.'Ekhajana/updateLandDetailsmouzadar');
+---
+> define('EKHAJANA_LAND_DETAILS_UPDATE_MOUZADAR_API', 'https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/updateLandDetailsmouzadar');
+424c401
+< define('EKHAJANA_PAYMENT_UPDATE_API', RTPS2_APP.'Ekhajana/updatePayment');//For live
+---
+> define('EKHAJANA_PAYMENT_UPDATE_API', 'https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/updatePayment');//For live
+430,431c407,408
+< define('EKHAJANA_REVERT_CASE_API', RTPS2_APP.'Ekhajana/updateRevertDetails');
+< define('EKHAJANA_LAND_DETAILS_UPDATE_API',RTPS2_APP.'Ekhajana/updateLandDetails');
+---
+> define('EKHAJANA_REVERT_CASE_API', 'https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/updateRevertDetails');
+> define('EKHAJANA_LAND_DETAILS_UPDATE_API','https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/updateLandDetails');
+433c410
+< define('PROFILE_UPDATE_DHARITREE_API_LINK', DHAR_APP."index.php/DharitreeApi/changeBasicData");
+---
+> define('PROFILE_UPDATE_DHARITREE_API_LINK', "http://10.177.0.53/dharitree_bhrigu/index.php/DharitreeApi/changeBasicData");
+435,437c412,414
+< define('RTPS_API_LINK ', RTPS2_APP.'Api/');
+< define('EKHAJANA_AADHAAR_PHOTO_FETCH', RTPS2_APP.'Ekhajana/getApplicantPhoto');
+< define('EKHAJANA_LAND_DETAILS_UPDATE_MOUZADAR_OBJECTION_API', RTPS2_APP.'Ekhajana/updateLandDetailsmouzadar');
+---
+> define('RTPS_API_LINK ', 'https://basundhara.assam.gov.in/rtpsmb2demo/Api/');
+> define('EKHAJANA_AADHAAR_PHOTO_FETCH', 'https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/getApplicantPhoto');
+> define('EKHAJANA_LAND_DETAILS_UPDATE_MOUZADAR_OBJECTION_API', 'https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/updateLandDetailsmouzadar');
+447,453c424,428
+< 
+< defined('UPLOAD_DIR') OR define('UPLOAD_DIR', BASE_UPLOAD_DIR.'uploads/mb2/dept/');
+< if (is_dir(UPLOAD_DIR) === false) mkdir(UPLOAD_DIR,0777,true);
+< 
+< define('CABMEMO_UPLOAD_DIR', UPLOAD_DIR.'cabinet_memo_list/');
+< if (is_dir(CABMEMO_UPLOAD_DIR) === false) mkdir(CABMEMO_UPLOAD_DIR,0777,true);
+< 
+---
+> defined('UPLOAD_DIR')  OR define('UPLOAD_DIR', '/u02/ilrmsdemo/uploads/mb2/dept/');
+> define('CABMEMO_UPLOAD_DIR', '/u02/ilrmsdemo/uploads/mb2/dept/cabinet_memo_list/');
+> if (is_dir(CABMEMO_UPLOAD_DIR) === false) {
+>     mkdir(CABMEMO_UPLOAD_DIR);
+> }
+465c440
+< define('EKHAJANA_PRE_ARREAR_YEARS', ['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023']);
+---
+> define('EKHAJANA_PRE_ARREAR_YEARS', ['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022']);
+481,482c456,458
+< define('GET_MINUTE_API_LINK', DHAR_APP.'index.php/DharitreeApi/getMinutes');
+< define('VIEW_CHITHA_API_LINK', DHAR_APP.'index.php/DharitreeApi/generateChithaRegistration');
+---
+> define('GET_MINUTE_API_LINK', '/Dharitree_uat/index.php/DharitreeApi/getMinutes');
+> define('VIEW_CHITHA_API_LINK', 'http://10.177.0.53/Dharitree_uat/index.php/DharitreeApi/generateChithaRegistration');
+> define('GET_API_IP', '10.177.0.53');
+502c478
+<     mkdir(CABMEMO_UPLOAD_DOCS_DIR,0777,true);
+---
+>     mkdir(CABMEMO_UPLOAD_DOCS_DIR);
+507c483
+<     mkdir(NOTIFICATION_UPLOAD_DIR,0777,true);
+---
+>     mkdir(NOTIFICATION_UPLOAD_DIR);
+526,530d501
+< /*
+< //NC VILLAGE
+< define('API_LINK_NC_VILLAGE', CHITHA_APP.'index.php/nc_village/NcVillageApiController/');
+< define('VILLAGE_MAP_PDF_DIR', BASE_UPLOAD_DIR.'uploads/village_data/map_pdf/');
+< if (is_dir(VILLAGE_MAP_PDF_DIR) === false) mkdir(VILLAGE_MAP_PDF_DIR,0777,true);
+531a503,508
+> //NC VILLAGE
+> define('API_LINK_NC_VILLAGE', 'http://10.177.0.37:8080/chithaentry/index.php/nc_village/NcVillageApiController/');
+> define('VILLAGE_MAP_PDF_DIR', '/u02/ilrmsdemo/uploads/village_data/map_pdf/');
+> if (is_dir(VILLAGE_MAP_PDF_DIR) === false) {
+>     mkdir(VILLAGE_MAP_PDF_DIR);
+> }
+548,549c525,528
+< define('NC_VILLAGE_NOTIFICATION_DIR', BASE_UPLOAD_DIR.'uploads/village_data/village_notification/');
+< if (is_dir(NC_VILLAGE_NOTIFICATION_DIR) === false) mkdir(NC_VILLAGE_NOTIFICATION_DIR,0777, true);
+---
+> define('NC_VILLAGE_NOTIFICATION_DIR', '/u02/ilrmsdemo/uploads/village_data/village_notification/');
+> if (is_dir(NC_VILLAGE_NOTIFICATION_DIR) === false) {
+>     mkdir(NC_VILLAGE_NOTIFICATION_DIR,0777, true);
+> }
+552c531
+<     ['dist_code' => '12', 'loc_name' => 'লক্ষীমপূৰ '],
+---
+>     //['dist_code' => '12', 'loc_name' => 'লক্ষীমপূৰ '],
+556a536
+> define('EKHAJANA_LAND_DETAILS_FETCH_URL','https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/getLandDetailsIdFromLdCaseNo');
+558,609d537
+< define('API_LINK_NC_VILLAGE', 'http://141.148.199.72/index.php/nc_village/NcVillageApiController/');
+< 
+< define('VILLAGE_MAP_PDF_DIR', 'village_data/map_pdf/');
+< define('NC_VILLAGE_NOTIFICATION_DIR', 'village_data/village_notification/');
+< define('MAP_PDF_SIZE', '102400');
+< 
+< //ADS
+< define('ADS','ADS');
+< //JDS
+< define('JDS','JDS');
+< 
+< //joint secretary
+< define('DPT_JS','DPT_JS');
+< 
+< //principal secretary
+< define('DPT_PS','DPT_PS');
+< 
+< define('NC_DISTIRTCS', json_encode([
+< //    ['dist_code' => '12', 'loc_name' => 'লক্ষীমপূৰ '],
+<     ['dist_code' => '25', 'loc_name' => 'ধেমাজি'],
+< ]));
+< 
+<  */
+< 
+< 
+< define('API_LINK_NC_VILLAGE', 'http://141.148.199.72/index.php/nc_village/NcVillageApiController/');
+< define('VILLAGE_MAP_PDF_DIR', BASE_UPLOAD_DIR.'uploads/village_data/map_pdf/');
+< if (is_dir(VILLAGE_MAP_PDF_DIR) === false) mkdir(VILLAGE_MAP_PDF_DIR,0777,true);
+< 
+< define('MAP_PDF_SIZE', '102400');
+< 
+< //ADS
+< define('ADS','ADS');
+< //JDS
+< define('JDS','JDS');
+< 
+< define('HOLD_All_MB2_CASES_DATE', '2024-12-31 23:59:59');
+< define('VGR_CHITHA_AREA_VALIDATION', 0);
+< 
+< //joint secretary
+< define('DPT_JS','DPT_JS');
+< 
+< //principal secretary
+< define('DPT_PS','DPT_PS');
+< 
+< define('NC_VILLAGE_NOTIFICATION_DIR', BASE_UPLOAD_DIR.'uploads/village_data/village_notification/');
+< if (is_dir(NC_VILLAGE_NOTIFICATION_DIR) === false) mkdir(NC_VILLAGE_NOTIFICATION_DIR,0777, true);
+< 
+< define('NC_DISTIRTCS', json_encode([
+<     //['dist_code' => '12', 'loc_name' => 'লক্ষীমপূৰ '],
+<     ['dist_code' => '25', 'loc_name' => 'ধেমাজি'],
+< ]));

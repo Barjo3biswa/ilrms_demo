@@ -1,0 +1,613 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+/*
+|--------------------------------------------------------------------------
+| Display Debug backtrace
+|--------------------------------------------------------------------------
+|
+| If set to TRUE, a backtrace will be displayed along with php errors. If
+| error_reporting is disabled, the backtrace will not display, regardless
+| of this setting
+|
+*/
+defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
+
+/*
+|--------------------------------------------------------------------------
+| File and Directory Modes
+|--------------------------------------------------------------------------
+|
+| These prefs are used when checking and setting modes when working
+| with the file system.  The defaults are fine on servers with proper
+| security, but you may wish (or even need) to change the values in
+| certain environments (Apache running a separate process for each
+| user, PHP under CGI with Apache suEXEC, etc.).  Octal values should
+| always be used to set the mode correctly.
+|
+*/
+defined('FILE_READ_MODE')  OR define('FILE_READ_MODE', 0644);
+defined('FILE_WRITE_MODE') OR define('FILE_WRITE_MODE', 0666);
+defined('DIR_READ_MODE')   OR define('DIR_READ_MODE', 0755);
+defined('DIR_WRITE_MODE')  OR define('DIR_WRITE_MODE', 0755);
+
+/*
+|--------------------------------------------------------------------------
+| File Stream Modes
+|--------------------------------------------------------------------------
+|
+| These modes are used when working with fopen()/popen()
+|
+*/
+defined('FOPEN_READ')                           OR define('FOPEN_READ', 'rb');
+defined('FOPEN_READ_WRITE')                     OR define('FOPEN_READ_WRITE', 'r+b');
+defined('FOPEN_WRITE_CREATE_DESTRUCTIVE')       OR define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
+defined('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE')  OR define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
+defined('FOPEN_WRITE_CREATE')                   OR define('FOPEN_WRITE_CREATE', 'ab');
+defined('FOPEN_READ_WRITE_CREATE')              OR define('FOPEN_READ_WRITE_CREATE', 'a+b');
+defined('FOPEN_WRITE_CREATE_STRICT')            OR define('FOPEN_WRITE_CREATE_STRICT', 'xb');
+defined('FOPEN_READ_WRITE_CREATE_STRICT')       OR define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
+
+/*
+|--------------------------------------------------------------------------
+| Exit Status Codes
+|--------------------------------------------------------------------------
+|
+| Used to indicate the conditions under which the script is exit()ing.
+| While there is no universal standard for error codes, there are some
+| broad conventions.  Three such conventions are mentioned below, for
+| those who wish to make use of them.  The CodeIgniter defaults were
+| chosen for the least overlap with these conventions, while still
+| leaving room for others to be defined in future versions and user
+| applications.
+|
+| The three main conventions used for determining exit status codes
+| are as follows:
+|
+|    Standard C/C++ Library (stdlibc):
+|       http://www.gnu.org/software/libc/manual/html_node/Exit-Status.html
+|       (This link also contains other GNU-specific conventions)
+|    BSD sysexits.h:
+|       http://www.gsp.com/cgi-bin/man.cgi?section=3&topic=sysexits
+|    Bash scripting:
+|       http://tldp.org/LDP/abs/html/exitcodes.html
+|
+*/
+defined('EXIT_SUCCESS')        OR define('EXIT_SUCCESS', 0); // no errors
+defined('EXIT_ERROR')          OR define('EXIT_ERROR', 1); // generic error
+defined('EXIT_CONFIG')         OR define('EXIT_CONFIG', 3); // configuration error
+defined('EXIT_UNKNOWN_FILE')   OR define('EXIT_UNKNOWN_FILE', 4); // file not found
+defined('EXIT_UNKNOWN_CLASS')  OR define('EXIT_UNKNOWN_CLASS', 5); // unknown class
+defined('EXIT_UNKNOWN_METHOD') OR define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
+defined('EXIT_USER_INPUT')     OR define('EXIT_USER_INPUT', 7); // invalid user input
+defined('EXIT_DATABASE')       OR define('EXIT_DATABASE', 8); // database error
+defined('EXIT__AUTO_MIN')      OR define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
+defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+
+
+#############################################################################################
+#define('BASU_URL','http://141.148.207.152/');
+define('BASU_URL','http://localhost/');
+define('DHAR_URL','http://144.24.127.231/');
+define('LANDHUB_URL','http://144.24.127.231/');
+define('CHITHA_URL','http://141.148.199.72/');
+define('GET_API_IP', '144.24.127.231');
+
+define('DHAR_APP',DHAR_URL.'dharitree_oci/');
+define('RTPS1_APP',BASU_URL.'rtpsdemo/');
+define('RTPS2_APP',BASU_URL.'rtpsmb2demo/');
+define('ILRMS_APP',BASU_URL.'ilrmsdemo/');
+define('LANDHUB_APP',LANDHUB_URL.'ilrmsdemo/');
+define('CHITHA_APP',CHITHA_URL.'chithaentry/');
+
+defined('BASE_UPLOAD_DIR') OR define('BASE_UPLOAD_DIR', '/u02/demo/ilrmsdemo/');
+if (is_dir(BASE_UPLOAD_DIR) === false) mkdir(BASE_UPLOAD_DIR,0777,true);
+
+defined('BASE_UPLOAD_DIR_OLD_1') OR define('BASE_UPLOAD_OLD_1', '/u01/demo/ilrmsdemo/');
+if (is_dir(BASE_UPLOAD_OLD_1) === false) mkdir(BASE_UPLOAD_OLD_1,0777,true);
+#############################################################################################
+
+
+define('DHARITREE','01');
+define('NOC','02');
+
+define('DLR','DLR');
+define('COMMISSIONER','COMMISSIONER');
+
+define('ARRAY_API', array('dashboard-api'));
+define('BARAK_VALLEY', array('21'));
+
+defined('BACKUP_JSON_DIR')     OR define('BACKUP_JSON_DIR', BASE_UPLOAD_DIR.'backup_json/');
+if (is_dir(BACKUP_JSON_DIR) === false) mkdir(BACKUP_JSON_DIR,0777,true);
+
+//define('MOUZADAR_USERCODE', 'MOUZADAR'); 
+
+
+//*************************************************************/
+//tehsildari system dist codes array
+define('EKHAJANA_TEHSILDARI_SYSTEM_DIST_CODES', json_encode([
+    '02', '03', '21', '13', '38'
+]));
+//tehsildari system and mouzadari system dist codes array
+define('EKHAJANA_TEHSILDARI_MIXED_DIST_CODES', json_encode([
+    '02'
+]));
+//mouzdari system village codes in tehsildari districts 
+define('EKHAJANA_TEHSILDARI_MIXED_VILLAGE_CODES', json_encode([
+    '10000000000726', '10000000000699','10000000000703', 
+    '10000000000704', '10000000000700', '10000000000701', 
+    '10000000000667', '10000000000138'
+]));
+//*************************************************************/
+
+define('EKHAJANA_MOUZADAR_ACTIVE', 1);//0 for deactive, 1 for active
+
+define('EKHAJANA_JAMAWASIL_VIEW_API', DHAR_APP.'index.php/dharitreeApi/getJamaWasil');
+
+// Basundhara Constant
+///Status Basundhara2.0
+defined('MB_REVERT') or define('MB_REVERT', 'R');
+defined('MB_FINAL') or define('MB_FINAL', 'F');
+defined('MB_APPLICANT_NOTICE') or define('MB_APPLICANT_NOTICE', 'A');
+defined('MB_NOTICE_SERVED') or define('MB_NOTICE_SERVED', 'S');
+defined('MB_PENDING') or define('MB_PENDING', 'W');
+defined('MB_PAYMENT_REQUEST') or define('MB_PAYMENT_REQUEST', 'M');
+defined('MB_DISMISS') or define('MB_DISMISS', 'D');
+defined('MB_PAYMENT_RECEIVED') or define('MB_PAYMENT_RECEIVED', 'P');
+defined('MB_UNDER_PROCESS_AFTER_PAYMENT') or define('MB_UNDER_PROCESS_AFTER_PAYMENT', 'U');
+defined('MB_PAYMENT_NOTICE') or define('MB_PAYMENT_NOTICE', 'N');
+defined('MB_DEPARTMENT_APPROVE') or define('MB_DEPARTMENT_APPROVE', 'X');
+defined('MB_DEPARTMENT_REVERT') or define('MB_DEPARTMENT_REVERT', 'Y');
+defined('MB_DEPARTMENT_REJECT') or define('MB_DEPARTMENT_REJECT', 'Z');
+
+
+//MB Actors Constants
+defined('MB_LOT_MONDOL') or define('MB_LOT_MONDOL', 'LM');
+defined('MB_CIRCLE_OFFICER') or define('MB_CIRCLE_OFFICER', 'CO');
+defined('MB_DEPUTY_COMM') or define('MB_DEPUTY_COMM', 'DC');
+defined('MB_DEPARTMENT') or define('MB_DEPARTMENT', 'DPT');
+defined('MB_APPLICANT') or define('MB_APPLICANT', 'Applicant');
+
+// Barak Valley json constant
+//define('BARAK_VALLEY', json_encode(['21']));
+
+//MB2.0 Service Constants
+defined('SETTLEMENT_TENANT')                or define('SETTLEMENT_TENANT', 'SOT');
+defined('SETTLEMENT_TENANT_ID')             or define('SETTLEMENT_TENANT_ID', 13);
+
+defined('SETTLEMENT_AP_TRANSFER')           or define('SETTLEMENT_AP_TRANSFER', 'SAP');
+defined('SETTLEMENT_AP_TRANSFER_ID')        or define('SETTLEMENT_AP_TRANSFER_ID', 14);
+
+defined('SETTLEMENT_TRIBAL_COMMUNITY')      or define('SETTLEMENT_TRIBAL_COMMUNITY', 'SHLTC');
+defined('SETTLEMENT_TRIBAL_COMMUNITY_ID')   or define('SETTLEMENT_TRIBAL_COMMUNITY_ID', 15);
+
+defined('SETTLEMENT_KHAS_LAND')             or define('SETTLEMENT_KHAS_LAND', 'SKCSL');
+defined('SETTLEMENT_KHAS_LAND_ID')          or define('SETTLEMENT_KHAS_LAND_ID', 16);
+
+defined('SETTLEMENT_PGR_VGR_LAND')          or define('SETTLEMENT_PGR_VGR_LAND', 'SPVL');
+defined('SETTLEMENT_PGR_VGR_LAND_ID')       or define('SETTLEMENT_PGR_VGR_LAND_ID', 17);
+
+defined('SETTLEMENT_SPECIAL_CULTIVATORS')    or define('SETTLEMENT_SPECIAL_CULTIVATORS', 'SOSC');
+defined('SETTLEMENT_SPECIAL_CULTIVATORS_ID') or define('SETTLEMENT_SPECIAL_CULTIVATORS_ID', 18);
+
+
+defined('MB_NR_CASE') or define('MB_NR_CASE', 'G');
+
+defined('PDAR_BUYER') or define('PDAR_BUYER', 'B');
+defined('PDAR_OWNER') or define('PDAR_OWNER', 'O');
+defined('PDAR_ENC') or define('PDAR_ENC', 'EN');
+defined('PDAR_GP') or define('PDAR_GP', 'GP');
+defined('PDAR_GGP') or define('PDAR_GGP', 'GGP');
+
+defined('RESERVE_ROADSIDE') or define('RESERVE_ROADSIDE', 'R');
+defined('RESERVE_FAMILY') or define('RESERVE_FAMILY', 'F');
+defined('RESERVE_VGR') or define('RESERVE_VGR', 'V');
+
+
+// New Constants added on 29/10/2022
+
+defined('MB_RE_REPORT') or define('MB_RE_REPORT', 'X');
+defined('MB_HEARING_DATE_CHANGED') or define('MB_HEARING_DATE_CHANGED', 'H');
+defined('SEND_TO_SDLAC_NOTICE_PATH') or define('SEND_TO_SDLAC_NOTICE_PATH', BASE_UPLOAD_DIR.'uploads/dc_to_sdlac_notice/');
+defined('PRO_CASE_STATUS_PENDING') or define('PRO_CASE_STATUS_PENDING', 1);
+defined('PRO_CASE_STATUS_REJECT') or define('PRO_CASE_STATUS_REJECT', 0);
+defined('PRO_CASE_STATUS_APPROVE') or define('PRO_CASE_STATUS_APPROVE', 2);
+defined('PRO_CASE_STATUS_REVERTED') or define('PRO_CASE_STATUS_REVERTED', 3);
+defined('MB_MARK_AS_SDLAC') or define('MB_MARK_AS_SDLAC', 'T');
+defined('MB_SEND_TO_SDLAC') or define('MB_SEND_TO_SDLAC', 'L');
+defined('MB_SDLAC') or define('MB_SDLAC', 'SDLAC');
+defined('MB_ORDER_FOR_CHITHA_UPDATE') or define('MB_ORDER_FOR_CHITHA_UPDATE', 'C');
+
+
+defined('FISHERY_MAX_AREA') or define('FISHERY_MAX_AREA', 1);
+define('KHAS_MAX_HOMESTEAD', 1);         // in bigha
+define('KHAS_MAX_AGRICULTURE', 7);       // in bigha
+define('CULTIVATION_MAX_APPLIED', 30);   // in bigha
+define('TRIBAL_MAX_HOMESTEAD', 1);       // in bigha
+define('TRIBAL_MAX_AGRICULTURE', 7);     // in bigha
+define('VGR_PGR_MAX_HOME', 1);           // in bigha
+
+
+define('TRACE_MAP_COPY', 'Trace Map Copy');
+define('GEO_TAG_PHOTO', 'Geo Tag Photo');
+define('FIELD_REPORT', 'Field Report');
+define('LR_REPORT', 'LR Report');
+define('CHITHA_COPY', 'Chitha Copy');
+
+define('BHUMI_CERT', 'CERT');
+define('BHUMI_ACK', 'ACK');
+define('AADHAR_APPLICATION_API_LINK', RTPS2_APP.'Api/applicantAppliedForSettlementServicesByAadhaarNo');
+
+
+// New Constants added on 29/10/2022
+defined('MB_RE_REPORT') or define('MB_RE_REPORT', 'X');
+defined('MB_HEARING_DATE_CHANGED') or define('MB_HEARING_DATE_CHANGED', 'H');
+defined('SEND_TO_SDLAC_NOTICE_PATH') or define('SEND_TO_SDLAC_NOTICE_PATH', BASE_UPLOAD_DIR.'uploads/dc_to_sdlac_notice/');
+defined('PRO_CASE_STATUS_PENDING') or define('PRO_CASE_STATUS_PENDING', 1);
+defined('PRO_CASE_STATUS_REJECT') or define('PRO_CASE_STATUS_REJECT', 0);
+defined('PRO_CASE_STATUS_APPROVE') or define('PRO_CASE_STATUS_APPROVE', 2);
+defined('PRO_CASE_STATUS_REVERTED') or define('PRO_CASE_STATUS_REVERTED', 3);
+defined('MB_MARK_AS_SDLAC') or define('MB_MARK_AS_SDLAC', 'T');
+defined('MB_SEND_TO_SDLAC') or define('MB_SEND_TO_SDLAC', 'L');
+defined('MB_SDLAC') or define('MB_SDLAC', 'SDLAC');
+defined('MB_ORDER_FOR_CHITHA_UPDATE') or define('MB_ORDER_FOR_CHITHA_UPDATE', 'C');
+
+
+// New Added on 03/12/2022
+define('PROTECTED_CLASS', json_encode([
+    ['CODE' => -1, 'NAME' => 'Select class...'],
+    ['CODE' => 1, 'NAME' => 'Plains Tribals'],
+    ['CODE' => 2, 'NAME' => 'Hills Tribals'],
+    ['CODE' => 3, 'NAME' => 'Tea Garden Tribals'],
+    ['CODE' => 4, 'NAME' => 'Santhals'],
+    ['CODE' => 5, 'NAME' => 'Nepali Cultivator graziers'],
+    ['CODE' => 6, 'NAME' => 'Scheduled Class'],
+    ['CODE' => 7, 'NAME' => 'Koch Rajbongshis'],
+    ['CODE' => 8, 'NAME' => 'Indigenous Nath (yogi)'],
+    ['CODE' => 9, 'NAME' => 'Tai Ahom'],
+    ['CODE' => 10, 'NAME' => 'Chutia'],
+    ['CODE' => 11, 'NAME' => 'Gorkha'],
+    ['CODE' => 12, 'NAME' => 'Moran'],
+    ['CODE' => 13, 'NAME' => 'Matak'],
+    ['CODE' => 14, 'NAME' => 'Not Available'],
+]));
+
+
+
+// Newly Added Constant
+define('MOUZADAR', 1);
+define('DEPT', 1);
+
+define('LM_NOTE', json_encode([
+    ['CODE' => -1, 'NAME' => 'Please select remark category...'],
+    ['CODE' => 1, 'NAME' => '<span class="text-success"><i class="fa fa-check"></i>  Can be Recommended</span>'],
+    ['CODE' => 2, 'NAME' => '<span class="text-danger"><i class="fa fa-remove"></i>  Can not be Recommended</span>']
+]));
+
+define('CASTE', json_encode([
+    ['CODE' => 1, 'NAME' => 'ST', 'STATUS' => 1],
+    ['CODE' => 2, 'NAME' => 'SC', 'STATUS' => 1],
+    ['CODE' => 3, 'NAME' => 'Tea Garden', 'STATUS' => 1],
+    ['CODE' => 4, 'NAME' => 'Ex Tea Garden', 'STATUS' => 1],
+    ['CODE' => 5, 'NAME' => 'OBC', 'STATUS' => 1],
+    ['CODE' => 6, 'NAME' => 'GEN', 'STATUS' => 1],
+    ['CODE' => 7, 'NAME' => 'MOBC', 'STATUS' => 1],
+]));
+
+
+define('LAND_FALLS', json_encode([
+    ['CODE' => -1, 'NAME' => 'Please select Land Falls'],
+    ['CODE' => 1, 'NAME' => 'VGR'],
+    ['CODE' => 2, 'NAME' => 'PGR'],
+    ['CODE' => 3, 'NAME' => 'Wet Land'],
+    ['CODE' => 4, 'NAME' => 'CS Land'],
+    ['CODE' => 5, 'NAME' => 'Khas Govt Land'],
+    ['CODE' => 6, 'NAME' => 'NR Govt Land'],
+    ['CODE' => 7, 'NAME' => 'Green Belt Area'],
+    ['CODE' => 8, 'NAME' => 'Reserved for Govt Departments'],
+    ['CODE' => 9, 'NAME' => 'Ancient Monuments'],
+    ['CODE' => 10, 'NAME' => 'Reserved for other Purposes'],
+    ['CODE' => 11, 'NAME' => 'RF'],
+    ['CODE' => 12, 'NAME' => 'PRF'],
+    ['CODE' => 13, 'NAME' => 'Un-classed Forest land'],
+    ['CODE' => 14, 'NAME' => 'Under Wild Life Sanctuary'],
+    ['CODE' => 15, 'NAME' => 'Any Land Barred for Allotment'],
+    ['CODE' => 16, 'NAME' => 'Settlement by a Judicial Pronouncement or any Central or State Legislation'],
+
+]));
+
+
+define('LB_NATURE_OF_RESERVATION', json_encode([
+    ['CODE' => 1, 'NAME' => 'VGR'],
+    ['CODE' => 2, 'NAME' => 'PGR'],
+    ['CODE' => 3, 'NAME' => 'ROAD-SIDE-RESERVE'],
+    ['CODE' => 4, 'NAME' => 'RIVER-SIDE-RESERVE'],
+    ['CODE' => 7, 'NAME' => 'GOVT-KHAS-LAND'],
+    ['CODE' => 8, 'NAME' => 'GOVT-CEILING-LAND'],
+    ['CODE' => 6, 'NAME' => 'NONE'],
+]));
+
+
+define('LB_ENC_TYPE_OF_LAND_USE', json_encode([
+    ['CODE' => 1, 'NAME' => 'HOMESTEAD'],
+    ['CODE' => 2, 'NAME' => 'AGRICULTURAL'],
+    ['CODE' => 3, 'NAME' => 'SMALL-TEA-GROWER'],
+    ['CODE' => 4, 'NAME' => 'SPECIAL-CULTIVATION-RUBBER'],
+    ['CODE' => 5, 'NAME' => 'SPECIAL-CULTIVATION-COFFEE'],
+    ['CODE' => 6, 'NAME' => 'BY DIGGING POND'],
+]));
+
+
+define('GRAMDAN_BHUDAN', json_encode([
+    ['CODE' => 1, 'NAME' => 'Eksona'],
+    ['CODE' => 2, 'NAME' => 'Gramdan Eksona'],
+    ['CODE' => 3, 'NAME' => 'Bhudan Eksona'],
+]));
+
+define('EKSONA_TRANSFERRED', json_encode([
+    ['CODE' => 1, 'NAME' => 'Transferred'],
+    ['CODE' => 2, 'NAME' => 'Non Transferred'],
+]));
+define('YES', 'YES');
+define('NO', 'NO');
+
+
+
+defined('DEPT_PROPOSAL_CASE_PENDING') or define('DEPT_PROPOSAL_CASE_PENDING', 0);
+defined('DEPT_PROPOSAL_CASE_APPROVE') or define('DEPT_PROPOSAL_CASE_APPROVE', 1);
+defined('DEPT_PROPOSAL_CASE_REVERT') or define('DEPT_PROPOSAL_CASE_REVERT', 2);
+defined('DEPT_PROPOSAL_CASE_REJECT') or define('DEPT_PROPOSAL_CASE_REJECT', 3);
+
+
+defined('DEPT_APPROVE_SETTLEMENT_BASIC') or define('DEPT_APPROVE_SETTLEMENT_BASIC', 'Y');
+defined('DEPT_REVERT_SETTLEMENT_BASIC') or define('DEPT_REVERT_SETTLEMENT_BASIC', 'R');
+
+
+define('SDLAC_USERCODE', 'SDLC'); 
+define('DEPARTMENT_USERCODE', 'DPT_JS'); 
+
+
+defined('SDLAC_MEMBER_REPORT_STATUS_PENDING') or define('SDLAC_MEMBER_REPORT_STATUS_PENDING', 0);
+defined('SDLAC_MEMBER_REPORT_STATUS_AGREE') or define('SDLAC_MEMBER_REPORT_STATUS_AGREE', 1);
+defined('SDLAC_MEMBER_REPORT_STATUS_DISAGREE') or define('SDLAC_MEMBER_REPORT_STATUS_DISAGREE', 2);
+
+
+defined('SDLAC_PROCEEDING_STATUS_UPDATED') or define('SDLAC_PROCEEDING_STATUS_UPDATED', 2);
+
+defined('SDLAC_PROPOSAL_LIST_STATUS_PENDING') or define('SDLAC_PROPOSAL_LIST_STATUS_PENDING', 1);
+defined('SDLAC_PROPOSAL_LIST_STATUS_UPDATED') or define('SDLAC_PROPOSAL_LIST_STATUS_UPDATED', 2);
+
+
+defined('DPT_REVERTED') or define('DPT_REVERTED', 'R');
+
+define('SDLAC_ATTEND_ONLINE', 1);
+define('SDLAC_ATTEND_OFFLINE', 2);
+define('NOMINEE_STATUS_ENABLE', 1);
+
+
+define('ENCRYPTION_KEY', "1234567890123456");
+define('AADHAARREGURL', RTPS2_APP."AadhaarAuthentication/verifyAadhaar/");
+define('AADHAAR_USER_CREATE_FORM', ILRMS_APP."userCreation");
+define('AADHAAR_REDIRECT_URL',ILRMS_APP."Basundhara/sdlacUserRegistration");
+
+define('SECRET_KEY', '#b$*))_++basun!!dhar_app^tree_php.create_');
+define('API_KEY', 'DHARITREE_MB2');
+define('LINK_AADHAAR_WITH_USER_ACCOUNT', ILRMS_APP."linkAadhaarForm");
+define('DHAR_SDLAC_ACCOUNT_API', DHAR_APP."index.php/dharitreeApi/createsdlcAccount");
+
+define('MOUZADAR_USERCODE', 'MOU');
+
+
+define('EKHAJANA_DOWNLOAD_DOCUMENT_API_FOR_MOUZADAR', RTPS2_APP.'Ekhajana/downloadDocumentForCo');
+define('EKHAJNA_MOUZADAR_PENDING_COUNT_API',RTPS2_APP.'Ekhajana/getMouzdarPendingCount');
+define('EKHAJANA_STATUS_CO_FORWARD_MOUZADAR_OBJECTION', 'OBJ_F');
+define('EKHAJNA_MOUZADAR_PENDING_LIST_API',RTPS2_APP.'Ekhajana/getPendingListForMouzadar');
+define('EKHAJANA_PENDING_CASE_DETAILS_API', RTPS2_APP.'Ekhajana/getEkhajanaPendingCaseDetails');
+
+
+define('API_LINK_MB2', RTPS2_APP.'Api/');
+define('BASUNDHARA_LOCAL_API', RTPS2_APP.'LocalAPI/');
+define('BASUNDHARA_PRODUCTION_API', RTPS2_APP.'Api/');
+
+define('API_LINK', RTPS2_APP.'Api/');
+
+
+define('EKHAJANA_STATUS_COMBINE_FORWARD', 'COM_F');
+define('EKHAJANA_STATUS_MOU_FORWARD', 'MOU_F');
+
+
+//constant not in live
+define('EKHAJANA_LAND_DETAILS_UPDATE_MOUZADAR_API', RTPS2_APP.'Ekhajana/updateLandDetailsmouzadar');
+define('EKHAJANA_STATUS_LM_FORWARD', 'LM-F');
+define('EKHAJANA_STATUS_CO_FORWARD', 'CO-F');
+define('EKHAJANA_STATUS_COMPLETED', 'F');
+define('EKHAJANA_STATUS_REJECTED', 'R');
+define('EKHAJANA_PAYMENT_UPDATE_API', RTPS2_APP.'Ekhajana/updatePayment');//For live
+define('JAMA_WASIL_ACTION_MOUZADAR_ENTRY', 'mouzadar_arrear_update');
+define('JAMA_WASIL_STATUS_OFFLINE', 'offline');
+define('JAMA_WASIL_STATUS_ONLINE', 'online');
+define('MOUZADAR_MENU', 1);//1 for only mouzadar
+define('EKHAJANA_AST_MOU_REVERT', 'L');
+define('EKHAJANA_REVERT_CASE_API', RTPS2_APP.'Ekhajana/updateRevertDetails');
+define('EKHAJANA_LAND_DETAILS_UPDATE_API',RTPS2_APP.'Ekhajana/updateLandDetails');
+define('EKHAJANA_MOUZADAR_OBJECTION', 'M_OBJ');
+define('PROFILE_UPDATE_DHARITREE_API_LINK', DHAR_APP."index.php/DharitreeApi/changeBasicData");
+defined('DPT_APPROVED') or define('DPT_APPROVED', 'Y');
+define('RTPS_API_LINK ', RTPS2_APP.'Api/');
+define('EKHAJANA_AADHAAR_PHOTO_FETCH', RTPS2_APP.'Ekhajana/getApplicantPhoto');
+define('EKHAJANA_LAND_DETAILS_UPDATE_MOUZADAR_OBJECTION_API', RTPS2_APP.'Ekhajana/updateLandDetailsmouzadar');
+defined('SDLAC_MEETING_STATUS_ONLINE') or define('SDLAC_MEETING_STATUS_ONLINE', 1);
+
+//define('EKHAJANA_LAND_DETAILS_UPDATE_MOUZADAR_API', 'https://basundhara.assam.gov.in/rtpsmb2demo/Ekhajana/updateLandDetailsmouzadar');
+
+
+define('VERIFIED_RECOMMENDED_CAB', 1);
+define('RECOMMENDED_WITHOUT_VERIFY_CAB', 2);
+define('NOT_RECOMMENDED_FOR_CAB', 3);
+define('ASSISTANT_USERCODE', 'ASSISTANT');
+
+defined('UPLOAD_DIR') OR define('UPLOAD_DIR', BASE_UPLOAD_DIR.'uploads/mb2/dept/');
+if (is_dir(UPLOAD_DIR) === false) mkdir(UPLOAD_DIR,0777,true);
+
+define('CABMEMO_UPLOAD_DIR', UPLOAD_DIR.'cabinet_memo_list/');
+if (is_dir(CABMEMO_UPLOAD_DIR) === false) mkdir(CABMEMO_UPLOAD_DIR,0777,true);
+
+define('VALUE_LOW', 0);
+define('VALUE_LOWH', 5);
+define('VALUE_MID', 30);
+define('VALUE_MIDL', 50);
+define('VALUE_HIGH', 90);
+
+define('VALUE_PEN', 0);
+define('VALUE_PENL1', 1000);
+define('VALUE_PENL2', 10000);
+define('VALUE_PENL3', 20000);
+define('EKHAJANA_AREEAR_PRE_UPDATED', 'PU'); //PU for Preupdated
+define('EKHAJANA_PRE_ARREAR_YEARS', ['2000','2001','2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022']);
+
+define('ADD_CASES_TO_CAB_MEMO', 0);
+define('ADD_CASES_UNDER_CAB_ID', 1);
+define('SB_ADD_CASES_TOCAB_MEMO', 1);
+define('VERIFICATION_PENDING', 0);
+define('VERIFIED_BY_ASSISTANT', 2);
+define('SENT_FOR_REVERIFICATION', 3);
+define('TEMP_APPROVE_BY_DEPT', 1);
+define('TEMP_REVERT_BY_DEPT', 2);
+define('FINAL_SUBMIT_BY_DEPT', 1);
+define('FINAL_SUBMISSION_CAB_MEMO', 3);
+define('FILE_TYPE', 'jpeg|jpg|png|pdf');
+
+//new constants
+define('SENT_FORVERIFICATION', 1);
+define('GET_MINUTE_API_LINK', DHAR_APP.'index.php/DharitreeApi/getMinutes');
+define('VIEW_CHITHA_API_LINK', DHAR_APP.'index.php/DharitreeApi/generateChithaRegistration');
+
+define('GENERATED_CAB_ID', 0);
+define('CAB_MEMO_DOC_GENERATED', 2);
+define('PREPARE_FOR_FINAL_APPROVAL', 1);
+
+define('ENC_VARIFICATION_LIST', json_encode([
+    ['CODE' => -1, 'NAME' => 'Select class...', 'STATUS' => '1'],
+    ['CODE' => 1, 'NAME' => 'Name exists', 'STATUS' => '1'],
+    ['CODE' => 2, 'NAME' => 'Name exists but possession not found', 'STATUS' => '1'],
+    ['CODE' => 3, 'NAME' => 'Name does not exists', 'STATUS' => '1'],
+    ['CODE' => 4, 'NAME' => 'Name does not exist and also not in possession', 'STATUS' => '1'],
+]));
+
+define('DIGITAL_SIGN_STATUS', 1);
+define('FINAL_SUBMISSION_PENDING', 0);
+
+define('EDITED_CAB_ID', 10);
+define('CABMEMO_UPLOAD_DOCS_DIR', UPLOAD_DIR.'cabinet_memo_list/docs/');
+if (is_dir(CABMEMO_UPLOAD_DOCS_DIR) === false) {
+    mkdir(CABMEMO_UPLOAD_DOCS_DIR,0777,true);
+}
+
+define('NOTIFICATION_UPLOAD_DIR', UPLOAD_DIR.'notifications/');
+if (is_dir(NOTIFICATION_UPLOAD_DIR) === false) {
+    mkdir(NOTIFICATION_UPLOAD_DIR,0777,true);
+}
+
+define('IS_PRODUCTION', 0);
+define('PULL_REQUEST_EXIST', 1);
+
+
+define('CHITHA_AREA_VALIDATION',0);  //(if 1 then Yes , 0 then NO)
+define('BARAK_VALLEY_DIST', json_encode(['21']));
+define('VGR_CLUSTER_VALIDATION',1);
+define('UNDER_SEC_USERCODE', 'UNDER_SECRETARY');
+
+define('APPLIED_SCHEME', json_encode([
+    ['CODE' => 1, 'NAME' => 'MNP', 'STATUS' => 1],
+    ['CODE' => 2, 'NAME' => 'ST / SC', 'STATUS' => 1],
+    ['CODE' => 3, 'NAME' => 'Refugee', 'STATUS' => 1],
+    ['CODE' => 4, 'NAME' => 'Ethinic Violence / Errossion Effected', 'STATUS' => 1],
+    ['CODE' => 5, 'NAME' => 'None of the above', 'STATUS' => 1],
+]));
+/*
+//NC VILLAGE
+define('API_LINK_NC_VILLAGE', CHITHA_APP.'index.php/nc_village/NcVillageApiController/');
+define('VILLAGE_MAP_PDF_DIR', BASE_UPLOAD_DIR.'uploads/village_data/map_pdf/');
+if (is_dir(VILLAGE_MAP_PDF_DIR) === false) mkdir(VILLAGE_MAP_PDF_DIR,0777,true);
+
+define('MAP_PDF_SIZE', '102400');
+
+//ADS
+define('ADS','ADS');
+//JDS
+define('JDS','JDS');
+
+define('HOLD_All_MB2_CASES_DATE', '2024-12-31 23:59:59');
+define('VGR_CHITHA_AREA_VALIDATION', 0);
+
+//joint secretary
+define('DPT_JS','DPT_JS');
+
+//principal secretary
+define('DPT_PS','DPT_PS');
+
+define('NC_VILLAGE_NOTIFICATION_DIR', BASE_UPLOAD_DIR.'uploads/village_data/village_notification/');
+if (is_dir(NC_VILLAGE_NOTIFICATION_DIR) === false) mkdir(NC_VILLAGE_NOTIFICATION_DIR,0777, true);
+
+define('NC_DISTIRTCS', json_encode([
+    ['dist_code' => '12', 'loc_name' => 'লক্ষীমপূৰ '],
+    ['dist_code' => '25', 'loc_name' => 'ধেমাজি'],
+]));
+
+
+
+define('API_LINK_NC_VILLAGE', 'http://141.148.199.72/index.php/nc_village/NcVillageApiController/');
+
+define('VILLAGE_MAP_PDF_DIR', 'village_data/map_pdf/');
+define('NC_VILLAGE_NOTIFICATION_DIR', 'village_data/village_notification/');
+define('MAP_PDF_SIZE', '102400');
+
+//ADS
+define('ADS','ADS');
+//JDS
+define('JDS','JDS');
+
+//joint secretary
+define('DPT_JS','DPT_JS');
+
+//principal secretary
+define('DPT_PS','DPT_PS');
+
+define('NC_DISTIRTCS', json_encode([
+//    ['dist_code' => '12', 'loc_name' => 'লক্ষীমপূৰ '],
+    ['dist_code' => '25', 'loc_name' => 'ধেমাজি'],
+]));
+
+ */
+
+
+define('API_LINK_NC_VILLAGE', CHITHA_URL.'index.php/nc_village/NcVillageApiController/');
+define('VILLAGE_MAP_PDF_DIR', BASE_UPLOAD_DIR.'uploads/village_data/map_pdf/');
+if (is_dir(VILLAGE_MAP_PDF_DIR) === false) mkdir(VILLAGE_MAP_PDF_DIR,0777,true);
+
+define('MAP_PDF_SIZE', '102400');
+
+//ADS
+define('ADS','ADS');
+//JDS
+define('JDS','JDS');
+
+define('HOLD_All_MB2_CASES_DATE', '2024-12-31 23:59:59');
+define('VGR_CHITHA_AREA_VALIDATION', 0);
+
+//joint secretary
+define('DPT_JS','DPT_JS');
+
+//principal secretary
+define('DPT_PS','DPT_PS');
+
+define('NC_VILLAGE_NOTIFICATION_DIR', BASE_UPLOAD_DIR.'uploads/village_data/village_notification/');
+if (is_dir(NC_VILLAGE_NOTIFICATION_DIR) === false) mkdir(NC_VILLAGE_NOTIFICATION_DIR,0777, true);
+
+define('NC_DISTIRTCS', json_encode([
+    //['dist_code' => '12', 'loc_name' => 'লক্ষীমপূৰ '],
+    ['dist_code' => '25', 'loc_name' => 'ধেমাজি'],
+]));
+
+define('EKHAJANA_LAND_DETAILS_FETCH_URL',RTPS2_APP.'Ekhajana/getLandDetailsIdFromLdCaseNo');
+

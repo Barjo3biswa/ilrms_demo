@@ -1,0 +1,656 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+/*
+| -------------------------------------------------------------------
+| DATABASE CONNECTIVITY SETTINGS
+| -------------------------------------------------------------------
+| This file will contain the settings needed to access your database.
+|
+| For complete instructions please consult the 'Database Connection'
+| page of the User Guide.
+|
+| -------------------------------------------------------------------
+| EXPLANATION OF VARIABLES
+| -------------------------------------------------------------------
+|
+|	['dsn']      The full DSN string describe a connection to the database.
+|	['hostname'] The hostname of your database server.
+|	['username'] The username used to connect to the database
+|	['password'] The password used to connect to the database
+|	['database'] The name of the database you want to connect to
+|	['dbdriver'] The database driver. e.g.: mysqli.
+|			Currently supported:
+|				 cubrid, ibase, mssql, mysql, mysqli, oci8,
+|				 odbc, pdo, postgre, sqlite, sqlite3, sqlsrv
+|	['dbprefix'] You can add an optional prefix, which will be added
+|				 to the table name when using the  Query Builder class
+|	['pconnect'] TRUE/FALSE - Whether to use a persistent connection
+|	['db_debug'] TRUE/FALSE - Whether database errors should be displayed.
+|	['cache_on'] TRUE/FALSE - Enables/disables query caching
+|	['cachedir'] The path to the folder where cache files should be stored
+|	['char_set'] The character set used in communicating with the database
+|	['dbcollat'] The character collation used in communicating with the database
+|				 NOTE: For MySQL and MySQLi databases, this setting is only used
+| 				 as a backup if your server is running PHP < 5.2.3 or MySQL < 5.0.7
+|				 (and in table creation queries made with DB Forge).
+| 				 There is an incompatibility in PHP with mysql_real_escape_string() which
+| 				 can make your site vulnerable to SQL injection if you are using a
+| 				 multi-byte character set and are running versions lower than these.
+| 				 Sites using Latin-1 or UTF-8 database character set and collation are unaffected.
+|	['swap_pre'] A default table prefix that should be swapped with the dbprefix
+|	['encrypt']  Whether or not to use an encrypted connection.
+|
+|			'mysql' (deprecated), 'sqlsrv' and 'pdo/sqlsrv' drivers accept TRUE/FALSE
+|			'mysqli' and 'pdo/mysql' drivers accept an array with the following options:
+|
+|				'ssl_key'    - Path to the private key file
+|				'ssl_cert'   - Path to the public key certificate file
+|				'ssl_ca'     - Path to the certificate authority file
+|				'ssl_capath' - Path to a directory containing trusted CA certificates in PEM format
+|				'ssl_cipher' - List of *allowed* ciphers to be used for the encryption, separated by colons (':')
+|				'ssl_verify' - TRUE/FALSE; Whether verify the server certificate or not
+|
+|	['compress'] Whether or not to use client compression (MySQL only)
+|	['stricton'] TRUE/FALSE - forces 'Strict Mode' connections
+|							- good for ensuring strict SQL while developing
+|	['ssl_options']	Used to set various SSL options that can be used when making SSL connections.
+|	['failover'] array - A array with 0 or more data for connections if the main should fail.
+|	['save_queries'] TRUE/FALSE - Whether to "save" all executed queries.
+| 				NOTE: Disabling this will also effectively disable both
+| 				$this->db->last_query() and profiling of DB queries.
+| 				When you run a query, with this setting set to TRUE (default),
+| 				CodeIgniter will store the SQL statement for debugging purposes.
+| 				However, this may cause high memory usage, especially if you run
+| 				a lot of SQL queries ... disable this to avoid that problem.
+|
+| The $active_group variable lets you choose which connection group to
+| make active.  By default there is only one group (the 'default' group).
+|
+| The $query_builder variables lets you determine whether or not to load
+| the query builder class.
+*/
+$active_group = 'db2';
+$query_builder = TRUE;
+
+
+$db['rtpsmb']['hostname'] = '10.177.7.143';
+$db['rtpsmb']['username'] = 'postgres';
+$db['rtpsmb']['password'] = 'postgres';
+$db['rtpsmb']['database'] = 'rtpsmb2demo2';
+$db['rtpsmb']['dbdriver'] = 'postgre';
+$db['rtpsmb']['dbprefix'] = '';
+$db['rtpsmb']['pconnect'] = FALSE;
+$db['rtpsmb']['db_debug'] = FALSE;
+$db['rtpsmb']['cache_on'] = FALSE;
+$db['rtpsmb']['cachedir'] = '';
+$db['rtpsmb']['char_set'] = 'utf8';
+$db['rtpsmb']['dbcollat'] = 'utf8_general_ci';
+$db['rtpsmb']['swap_pre'] = '';
+$db['rtpsmb']['autoinit'] = TRUE;
+$db['rtpsmb']['stricton'] = FALSE;
+$db['rtpsmb']['port'] = 5432;
+
+
+$db['db2']['hostname'] = '10.177.7.143';
+$db['db2']['username'] = 'postgres';
+$db['db2']['password'] = 'postgres';
+$db['db2']['database'] = 'ilrmsdemo';
+$db['db2']['dbdriver'] = 'postgre';
+$db['db2']['dbprefix'] = '';
+$db['db2']['pconnect'] = FALSE;
+$db['db2']['db_debug'] = FALSE;
+$db['db2']['cache_on'] = FALSE;
+$db['db2']['cachedir'] = '';
+$db['db2']['char_set'] = 'utf8';
+$db['db2']['dbcollat'] = 'utf8_general_ci';
+$db['db2']['swap_pre'] = '';
+$db['db2']['autoinit'] = TRUE;
+$db['db2']['stricton'] = FALSE;
+$db['db2']['port'] = 5432;
+
+
+$db['kamrup1']['hostname'] = '10.177.7.134';
+$db['kamrup1']['username'] = 'postgres';
+$db['kamrup1']['password'] = 'postgres';
+$db['kamrup1']['database'] = 'kamrup';
+$db['kamrup1']['dbdriver'] = 'postgre';
+$db['kamrup1']['dbprefix'] = '';
+$db['kamrup1']['pconnect'] = FALSE;
+$db['kamrup1']['db_debug'] = TRUE;
+$db['kamrup1']['cache_on'] = FALSE;
+$db['kamrup1']['cachedir'] = '';
+$db['kamrup1']['char_set'] = 'utf8';
+$db['kamrup1']['dbcollat'] = 'utf8_general_ci';
+$db['kamrup1']['swap_pre'] = '';
+$db['kamrup1']['autoinit'] = TRUE;
+$db['kamrup1']['stricton'] = FALSE;
+
+$db['golaghat']['hostname'] = '10.177.7.134';
+$db['golaghat']['username'] = 'postgres';
+$db['golaghat']['password'] = 'postgres';
+$db['golaghat']['database'] = 'golaghat';
+$db['golaghat']['dbdriver'] = 'postgre';
+$db['golaghat']['dbprefix'] = '';
+$db['golaghat']['pconnect'] = FALSE;
+$db['golaghat']['db_debug'] = TRUE;
+$db['golaghat']['cache_on'] = FALSE;
+$db['golaghat']['cachedir'] = '';
+$db['golaghat']['char_set'] = 'utf8';
+$db['golaghat']['dbcollat'] = 'utf8_general_ci';
+$db['golaghat']['swap_pre'] = '';
+$db['golaghat']['autoinit'] = TRUE;
+$db['golaghat']['stricton'] = FALSE;
+
+
+$db['auth']['hostname'] = '10.177.7.153';
+$db['auth']['username'] = 'postgres';
+$db['auth']['password'] = 'postgres';
+$db['auth']['database'] = 'central_auth';
+$db['auth']['dbdriver'] = 'postgre';
+$db['auth']['dbprefix'] = '';
+$db['auth']['pconnect'] = FALSE;
+$db['auth']['db_debug'] = FALSE;
+$db['auth']['cache_on'] = FALSE;
+$db['auth']['cachedir'] = '';
+$db['auth']['char_set'] = 'utf8';
+$db['auth']['dbcollat'] = 'utf8_general_ci';
+$db['auth']['swap_pre'] = '';
+$db['auth']['autoinit'] = TRUE;
+$db['auth']['stricton'] = FALSE;
+$db['auth']['port'] = 5432;
+
+
+
+$db['barpeta']['hostname'] = '10.177.7.134';
+$db['barpeta']['username'] = 'postgres';
+$db['barpeta']['password'] = 'postgres';
+$db['barpeta']['database'] = 'barpeta';
+$db['barpeta']['dbdriver'] = 'postgre';
+$db['barpeta']['dbprefix'] = '';
+$db['barpeta']['pconnect'] = FALSE;
+$db['barpeta']['db_debug'] = FALSE;
+$db['barpeta']['cache_on'] = FALSE;
+$db['barpeta']['cachedir'] = '';
+$db['barpeta']['char_set'] = 'utf8';
+$db['barpeta']['dbcollat'] = 'utf8_general_ci';
+$db['barpeta']['swap_pre'] = '';
+$db['barpeta']['autoinit'] = FALSE;
+$db['barpeta']['stricton'] = FALSE;
+$db['barpeta']['port'] = 5432;
+
+$db['bongaigaon']['hostname'] = '10.177.7.134';
+$db['bongaigaon']['username'] = 'postgres';
+$db['bongaigaon']['password'] = 'postgres';
+$db['bongaigaon']['database'] = 'bongaigaon';
+$db['bongaigaon']['dbdriver'] = 'postgre';
+$db['bongaigaon']['dbprefix'] = '';
+$db['bongaigaon']['pconnect'] = FALSE;
+$db['bongaigaon']['db_debug'] = FALSE;
+$db['bongaigaon']['cache_on'] = FALSE;
+$db['bongaigaon']['cachedir'] = '';
+$db['bongaigaon']['char_set'] = 'utf8';
+$db['bongaigaon']['dbcollat'] = 'utf8_general_ci';
+$db['bongaigaon']['swap_pre'] = '';
+$db['bongaigaon']['autoinit'] = FALSE;
+$db['bongaigaon']['stricton'] = FALSE;
+$db['bongaigaon']['port'] = 5432;
+
+$db['dhubri']['hostname'] = '10.177.7.134';
+$db['dhubri']['username'] = 'postgres';
+$db['dhubri']['password'] = 'postgres';
+$db['dhubri']['database'] = 'dhubri';
+$db['dhubri']['dbdriver'] = 'postgre';
+$db['dhubri']['dbprefix'] = '';
+$db['dhubri']['pconnect'] = FALSE;
+$db['dhubri']['db_debug'] = FALSE;
+$db['dhubri']['cache_on'] = FALSE;
+$db['dhubri']['cachedir'] = '';
+$db['dhubri']['char_set'] = 'utf8';
+$db['dhubri']['dbcollat'] = 'utf8_general_ci';
+$db['dhubri']['swap_pre'] = '';
+$db['dhubri']['autoinit'] = FALSE;
+$db['dhubri']['stricton'] = FALSE;
+$db['dhubri']['port'] = 5432;
+
+$db['dibrugarh']['hostname'] = '10.177.7.134';
+$db['dibrugarh']['username'] = 'postgres';
+$db['dibrugarh']['password'] = 'postgres';
+$db['dibrugarh']['database'] = 'dibrugarh';
+$db['dibrugarh']['dbdriver'] = 'postgre';
+$db['dibrugarh']['dbprefix'] = '';
+$db['dibrugarh']['pconnect'] = FALSE;
+$db['dibrugarh']['db_debug'] = FALSE;
+$db['dibrugarh']['cache_on'] = FALSE;
+$db['dibrugarh']['cachedir'] = '';
+$db['dibrugarh']['char_set'] = 'utf8';
+$db['dibrugarh']['dbcollat'] = 'utf8_general_ci';
+$db['dibrugarh']['swap_pre'] = '';
+$db['dibrugarh']['autoinit'] = FALSE;
+$db['dibrugarh']['stricton'] = FALSE;
+$db['dibrugarh']['port'] = 5432;
+
+$db['jorhat']['hostname'] = '10.177.7.134';
+$db['jorhat']['username'] = 'postgres';
+$db['jorhat']['password'] = 'postgres';
+$db['jorhat']['database'] = 'jorhat';
+$db['jorhat']['dbdriver'] = 'postgre';
+$db['jorhat']['dbprefix'] = '';
+$db['jorhat']['pconnect'] = FALSE;
+$db['jorhat']['db_debug'] = FALSE;
+$db['jorhat']['cache_on'] = FALSE;
+$db['jorhat']['cachedir'] = '';
+$db['jorhat']['char_set'] = 'utf8';
+$db['jorhat']['dbcollat'] = 'utf8_general_ci';
+$db['jorhat']['swap_pre'] = '';
+$db['jorhat']['autoinit'] = FALSE;
+$db['jorhat']['stricton'] = FALSE;
+$db['jorhat']['port'] = 5432;
+
+$db['golaghat']['hostname'] = '10.177.7.134';
+$db['golaghat']['username'] = 'postgres';
+$db['golaghat']['password'] = 'postgres';
+$db['golaghat']['database'] = 'golaghat';
+$db['golaghat']['dbdriver'] = 'postgre';
+$db['golaghat']['dbprefix'] = '';
+$db['golaghat']['pconnect'] = FALSE;
+$db['golaghat']['db_debug'] = FALSE;
+$db['golaghat']['cache_on'] = FALSE;
+$db['golaghat']['cachedir'] = '';
+$db['golaghat']['char_set'] = 'utf8';
+$db['golaghat']['dbcollat'] = 'utf8_general_ci';
+$db['golaghat']['swap_pre'] = '';
+$db['golaghat']['autoinit'] = FALSE;
+$db['golaghat']['stricton'] = FALSE;
+$db['golaghat']['port'] = 5432;
+
+$db['kamrup']['hostname'] = '10.177.0.37';
+$db['kamrup']['username'] = 'postgres';
+$db['kamrup']['password'] = 'postgres';
+$db['kamrup']['database'] = 'kamrup_uat';
+$db['kamrup']['dbdriver'] = 'postgre';
+$db['kamrup']['dbprefix'] = '';
+$db['kamrup']['pconnect'] = FALSE;
+$db['kamrup']['db_debug'] = FALSE;
+$db['kamrup']['cache_on'] = FALSE;
+$db['kamrup']['cachedir'] = '';
+$db['kamrup']['char_set'] = 'utf8';
+$db['kamrup']['dbcollat'] = 'utf8_general_ci';
+$db['kamrup']['swap_pre'] = '';
+$db['kamrup']['autoinit'] = FALSE;
+$db['kamrup']['stricton'] = FALSE;
+$db['kamrup']['port'] = 5432;
+
+$db['goalpara']['hostname'] = '10.177.0.37';
+$db['goalpara']['username'] = 'postgres';
+$db['goalpara']['password'] = 'postgres';
+$db['goalpara']['database'] = 'goalpara_uat';
+$db['goalpara']['dbdriver'] = 'postgre';
+$db['goalpara']['dbprefix'] = '';
+$db['goalpara']['pconnect'] = FALSE;
+$db['goalpara']['db_debug'] = FALSE;
+$db['goalpara']['cache_on'] = FALSE;
+$db['goalpara']['cachedir'] = '';
+$db['goalpara']['char_set'] = 'utf8';
+$db['goalpara']['dbcollat'] = 'utf8_general_ci';
+$db['goalpara']['swap_pre'] = '';
+$db['goalpara']['autoinit'] = FALSE;
+$db['goalpara']['stricton'] = FALSE;
+$db['goalpara']['port'] = 5432;
+
+$db['tinsukia']['hostname'] = '10.177.7.134';
+$db['tinsukia']['username'] = 'postgres';
+$db['tinsukia']['password'] = 'postgres';
+$db['tinsukia']['database'] = 'tinsukia';
+$db['tinsukia']['dbdriver'] = 'postgre';
+$db['tinsukia']['dbprefix'] = '';
+$db['tinsukia']['pconnect'] = FALSE;
+$db['tinsukia']['db_debug'] = FALSE;
+$db['tinsukia']['cache_on'] = FALSE;
+$db['tinsukia']['cachedir'] = '';
+$db['tinsukia']['char_set'] = 'utf8';
+$db['tinsukia']['dbcollat'] = 'utf8_general_ci';
+$db['tinsukia']['swap_pre'] = '';
+$db['tinsukia']['autoinit'] = FALSE;
+$db['tinsukia']['stricton'] = FALSE;
+$db['tinsukia']['port'] = 5432;
+
+$db['kamrupm']['hostname'] = '10.177.7.134';
+$db['kamrupm']['username'] = 'postgres';
+$db['kamrupm']['password'] = 'postgres';
+$db['kamrupm']['database'] = 'kamrupM';
+$db['kamrupm']['dbdriver'] = 'postgre';
+$db['kamrupm']['dbprefix'] = '';
+$db['kamrupm']['pconnect'] = FALSE;
+$db['kamrupm']['db_debug'] = FALSE;
+$db['kamrupm']['cache_on'] = FALSE;
+$db['kamrupm']['cachedir'] = '';
+$db['kamrupm']['char_set'] = 'utf8';
+$db['kamrupm']['dbcollat'] = 'utf8_general_ci';
+$db['kamrupm']['swap_pre'] = '';
+$db['kamrupm']['autoinit'] = FALSE;
+$db['kamrupm']['stricton'] = FALSE;
+$db['kamrupm']['port'] = 5432;
+
+$db['nalbari']['hostname'] = '10.177.7.134';
+$db['nalbari']['username'] = 'postgres';
+$db['nalbari']['password'] = 'postgres';
+$db['nalbari']['database'] = 'nalbari';
+$db['nalbari']['dbdriver'] = 'postgre';
+$db['nalbari']['dbprefix'] = '';
+$db['nalbari']['pconnect'] = FALSE;
+$db['nalbari']['db_debug'] = FALSE;
+$db['nalbari']['cache_on'] = FALSE;
+$db['nalbari']['cachedir'] = '';
+$db['nalbari']['char_set'] = 'utf8';
+$db['nalbari']['dbcollat'] = 'utf8_general_ci';
+$db['nalbari']['swap_pre'] = '';
+$db['nalbari']['autoinit'] = FALSE;
+$db['nalbari']['stricton'] = FALSE;
+$db['nalbari']['port'] = 5432;
+
+$db['sonitpur']['hostname'] = '10.177.7.134';
+$db['sonitpur']['username'] = 'postgres';
+$db['sonitpur']['password'] = 'postgres';
+$db['sonitpur']['database'] = 'sonitpur';
+$db['sonitpur']['dbdriver'] = 'postgre';
+$db['sonitpur']['dbprefix'] = '';
+$db['sonitpur']['pconnect'] = FALSE;
+$db['sonitpur']['db_debug'] = FALSE;
+$db['sonitpur']['cache_on'] = FALSE;
+$db['sonitpur']['cachedir'] = '';
+$db['sonitpur']['char_set'] = 'utf8';
+$db['sonitpur']['dbcollat'] = 'utf8_general_ci';
+$db['sonitpur']['swap_pre'] = '';
+$db['sonitpur']['autoinit'] = FALSE;
+$db['sonitpur']['stricton'] = FALSE;
+$db['sonitpur']['port'] = 5432;
+
+$db['lakhimpur']['hostname'] = '10.177.0.37';
+$db['lakhimpur']['username'] = 'postgres';
+$db['lakhimpur']['password'] = 'postgres';
+$db['lakhimpur']['database'] = 'lakhimpur_uat';
+$db['lakhimpur']['dbdriver'] = 'postgre';
+$db['lakhimpur']['dbprefix'] = '';
+$db['lakhimpur']['pconnect'] = FALSE;
+$db['lakhimpur']['db_debug'] = FALSE;
+$db['lakhimpur']['cache_on'] = FALSE;
+$db['lakhimpur']['cachedir'] = '';
+$db['lakhimpur']['char_set'] = 'utf8';
+$db['lakhimpur']['dbcollat'] = 'utf8_general_ci';
+$db['lakhimpur']['swap_pre'] = '';
+$db['lakhimpur']['autoinit'] = FALSE;
+$db['lakhimpur']['stricton'] = FALSE;
+$db['lakhimpur']['port'] = 5432;
+
+$db['sibsagar']['hostname'] = '10.177.7.134';
+$db['sibsagar']['username'] = 'postgres';
+$db['sibsagar']['password'] = 'postgres';
+$db['sibsagar']['database'] = 'sibsagar';
+$db['sibsagar']['dbdriver'] = 'postgre';
+$db['sibsagar']['dbprefix'] = '';
+$db['sibsagar']['pconnect'] = FALSE;
+$db['sibsagar']['db_debug'] = FALSE;
+$db['sibsagar']['cache_on'] = FALSE;
+$db['sibsagar']['cachedir'] = '';
+$db['sibsagar']['char_set'] = 'utf8';
+$db['sibsagar']['dbcollat'] = 'utf8_general_ci';
+$db['sibsagar']['swap_pre'] = '';
+$db['sibsagar']['autoinit'] = FALSE;
+$db['sibsagar']['stricton'] = FALSE;
+$db['sibsagar']['port'] = 5432;
+
+$db['morigaon']['hostname'] = '10.177.7.134';
+$db['morigaon']['username'] = 'postgres';
+$db['morigaon']['password'] = 'postgres';
+$db['morigaon']['database'] = 'morigaon';
+$db['morigaon']['dbdriver'] = 'postgre';
+$db['morigaon']['dbprefix'] = '';
+$db['morigaon']['pconnect'] = FALSE;
+$db['morigaon']['db_debug'] = FALSE;
+$db['morigaon']['cache_on'] = FALSE;
+$db['morigaon']['cachedir'] = '';
+$db['morigaon']['char_set'] = 'utf8';
+$db['morigaon']['dbcollat'] = 'utf8_general_ci';
+$db['morigaon']['swap_pre'] = '';
+$db['morigaon']['autoinit'] = FALSE;
+$db['morigaon']['stricton'] = FALSE;
+$db['morigaon']['port'] = 5432;
+
+$db['nagaon']['hostname'] = '10.177.7.134';
+$db['nagaon']['username'] = 'postgres';
+$db['nagaon']['password'] = 'postgres';
+$db['nagaon']['database'] = 'nagaon';
+$db['nagaon']['dbdriver'] = 'postgre';
+$db['nagaon']['dbprefix'] = '';
+$db['nagaon']['pconnect'] = FALSE;
+$db['nagaon']['db_debug'] = FALSE;
+$db['nagaon']['cache_on'] = FALSE;
+$db['nagaon']['cachedir'] = '';
+$db['nagaon']['char_set'] = 'utf8';
+$db['nagaon']['dbcollat'] = 'utf8_general_ci';
+$db['nagaon']['swap_pre'] = '';
+$db['nagaon']['autoinit'] = FALSE;
+$db['nagaon']['stricton'] = FALSE;
+$db['nagaon']['port'] = 5432;
+
+$db['majuli']['hostname'] = '10.177.7.134';
+$db['majuli']['username'] = 'postgres';
+$db['majuli']['password'] = 'postgres';
+$db['majuli']['database'] = 'majuli';
+$db['majuli']['dbdriver'] = 'postgre';
+$db['majuli']['dbprefix'] = '';
+$db['majuli']['pconnect'] = FALSE;
+$db['majuli']['db_debug'] = FALSE;
+$db['majuli']['cache_on'] = FALSE;
+$db['majuli']['cachedir'] = '';
+$db['majuli']['char_set'] = 'utf8';
+$db['majuli']['dbcollat'] = 'utf8_general_ci';
+$db['majuli']['swap_pre'] = '';
+$db['majuli']['autoinit'] = FALSE;
+$db['majuli']['stricton'] = FALSE;
+$db['majuli']['port'] = 5432;
+
+$db['karimganj']['hostname'] = '10.177.0.37';
+$db['karimganj']['username'] = 'postgres';
+$db['karimganj']['password'] = 'postgres';
+$db['karimganj']['database'] = 'karimganj_new';
+$db['karimganj']['dbdriver'] = 'postgre';
+$db['karimganj']['dbprefix'] = '';
+$db['karimganj']['pconnect'] = FALSE;
+$db['karimganj']['db_debug'] = FALSE;
+$db['karimganj']['cache_on'] = FALSE;
+$db['karimganj']['cachedir'] = '';
+$db['karimganj']['char_set'] = 'utf8';
+$db['karimganj']['dbcollat'] = 'utf8_general_ci';
+$db['karimganj']['swap_pre'] = '';
+$db['karimganj']['autoinit'] = FALSE;
+$db['karimganj']['stricton'] = FALSE;
+$db['karimganj']['port'] = 5432;
+
+$db['darrang']['hostname'] = '10.177.7.134';
+$db['darrang']['username'] = 'postgres';
+$db['darrang']['password'] = 'postgres';
+$db['darrang']['database'] = 'darrang';
+$db['darrang']['dbdriver'] = 'postgre';
+$db['darrang']['dbprefix'] = '';
+$db['darrang']['pconnect'] = FALSE;
+$db['darrang']['db_debug'] = FALSE;
+$db['darrang']['cache_on'] = FALSE;
+$db['darrang']['cachedir'] = '';
+$db['darrang']['char_set'] = 'utf8';
+$db['darrang']['dbcollat'] = 'utf8_general_ci';
+$db['darrang']['swap_pre'] = '';
+$db['darrang']['autoinit'] = FALSE;
+$db['darrang']['stricton'] = FALSE;
+$db['darrang']['port'] = 5432;
+
+$db['biswanath']['hostname'] = '10.177.7.134';
+$db['biswanath']['username'] = 'postgres';
+$db['biswanath']['password'] = 'postgres';
+$db['biswanath']['database'] = 'biswanath';
+$db['biswanath']['dbdriver'] = 'postgre';
+$db['biswanath']['dbprefix'] = '';
+$db['biswanath']['pconnect'] = FALSE;
+$db['biswanath']['db_debug'] = FALSE;
+$db['biswanath']['cache_on'] = FALSE;
+$db['biswanath']['cachedir'] = '';
+$db['biswanath']['char_set'] = 'utf8';
+$db['biswanath']['dbcollat'] = 'utf8_general_ci';
+$db['biswanath']['swap_pre'] = '';
+$db['biswanath']['autoinit'] = FALSE;
+$db['biswanath']['stricton'] = FALSE;
+$db['biswanath']['port'] = 5432;
+
+$db['hojai']['hostname'] = '10.177.7.134';
+$db['hojai']['username'] = 'postgres';
+$db['hojai']['password'] = 'postgres';
+$db['hojai']['database'] = 'hojai';
+$db['hojai']['dbdriver'] = 'postgre';
+$db['hojai']['dbprefix'] = '';
+$db['hojai']['pconnect'] = FALSE;
+$db['hojai']['db_debug'] = FALSE;
+$db['hojai']['cache_on'] = FALSE;
+$db['hojai']['cachedir'] = '';
+$db['hojai']['char_set'] = 'utf8';
+$db['hojai']['dbcollat'] = 'utf8_general_ci';
+$db['hojai']['swap_pre'] = '';
+$db['hojai']['autoinit'] = FALSE;
+$db['hojai']['stricton'] = FALSE;
+$db['hojai']['port'] = 5432;
+
+$db['charaideo']['hostname'] = '10.177.7.134';
+$db['charaideo']['username'] = 'postgres';
+$db['charaideo']['password'] = 'postgres';
+$db['charaideo']['database'] = 'charaideo';
+$db['charaideo']['dbdriver'] = 'postgre';
+$db['charaideo']['dbprefix'] = '';
+$db['charaideo']['pconnect'] = FALSE;
+$db['charaideo']['db_debug'] = FALSE;
+$db['charaideo']['cache_on'] = FALSE;
+$db['charaideo']['cachedir'] = '';
+$db['charaideo']['char_set'] = 'utf8';
+$db['charaideo']['dbcollat'] = 'utf8_general_ci';
+$db['charaideo']['swap_pre'] = '';
+$db['charaideo']['autoinit'] = FALSE;
+$db['charaideo']['stricton'] = FALSE;
+$db['charaideo']['port'] = 5432;
+
+$db['dhemaji']['hostname'] = '10.177.7.134';
+$db['dhemaji']['username'] = 'postgres';
+$db['dhemaji']['password'] = 'postgres';
+$db['dhemaji']['database'] = 'dhemaji';
+$db['dhemaji']['dbdriver'] = 'postgre';
+$db['dhemaji']['dbprefix'] = '';
+$db['dhemaji']['pconnect'] = FALSE;
+$db['dhemaji']['db_debug'] = FALSE;
+$db['dhemaji']['cache_on'] = FALSE;
+$db['dhemaji']['cachedir'] = '';
+$db['dhemaji']['char_set'] = 'utf8';
+$db['dhemaji']['dbcollat'] = 'utf8_general_ci';
+$db['dhemaji']['swap_pre'] = '';
+$db['dhemaji']['autoinit'] = FALSE;
+$db['dhemaji']['stricton'] = FALSE;
+$db['dhemaji']['port'] = 5432;
+
+$db['chirang']['hostname'] = '10.177.7.134';
+$db['chirang']['username'] = 'postgres';
+$db['chirang']['password'] = 'postgres';
+$db['chirang']['database'] = 'chirang';
+$db['chirang']['dbdriver'] = 'postgre';
+$db['chirang']['dbprefix'] = '';
+$db['chirang']['pconnect'] = FALSE;
+$db['chirang']['db_debug'] = FALSE;
+$db['chirang']['cache_on'] = FALSE;
+$db['chirang']['cachedir'] = '';
+$db['chirang']['char_set'] = 'utf8';
+$db['chirang']['dbcollat'] = 'utf8_general_ci';
+$db['chirang']['swap_pre'] = '';
+$db['chirang']['autoinit'] = FALSE;
+$db['chirang']['stricton'] = FALSE;
+$db['chirang']['port'] = 5432;
+
+$db['ssalmara']['hostname'] = '10.177.7.134';
+$db['ssalmara']['username'] = 'postgres';
+$db['ssalmara']['password'] = 'postgres';
+$db['ssalmara']['database'] = 'ssalmara';
+$db['ssalmara']['dbdriver'] = 'postgre';
+$db['ssalmara']['dbprefix'] = '';
+$db['ssalmara']['pconnect'] = FALSE;
+$db['ssalmara']['db_debug'] = FALSE;
+$db['ssalmara']['cache_on'] = FALSE;
+$db['ssalmara']['cachedir'] = '';
+$db['ssalmara']['char_set'] = 'utf8';
+$db['ssalmara']['dbcollat'] = 'utf8_general_ci';
+$db['ssalmara']['swap_pre'] = '';
+$db['ssalmara']['autoinit'] = FALSE;
+$db['ssalmara']['stricton'] = FALSE;
+$db['ssalmara']['port'] = 5432;
+
+$db['nocmaster']['hostname'] = '10.177.7.134';
+$db['nocmaster']['username'] = 'postgres';
+$db['nocmaster']['password'] = 'postgres';
+$db['nocmaster']['database'] = 'nocmaster';
+$db['nocmaster']['dbdriver'] = 'postgre';
+$db['nocmaster']['dbprefix'] = '';
+$db['nocmaster']['pconnect'] = FALSE;
+$db['nocmaster']['db_debug'] = FALSE;
+$db['nocmaster']['cache_on'] = FALSE;
+$db['nocmaster']['cachedir'] = '';
+$db['nocmaster']['char_set'] = 'utf8';
+$db['nocmaster']['dbcollat'] = 'utf8_general_ci';
+$db['nocmaster']['swap_pre'] = '';
+$db['nocmaster']['autoinit'] = FALSE;
+$db['nocmaster']['stricton'] = FALSE;
+$db['nocmaster']['port'] = 5432;
+
+$db['bajali']['hostname'] = '10.177.7.134';
+$db['bajali']['username'] = 'postgres';
+$db['bajali']['password'] = 'postgres';
+$db['bajali']['database'] = 'bajali';
+$db['bajali']['dbdriver'] = 'postgre';
+$db['bajali']['dbprefix'] = '';
+$db['bajali']['pconnect'] = FALSE;
+$db['bajali']['db_debug'] = FALSE;
+$db['bajali']['cache_on'] = FALSE;
+$db['bajali']['cachedir'] = '';
+$db['bajali']['char_set'] = 'utf8';
+$db['bajali']['dbcollat'] = 'utf8_general_ci';
+$db['bajali']['swap_pre'] = '';
+$db['bajali']['autoinit'] = FALSE;
+$db['bajali']['stricton'] = FALSE;
+$db['bajali']['port'] = 5432;
+
+$db['kamrup_test']['hostname'] = '10.177.0.37';
+$db['kamrup_test']['username'] = 'postgres';
+$db['kamrup_test']['password'] = 'postgres';
+$db['kamrup_test']['database'] = 'kamrup';
+$db['kamrup_test']['dbdriver'] = 'postgre';
+$db['kamrup_test']['dbprefix'] = '';
+$db['kamrup_test']['pconnect'] = FALSE;
+$db['kamrup_test']['db_debug'] = FALSE;
+$db['kamrup_test']['cache_on'] = FALSE;
+$db['kamrup_test']['cachedir'] = '';
+$db['kamrup_test']['char_set'] = 'utf8';
+$db['kamrup_test']['dbcollat'] = 'utf8_general_ci';
+$db['kamrup_test']['swap_pre'] = '';
+$db['kamrup_test']['autoinit'] = FALSE;
+$db['kamrup_test']['stricton'] = FALSE;
+$db['kamrup_test']['port'] = 5432;
+
+$db['karim_test']['hostname'] = '10.177.0.37';
+$db['karim_test']['username'] = 'postgres';
+$db['karim_test']['password'] = 'postgres';
+$db['karim_test']['database'] = 'karimganj_new';
+$db['karim_test']['dbdriver'] = 'postgre';
+$db['karim_test']['dbprefix'] = '';
+$db['karim_test']['pconnect'] = FALSE;
+$db['karim_test']['db_debug'] = FALSE;
+$db['karim_test']['cache_on'] = FALSE;
+$db['karim_test']['cachedir'] = '';
+$db['karim_test']['char_set'] = 'utf8';
+$db['karim_test']['dbcollat'] = 'utf8_general_ci';
+$db['karim_test']['swap_pre'] = '';
+$db['karim_test']['autoinit'] = FALSE;
+$db['karim_test']['stricton'] = FALSE;
+$db['karim_test']['port'] = 5432;

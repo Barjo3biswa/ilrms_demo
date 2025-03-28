@@ -1,0 +1,165 @@
+    // Agree All Cases Under Proposal by SDLAC
+    public function agreeProposalBySdlac()
+    {
+        $_POST = json_decode(file_get_contents("php://input"), true);
+
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('proposal_id', 'Proposal ID', 'trim|required|is_natural');
+        if ($this->form_validation->run() == FALSE) {
+            echo json_encode(array(
+                'responseType' => 3,
+            ));
+        } 
+        else 
+        {
+            $proposal_no     = $this->input->post('proposal_id');
+            $dist_code   = $this->session->userdata('dist_code');
+
+            $this->dbswitch2($dist_code);
+
+            $pendingCase = $this->basundharamodel->getAllCasesUnderProposalSdlac($proposal_no);
+            $cases     = $pendingCase->result();
+            $caseCount = $pendingCase->num_rows();
+
+            // var_dump($caseCount);
+            // die;
+
+            if ($caseCount != 0) 
+            {
+                    $this->db2->trans_begin();
+
+                    foreach ($cases as $row) 
+                    {
+                        // Update in Settlement Basic
+                        $case_no = $row->case_no;
+                        $updateData = array(
+                            'status' => MB_PENDING,
+                            'pending_officer' => MB_DEPUTY_COMM,
+                            'pending_office'  => MB_SDLAC,
+                            'from_office'     => MB_SDLAC,
+                            'sdlac_approval'  => 'Y',
+                            'sdlac_date'      => date('Y-m-d h:i:s'),
+                            'sdlace_proposal_no' => $proposal_no,
+
+                        );
+
+                        if ($this->basundharamodel->updateSettlementBasicData($case_no, $updateData) <= 0) 
+                        {
+                            $this->db2->trans_rollback();
+                            log_message('error', '#ERRDUPDATE0001: Updation failed in settlement_basic for Agree by SDLAC');
+                            log_message('error', $this->db2->last_query());
+
+                            echo json_encode(array(
+                                'responseType' => 1,
+                                'message'=> '#ERRDUPDATE0001: Updation failed in settlement_basic for Agree by SDLAC. Kindly contact System Administrator',
+
+                            ));
+                            return false;
+
+                        }
+                            // Update in Settlement Basic End
+
+                                //////proceeding start//////
+                                $proceeding_id = $this->db2->query("Select max(proceeding_id)+1 as c from settlement_proceeding where case_no='$case_no' ")->row()->c;
+
+                                if ($proceeding_id == null) {
+                                    $proceeding_id = 1;
+                                }
+
+                                $insPetProceed = [
+                                    'case_no' => $case_no,
+                                    'proceeding_id' => $proceeding_id,
+                                    'date_of_hearing' => date('Y-m-d h:i:s'),
+                                    'next_date_of_hearing' => date('Y-m-d h:i:s'),
+                                    'status' => MB_PENDING,
+                                    'user_code'  => $this->session->userdata('user_code'),
+                                    'date_entry' => date('Y-m-d h:i:s'),
+                                    'operation'  => 'E',
+                                    'note_on_order' => 'Approved by SDLAC',
+                                    'ip' => $_SERVER['REMOTE_ADDR'],
+                                    'office_from' => MB_SDLAC,
+                                    'office_to'   => MB_DEPUTY_COMM,
+                                    'task'        => 'Approved by SDLAC',
+                                    'minutes_proposal_id' => $proposal_no
+                                ];
+                                $insertProceeding = $this->db2->insert('settlement_proceeding', $insPetProceed);
+
+                                if ($insertProceeding != 1) {
+                                    $this->db2->trans_rollback();
+                                    log_message('error', '#ERRORPP: Insertion failed in settlement_proceeding for case no :' . $case_no);
+                                    echo json_encode(array(
+                                        'responseType' => 1,
+                                        'message' => '#ERRADD0004: Failed to insert . Kindly contact System Administrator',
+
+                                    ));
+                                    return false;
+                                    }
+                                    //////proceeding end//////
+
+                                    //////////////UPDATE To Settlement_proposal_cases/////////////////////                                
+                                    $updateProposalData = array(
+                                        'status' => '2',
+                                    );
+
+                                    if ($this->basundharamodel->updateProposalData($case_no, $updateProposalData) <= 0) {
+                                        $this->db2->trans_rollback();
+                                        log_message('error', '#ERRDUPDATE0001: Updation failed in settlement_proposal_cases for bulk Approve');
+                                        echo json_encode(array(
+                                            'responseType' => 1,
+                                            'message' => '#ERRDUPDATE0001: Updation failed in settlement_proposal_cases. Kindly contact System Administrator',
+
+                                        ));
+                                        return false;
+                                    } 
+                                    
+                                    //////Update to Settlement_proposal_cases End//////
+
+                                     //////////////UPDATE To Settlement_proposal_list/////////////////////                                
+                                     $updateProposalListData = array(
+                                        'status' => '2',
+                                    );
+
+                                    if ($this->basundharamodel->updateProposalListData($case_no, $updateProposalListData) <= 0) {
+                                        $this->db2->trans_rollback();
+                                        log_message('error', '#ERRDUPDATE0001: Updation failed in settlement_proposal_list for bulk Approve');
+                                        echo json_encode(array(
+                                            'responseType' => 1,
+                                            'message' => '#ERRDUPDATE0001: Updation failed in settlement_proposal_list. Kindly contact System Administrator',
+
+                                        ));
+                                        return false;
+                                    } 
+                                    
+                                    //////Update to Settlement_proposal_list End//////
+
+
+
+                                            //////////////POST To basundhara/////////////////////
+                                            $application_no = $this->basundharamodel->getApplicationNoByCaseNo($case_no)->applid;
+                                            $rmk = 'Approved  by SDLAC';
+                                            $status = MB_PENDING;
+                                            $task = MB_SDLAC;
+                                            $pen = MB_DEPUTY_COMM;
+                                            $case = $case_no;
+                                            $rtpsno = $application_no;
+
+                                            $rtps_status = $this->basundharamodel->postApiBasundhara($rtpsno, $case, $rmk, $status, $task, $pen);
+                                            $rtps_status = json_decode($rtps_status);
+                                            if ($rtps_status == 'n') {
+                                                $this->db->trans_rollback();
+                                                $this->session->set_flashdata('message', "Error #ERRAPP0011: Update Failed in API for Application_no # $rtpsno");
+                                                redirect(base_url() . "index.php/home");
+                                            } else {
+                                                $this->db2->trans_commit();
+                                                
+                                                echo json_encode(array(
+                                                    'responseType' => 2,
+                                                ));
+                                            }
+                                            //////////////POST To basundhara End///////////////
+
+                    }
+
+            } 
+        }
+    }

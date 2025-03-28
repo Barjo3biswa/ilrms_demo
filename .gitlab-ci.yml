@@ -1,0 +1,31 @@
+stages:
+  - deploy_stage
+  - deploy_prod
+  - deploy_dev
+
+deploy_stage:
+  stage: deploy_stage
+  script:    
+   - echo "Success"
+  only:
+    - stage
+
+
+deploy_dev:
+  stage: deploy_dev
+  script:    
+    - echo "Success"
+  only:
+    - dev
+
+
+deploy_prod:
+  stage: deploy_prod
+  script:    
+    - echo "Deploying to prod server...!!"
+    - ssh -v opc@172.16.3.134 'sudo chown -R opc:opc /var/www/html/ilrmsdemo && cd /var/www/html/ilrmsdemo && /home/opc/git-2.39.0/git checkout main && /home/opc/git-2.39.0/git reset --hard origin/main && /home/opc/git-2.39.0/git pull origin main && sudo chown -R apache:apache /var/www/html/ilrmsdemo'
+    - ssh -v opc@172.16.3.158 'sudo chown -R opc:opc /var/www/html/ilrmsdemo && cd /var/www/html/ilrmsdemo && /home/opc/git-2.39.0/git checkout main && /home/opc/git-2.39.0/git reset --hard origin/main && /home/opc/git-2.39.0/git pull origin main && sudo chown -R apache:apache /var/www/html/ilrmsdemo'
+    - echo "Deployment successful for prod!!!!!"
+  only:
+    - main
+
