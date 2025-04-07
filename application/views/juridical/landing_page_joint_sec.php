@@ -367,27 +367,27 @@
                 <div class="modal-header bg-danger">
                         <h5 class="modal-title w-100">
                             <i class="fa fa-undo" aria-hidden="true"></i>
-                            REVERT CASES TO DC <br>
+                            Revert Case(s) to DC <br>
                             <input type="hidden" value="" id="distict_code_revert" name="distict_code_revert">
                             <input type="hidden" value="" id="no_of_rows_update_form" name="no_of_rows_update_form">
+                            <input type="hidden" value="45" id="service_code" name="service_code">
                         </h5>
                 </div>
                 <div class="modal-body " style="font-size:15px">
                     <div class="form-group">
                         <label for="">Select Cabinet Memo</label>
-                        <select class="form-select" aria-label="Default select example" name="cabMemoIdRevert" id="cabMemoIdRevert" required>
-                        </select>
+                        <select class="form-select" aria-label="Default select example" name="cabMemoIdRevert" id="cabMemoIdRevert" required></select>
                     </div>
+                    <br>
                     <div class="form-group">
                         <label for="selectedCasesTable">Selected Cases</label>
                         <div style="height: 200px; overflow-y: auto;">
                             <table id="reverted_case_details_table" class="table table-striped">
                                 <thead>
                                     <tr  class="bg-danger">
-                                        <th></th>
-                                        <th width="30%">Case No.</th>
-                                        <th width="15%">Ast Verification.</th>
-                                        <th width="55%">Reverted Remarks </th>
+                                        <th width="20%">Case No</th>
+                                        <th width="35%">Ast Remarks</th>
+                                        <th width="45%">Reverted Remarks </th>
                                     </tr>
                                 </thead>
                                 <tbody id="TextBoxContainerViewForm">
@@ -398,11 +398,9 @@
 
                 </div>
                 <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" id="modalClose">
-                            <i class="fa-fa-close"></i>
-                            Close
-                        </button>
-                    <button type="button" class="btn btn-primary" id="confirmSubmitRevert" onclick="revert_cases_to_dc_submit()">Confirm Revert</button>
+                    <button type="button" class="btn btn-secondary" id="modalClose">
+                            <i class="fa-fa-close"></i> Close</button>
+                    <button type="button" class="btn btn-primary" id="confirmSubmitRevert">Confirm Revert</button>
                 </div>
             </div>
         </div>
@@ -799,64 +797,64 @@ $(document).ready(function() {
         ////////////////Revert Cases to DC//////////
 
 
-    $(document).on('click', '#bulkRevertToDcModalOpen', function() {
-    var district_id = $("#selectDistrict").val();
-    var selectedList = [];
-    $('.selectMark:checked').each(function(i) {
-        selectedList[i] = $(this).val();
-    });
+    // $(document).on('click', '#bulkRevertToDcModalOpen', function() {
+    // var district_id = $("#selectDistrict").val();
+    // var selectedList = [];
+    // $('.selectMark:checked').each(function(i) {
+    //     selectedList[i] = $(this).val();
+    // });
 
-    if (selectedList.length > 0) {
-        const applicant = {
-            selectedList: selectedList,
-            district_id: district_id,
-        };
+    // if (selectedList.length > 0) {
+    //     const applicant = {
+    //         selectedList: selectedList,
+    //         district_id: district_id,
+    //     };
 
-        $.ajax({
-            url: baseurl + "DeptTenant/getAstRemarksDetailsRevertedCases",
-            type: "POST",
-            dataType: "json",
-            contentType: "application/json",
-            data: JSON.stringify(applicant),
-            success: function(data) {
-                $('#show-Img').hide();
-                if (data.responseType == 1) {
-                    showErrorMessage(data.message);
-                } else if (data.responseType == 2) {
-                    $('#distict_code_revert').val(district_id);
-                    $('#reverted_case_details_table tbody').empty();
-                    for (let i = 0; i < data.reverted_case_list.length; i++) {
-                        var div = $("<tr/>");
-                        div.html(GetDynamicTextBoxForRevert(i, data.reverted_case_list[i].ast_verification));
-                        $("#reverted_case_details_table tbody").append(div);   
-                        $('#view_case_no_' + i).val(data.reverted_case_list[i].case_no);      
-                        $('#view_case_no1_' + i).text(data.reverted_case_list[i].case_no);      
-                        $('#view_remark_' + i).val(data.reverted_case_list[i].ast_remarks);       
-                    }
+    //     $.ajax({
+    //         url: baseurl + "DeptTenant/getAstRemarksDetailsRevertedCases",
+    //         type: "POST",
+    //         dataType: "json",
+    //         contentType: "application/json",
+    //         data: JSON.stringify(applicant),
+    //         success: function(data) {
+    //             $('#show-Img').hide();
+    //             if (data.responseType == 1) {
+    //                 showErrorMessage(data.message);
+    //             } else if (data.responseType == 2) {
+    //                 $('#distict_code_revert').val(district_id);
+    //                 $('#reverted_case_details_table tbody').empty();
+    //                 for (let i = 0; i < data.reverted_case_list.length; i++) {
+    //                     var div = $("<tr/>");
+    //                     div.html(GetDynamicTextBoxForRevert(i, data.reverted_case_list[i].ast_verification));
+    //                     $("#reverted_case_details_table tbody").append(div);   
+    //                     $('#view_case_no_' + i).val(data.reverted_case_list[i].case_no);      
+    //                     $('#view_case_no1_' + i).text(data.reverted_case_list[i].case_no);      
+    //                     $('#view_remark_' + i).val(data.reverted_case_list[i].ast_remarks);       
+    //                 }
 
-                    // Populate the cabMemoIdRevert select box
-                    $('#cabMemoIdRevert').empty();
-                    $.each(data.cabMemoList, function(index, memo) {
-                        $('#cabMemoIdRevert').append($('<option></option>').attr('value', memo.cab_id).text(memo.cab_memo_name));
-                    });
+    //                 // Populate the cabMemoIdRevert select box
+    //                 $('#cabMemoIdRevert').empty();
+    //                 $.each(data.cabMemoList, function(index, memo) {
+    //                     $('#cabMemoIdRevert').append($('<option></option>').attr('value', memo.cab_id).text(memo.cab_memo_name));
+    //                 });
 
-                    const modal = $('#revertToDCModal').modal({
-                        backdrop: 'static',
-                        keyboard: false,
-                    });
-                    modal.fadeIn('slow').modal('show');
-                } else if (data.responseType == 3) {
-                    showWarningMessage(data.message);
-                }
-            },
-            error: function (jqXHR, exception) {
-                alert('Could not Complete your Request ..!, Please Try Again later..!');
-            }
-        });
-    } else {
-        showWarningMessage("Please Select Case to Revert to DC");
-    }
-});
+    //                 const modal = $('#revertToDCModal').modal({
+    //                     backdrop: 'static',
+    //                     keyboard: false,
+    //                 });
+    //                 modal.fadeIn('slow').modal('show');
+    //             } else if (data.responseType == 3) {
+    //                 showWarningMessage(data.message);
+    //             }
+    //         },
+    //         error: function (jqXHR, exception) {
+    //             alert('Could not Complete your Request ..!, Please Try Again later..!');
+    //         }
+    //     });
+    // } else {
+    //     showWarningMessage("Please Select Case to Revert to DC");
+    // }
+// });
 
 function GetDynamicTextBoxForRevert(count, ast_verification) {
     var verificationStatus = '';
@@ -900,25 +898,27 @@ $(document).on('click', '#confirmSubmitRevert', function(event) {
     event.preventDefault();
     var district_id = $("#distict_code_revert").val();
     var cabIdRevert = $("#cabMemoIdRevert").val();
-    var rowCount = $('#reverted_case_details_table tr').length - 1;
+    var rowCount    = $('#reverted_case_details_table tr').length - 1;
     $('#no_of_rows_update_form').val(rowCount);
+    var service_code = $("#service_code").val();
 
-    var formdata = $('#case_revert_to_dc_form').serialize();
+    var formdata    = $('#case_revert_to_dc_form').serialize();
+
     Swal.fire({
-        title: 'Are you sure?',
-        text: "Are you sure to Revert These Cases to DC!",
-        icon: 'info',
-        html: '<p class="text-danger">*** These Cases Will be Reverted Under Cab ID: ' + cabIdRevert + ' </p>',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, Revert!',
+        title : 'Are you sure?',
+        text  : "Are you sure to Revert These Cases to DC!",
+        icon  : 'info',
+        html  : '<p class="text-danger">*** These Cases Will be Reverted Under Cab ID: ' + cabIdRevert + ' </p>',
+        showCancelButton   : true,
+        confirmButtonColor : '#3085d6',
+        cancelButtonColor  : '#d33',
+        confirmButtonText  : 'Yes, Revert!',
     }).then((result) => {
         if (result.isConfirmed) {
             $('#revertToDCModal').hide();
             $('#show-Img').show();
             $.ajax({
-                url: baseurl + "DeptTenant/bulkRevertConversionCasesToDC",
+                url: baseurl + "DeptRevertController/bulkRevertDeptCasesToDC",
                 type: "POST",
                 data: formdata,
                 dataType: "json",
@@ -958,6 +958,7 @@ $(document).on('click', '#confirmSubmitRevert', function(event) {
         }
     });
 });
+
 
 
 

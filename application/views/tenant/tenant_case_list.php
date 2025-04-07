@@ -60,6 +60,7 @@
 
 
 
+
             <div class="row mt-3">
                 <div class="col-lg-12" align="left">
                     <button class="rezaButt buttInfo" id="markAddCasesBtn">
@@ -80,6 +81,11 @@
                     <button class="rezaButt buttsuccess" id="sentForASOVerification">
                         <i class="fa fa-forward" aria-hidden="true"></i>
                         Sent for ASO verification
+                    </button>
+
+                    <button class="rezaButt buttdanger" id="bulkRevertJuridicalToDcModalOpen">
+                        <i class="fa fa-undo" aria-hidden="true"></i>
+                        Revert To DC
                     </button>
 
                     <!-- <button class="rezaButt buttInfo" id="addToProposal">
@@ -214,6 +220,86 @@
             $(this).closest('tr').removeClass('highlighted-row');
         }
     });
+    }
+
+
+    $(document).on('click', '#bulkRevertJuridicalToDcModalOpen', function() {
+        $('#show-Img').show();
+        var district_id = $("#dist_code").val();
+        var selectedList = [];
+        $('.selectMark:checked').each(function(i) {
+            selectedList[i] = $(this).val().split('@')[0];
+        });
+
+        if (selectedList.length > 0) {
+
+             const applicant = {
+                selectedList : selectedList,
+                district_id  : district_id,
+                service_code : '42',
+            };
+            // console.log(applicant);
+
+            $.ajax({
+              url: baseurl + "DeptRevertController/getRemarksDetailsRevertedCases",
+              type: "POST",
+              dataType: "json",
+              contentType: "application/json",
+              success: function (data) {
+
+                $('#distict_code_revert').val(district_id);
+
+                if(data.asstVerify != 0)
+                {
+                  showWarningMessage("Reverting to DC is not possible because the assistant verification for a few selected case(s) is still pending !!!");
+                  return;
+                }
+                else
+                {
+                  var option = "<option>-- Select Cabinet Memo --</option>";
+                  $.each(data.cabIdList, function (j, val)
+                  {
+                    option += "<option value='"+val["id"]+"'>"+ val["cab_memo_name"] + " ("+val["cab_id"] +")</option>";
+                  });
+                  $('#cabMemoIdRevert').html(option);
+
+
+                  // console.log(data.revertedCases.reverted_case_list);
+
+
+                  var tableData = '';
+                  $.each(data.revertedCases.reverted_case_list, function (i, val)
+                  {
+                    count = i+1;
+                    tableData +=
+                      '<tr>'+
+                        '<td>' + val["case_no"] + 
+                        '<input id="view_case_no_' + count + '" readonly name="revert_case_no[]" type="hidden" class="form-control-1" value="'+ val["case_no"] +'" />'+
+                        '</td>' +
+                        '<td>' + val["ast_remarks"] + '</td>' +
+                        '<td><textarea rows ="1" id ="view_remark_'+ count +'" name="revert_remarks[]" type="text"  class="form-control text-danger" placeholder="Please Enter Remarks for Revert"/></td>' +
+                      '</tr>'
+                  });
+                  $('#TextBoxContainerViewForm').html(tableData);
+                  const modal = $('#revertToDCModal').modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                  });
+                  modal.fadeIn('slow').modal('show')
+                }
+              },
+              error: function (jqXHR, exception) {
+                showWarningMessage('Could not Complete your Request ..!, Please Try Again later..!');
+              },
+              data: JSON.stringify(applicant)
+          });
+        } else {
+          showWarningMessage("Please Select Case to Reverto DC");
+        }
+    });
+
+    function revertToDCModalClose(){
+        $('#revertToDCModal').fadeOut('slow').modal('hide');
     }
 
 

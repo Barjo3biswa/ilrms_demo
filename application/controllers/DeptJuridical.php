@@ -107,6 +107,16 @@ class DeptJuridical extends MY_Controller
         $this->load->view('layouts/main', $data);
     }
 
+    public function revertPage(){
+        $dist_code     = trim($this->input->post('selectDistrict'));
+        $data['user_dist']      = $this->DeptJuridicalModel->getDeptUserDistListWithRevertedCaseCount();
+        $data['dist_code'] = $dist_code;
+        $data['_view'] = 'revert/juridical-revert';
+        $this->load->view('layouts/main', $data);
+
+        
+    }
+
     public function viewPendingJuridicalCases()
     {
         $dist_code   = $this->input->post('dist_code');

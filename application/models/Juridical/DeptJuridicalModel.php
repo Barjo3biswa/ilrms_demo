@@ -7,6 +7,66 @@ class DeptJuridicalModel extends CI_Model
 
     }
 
+    public function dbswitch2($dist_code)
+    {
+        if ($dist_code == "02") {
+            $this->db2 = $this->load->database('dhubri', TRUE);
+        } else if ($dist_code == "05") {
+            $this->db2 = $this->load->database('barpeta', TRUE);
+        } else if ($dist_code == "10") {
+            $this->db2 = $this->load->database('chirang', TRUE);
+        } else if ($dist_code == "13") {
+            $this->db2 = $this->load->database('bongaigaon', TRUE);
+        } else if ($dist_code == "17") {
+            $this->db2 = $this->load->database('dibrugarh', TRUE);
+        } else if ($dist_code == "15") {
+            $this->db2 = $this->load->database('jorhat', TRUE);
+        } else if ($dist_code == "14") {
+            $this->db2 = $this->load->database('golaghat', TRUE);
+        } else if ($dist_code == "07") {
+            $this->db2 = $this->load->database('kamrup', TRUE);
+        } else if ($dist_code == "03") {
+            $this->db2 = $this->load->database('goalpara', TRUE);
+        } else if ($dist_code == "18") {
+            $this->db2 = $this->load->database('tinsukia', TRUE);
+        } else if ($dist_code == "12") {
+            $this->db2 = $this->load->database('lakhimpur', TRUE);
+        } else if ($dist_code == "24") {
+            $this->db2 = $this->load->database('kamrupm', TRUE);
+        } else if ($dist_code == "06") {
+            $this->db2 = $this->load->database('nalbari', TRUE);
+        } else if ($dist_code == "11") {
+            $this->db2 = $this->load->database('sonitpur', TRUE);
+        } else if ($dist_code == "16") {
+            $this->db2 = $this->load->database('sibsagar', TRUE);
+        } else if ($dist_code == "32") {
+            $this->db2 = $this->load->database('morigaon', TRUE);
+        } else if ($dist_code == "33") {
+            $this->db2 = $this->load->database('nagaon', TRUE);
+        } else if ($dist_code == "34") {
+            $this->db2 = $this->load->database('majuli', TRUE);
+        } else if ($dist_code == "21") {
+            $this->db2 = $this->load->database('karimganj', TRUE);
+        } else if ($dist_code == "35") {
+            $this->db2 = $this->load->database('biswanath', TRUE);
+        } else if ($dist_code == "36") {
+            $this->db2 = $this->load->database('hojai', TRUE);
+        } else if ($dist_code == "37") {
+            $this->db2 = $this->load->database('charaideo', TRUE);
+        } else if ($dist_code == "25") {
+            $this->db2 = $this->load->database('dhemaji', TRUE);
+        } else if ($dist_code == "39") {
+            $this->db2 = $this->load->database('bajali', TRUE);
+        } else if ($dist_code == "38") {
+            $this->db2 = $this->load->database('ssalmara', TRUE);
+        } else if ($dist_code == "08") {
+            $this->db2 = $this->load->database('darrang', TRUE);
+        } else if ($dist_code == "auth") {
+            $this->db2 = $this->load->database('auth', TRUE);
+        }
+        return $this->db2;
+    }
+
     public function getTenantCaseList($dbb,$distCode) {
         $cases = $dbb->query("select * from petition_basic fmb where add_off_desig=? and not_fresh =? and status =? and mut_type=? and dist_code=? and bo_note_yn is not null order by petition_no ASC",
             array(MB_DEPARTMENT,'Y','W',CONVERSION_CODE,$distCode));

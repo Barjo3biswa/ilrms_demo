@@ -243,10 +243,15 @@
                             Sent For Verification
                         </button>
 
-                        <button class="btn btn-danger" id="bulkRevertToDcModalOpen">
+                        <!-- <button class="btn btn-danger" id="bulkRevertToDcModalOpen">
                             <i class="fa fa-undo" aria-hidden="true"></i>
                             Revert Cases To DC
-                        </button>
+                        </button> -->
+
+                        <button class="rezaButt buttdanger" id="bulkRevertJuridicalToDcModalOpen">
+                        <i class="fa fa-undo" aria-hidden="true"></i>
+                        Revert To DC
+                    </button>
                     </div>
                 </div>
 
@@ -300,7 +305,7 @@
 
 
 <!-- Modal for Revert Cases to DC -->
-<div class="modal" role="dialog" id="revertToDCModal" data-keyboard="false" data-backdrop="static">
+<!-- <div class="modal" role="dialog" id="revertToDCModal" data-keyboard="false" data-backdrop="static">
     <form method="post" id="case_revert_to_dc_form">
         <div class="modal-dialog modal-dialog-scrollable modal-xl">
             <div class="modal-content">
@@ -337,7 +342,7 @@
             </div>
         </div>
     </form>
-</div>
+</div> -->
 <!-- Modal for Revert Cases to DC -->
 
 <!-- Modal for send cases to Assistant for Verification -->
@@ -376,6 +381,55 @@
     </div>
 </div>
 <!-- Modal for send cases to Assistant for Verification -->
+
+<!-- Modal for Revert Cases to DC -->
+<div class="modal" role="dialog" id="revertToDCModal" data-keyboard="false" data-backdrop="static">
+    <form method="post" id="case_revert_to_dc_form">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                        <h5 class="modal-title w-100">
+                            <i class="fa fa-undo" aria-hidden="true"></i>
+                            Revert Case(s) to DC <br>
+                            <input type="hidden" value="" id="distict_code_revert" name="distict_code_revert">
+                            <input type="hidden" value="" id="no_of_rows_update_form" name="no_of_rows_update_form">
+                            <input type="hidden" value="25" id="service_code" name="service_code">
+                        </h5>
+                </div>
+                <div class="modal-body " style="font-size:15px">
+                    <div class="form-group">
+                        <label for="">Select Cabinet Memo</label>
+                        <select class="form-select" aria-label="Default select example" name="cabMemoIdRevert" id="cabMemoIdRevert" required></select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="selectedCasesTable">Selected Cases</label>
+                        <div style="height: 200px; overflow-y: auto;">
+                            <table id="reverted_case_details_table" class="table table-striped">
+                                <thead>
+                                    <tr  class="bg-danger">
+                                        <th width="20%">Case No</th>
+                                        <th width="35%">Ast Remarks</th>
+                                        <th width="45%">Reverted Remarks </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TextBoxContainerViewForm">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="modalClose">
+                            <i class="fa-fa-close"></i> Close</button>
+                    <button type="button" class="btn btn-primary" id="confirmSubmitRevert">Confirm Revert</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Modal for Revert Cases to DC -->
 
 
 <input type="hidden" id="getBaseURL" value="<?php echo base_url(); ?>index.php">
@@ -929,5 +983,154 @@
             }
         })
     }
+
+
+    var baseurl = "<?php echo base_url(); ?>";
+
+    $(document).on('click', '#bulkRevertJuridicalToDcModalOpen', function() {
+        
+        $('#show-Img').show();
+        var district_id = $("#dist_code").val();
+        var selectedList = [];
+        $('.selectMark:checked').each(function(i) {
+            selectedList[i] = $(this).val().split('@')[0];
+        });
+
+        if (selectedList.length > 0) {
+
+             const applicant = {
+                selectedList : selectedList,
+                district_id  : district_id,
+                service_code : '25',
+            };
+            // console.log(applicant);
+
+            $.ajax({
+              url: baseurl + "DeptRevertController/getRemarksDetailsRevertedCases",
+              type: "POST",
+              dataType: "json",
+              contentType: "application/json",
+              success: function (data) {
+
+                $('#distict_code_revert').val(district_id);
+
+                if(data.asstVerify != 0)
+                {
+                  showWarningMessage("Reverting to DC is not possible because the assistant verification for a few selected case(s) is still pending !!!");
+                  return;
+                }
+                else
+                {
+                  var option = "<option>-- Select Cabinet Memo --</option>";
+                  $.each(data.cabIdList, function (j, val)
+                  {
+                    option += "<option value='"+val["id"]+"'>"+ val["cab_memo_name"] + " ("+val["cab_id"] +")</option>";
+                  });
+                  $('#cabMemoIdRevert').html(option);
+
+
+                  // console.log(data.revertedCases.reverted_case_list);
+
+
+                  var tableData = '';
+                  $.each(data.revertedCases.reverted_case_list, function (i, val)
+                  {
+                    count = i+1;
+                    tableData +=
+                      '<tr>'+
+                        '<td>' + val["case_no"] + 
+                        '<input id="view_case_no_' + count + '" readonly name="revert_case_no[]" type="hidden" class="form-control-1" value="'+ val["case_no"] +'" />'+
+                        '</td>' +
+                        '<td>' + val["ast_remarks"] + '</td>' +
+                        '<td><textarea rows ="1" id ="view_remark_'+ count +'" name="revert_remarks[]" type="text"  class="form-control text-danger" placeholder="Please Enter Remarks for Revert"/></td>' +
+                      '</tr>'
+                  });
+                  $('#TextBoxContainerViewForm').html(tableData);
+                  const modal = $('#revertToDCModal').modal({
+                    backdrop: 'static',
+                    keyboard: false,
+                  });
+                  modal.fadeIn('slow').modal('show')
+                }
+              },
+              error: function (jqXHR, exception) {
+                showWarningMessage('Could not Complete your Request ..!, Please Try Again later..!');
+              },
+              data: JSON.stringify(applicant)
+          });
+        } else {
+          showWarningMessage("Please Select Case to Reverto DC");
+        }
+    });
+
+    function revertToDCModalClose(){
+        $('#revertToDCModal').fadeOut('slow').modal('hide');
+    }
+
+
+    $(document).on('click', '#confirmSubmitRevert', function(event) {
+    event.preventDefault();
+    var district_id = $("#distict_code_revert").val();
+    var cabIdRevert = $("#cabMemoIdRevert").val();
+    var rowCount    = $('#reverted_case_details_table tr').length - 1;
+    $('#no_of_rows_update_form').val(rowCount);
+    var service_code = $("#service_code").val();
+
+    var formdata    = $('#case_revert_to_dc_form').serialize();
+
+    Swal.fire({
+        title : 'Are you sure?',
+        text  : "Are you sure to Revert These Cases to DC!",
+        icon  : 'info',
+        html  : '<p class="text-danger">*** These Cases Will be Reverted Under Cab ID: ' + cabIdRevert + ' </p>',
+        showCancelButton   : true,
+        confirmButtonColor : '#3085d6',
+        cancelButtonColor  : '#d33',
+        confirmButtonText  : 'Yes, Revert!',
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#revertToDCModal').hide();
+            $('#show-Img').show();
+            $.ajax({
+                url: baseurl + "DeptRevertController/bulkRevertDeptCasesToDC",
+                type: "POST",
+                data: formdata,
+                dataType: "json",
+                success: function(data) {
+                    $('#show-Img').hide();
+                    if (data.responseType == 1) {
+                        showErrorMessage(data.message);
+                        $('#revertToDCModal').show();
+                    } else if (data.responseType == 2) {
+                        Swal.fire({
+                            backdrop: true,
+                            allowOutsideClick: false,
+                            text: data.message,
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                actions: 'my-actions',
+                                confirmButton: 'order-2',
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(true);
+                            }
+                        });
+                    } else if (data.responseType == 3) {
+                        showWarningMessage(data.message);
+                        $('#revertToDCModal').show();
+                    } else {
+                        showErrorMessage("SOMETHING WENT WRONG");
+                    }
+                },
+                error: function() {
+                    Swal.fire('Changes are not saved', '', 'warning');
+                    $('#show-Img').hide();
+                    $('#revertToDCModal').show();
+                },
+            });
+        }
+    });
+});
 
 </script>

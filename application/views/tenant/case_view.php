@@ -589,8 +589,8 @@
 
                             <?php
 
-                                $pre_addr = json_decode($settlement->pdar_add1);
-                                $per_addr = json_decode($settlement->pdar_add2);
+                                $pre_addr = $settlement->pdar_add1;
+                                $per_addr = $settlement->pdar_add2;
                             ?>
 
 
@@ -598,7 +598,7 @@
                                 <th>Present address</th>
                                 <td>
                                     <strong class="alert-warning">
-                                        <?=$pre_addr->address?>
+                                        <?=$pre_addr?>
                                     </strong>
                                 </td>
                                 <th>
@@ -606,7 +606,7 @@
                                 </th>
                                 <td>
                                     <strong class="alert-warning">
-                                        <?=$per_addr->address?>
+                                        <?=$per_addr?>
                                     </strong>
                                 </td>
                             </tr>

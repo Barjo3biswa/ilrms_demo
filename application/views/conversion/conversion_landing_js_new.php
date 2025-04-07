@@ -371,6 +371,7 @@
                             REVERT CASES TO DC <br>
                             <input type="hidden" value="" id="distict_code_revert" name="distict_code_revert">
                             <input type="hidden" value="" id="no_of_rows_update_form" name="no_of_rows_update_form">
+                            <input type="hidden" value="44" name="service_code" id="service_code">
                         </h5>
                 </div>
                 <div class="modal-body " style="font-size:15px">
@@ -385,7 +386,7 @@
                             <table id="reverted_case_details_table" class="table table-striped">
                                 <thead>
                                     <tr  class="bg-danger">
-                                        <th></th>
+                                        <!-- <th></th> -->
                                         <th width="30%">Case No.</th>
                                         <th width="15%">Ast Verification.</th>
                                         <th width="55%">Reverted Remarks </th>
@@ -403,7 +404,7 @@
                             <i class="fa-fa-close"></i>
                             Close
                         </button>
-                    <button type="button" class="btn btn-primary" id="confirmSubmitRevert" onclick="revert_cases_to_dc_submit()">Confirm Revert</button>
+                    <button type="button" class="btn btn-primary" id="confirmSubmitRevert">Confirm Revert</button>
                 </div>
             </div>
         </div>
@@ -961,25 +962,27 @@ $(document).on('click', '#confirmSubmitRevert', function(event) {
     event.preventDefault();
     var district_id = $("#distict_code_revert").val();
     var cabIdRevert = $("#cabMemoIdRevert").val();
-    var rowCount = $('#reverted_case_details_table tr').length - 1;
+    var rowCount    = $('#reverted_case_details_table tr').length - 1;
     $('#no_of_rows_update_form').val(rowCount);
+    var service_code = $("#service_code").val();
 
-    var formdata = $('#case_revert_to_dc_form').serialize();
+    var formdata    = $('#case_revert_to_dc_form').serialize();
+
     Swal.fire({
-        title: 'Are you sure?',
-        text: "Are you sure to Revert These Cases to DC!",
-        icon: 'info',
-        html: '<p class="text-danger">*** These Cases Will be Reverted Under Cab ID: ' + cabIdRevert + ' </p>',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, Revert!',
+        title : 'Are you sure?',
+        text  : "Are you sure to Revert These Cases to DC!",
+        icon  : 'info',
+        html  : '<p class="text-danger">*** These Cases Will be Reverted Under Cab ID: ' + cabIdRevert + ' </p>',
+        showCancelButton   : true,
+        confirmButtonColor : '#3085d6',
+        cancelButtonColor  : '#d33',
+        confirmButtonText  : 'Yes, Revert!',
     }).then((result) => {
         if (result.isConfirmed) {
             $('#revertToDCModal').hide();
             $('#show-Img').show();
             $.ajax({
-                url: baseurl + "DeptConversionNew/bulkRevertConversionCasesToDC",
+                url: baseurl + "DeptRevertController/bulkRevertDeptCasesToDC",
                 type: "POST",
                 data: formdata,
                 dataType: "json",
@@ -1019,7 +1022,6 @@ $(document).on('click', '#confirmSubmitRevert', function(event) {
         }
     });
 });
-
 
 
 });

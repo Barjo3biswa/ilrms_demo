@@ -311,7 +311,7 @@
 </style>
 <div class="col-lg-10 offset-1 mb-5">
     <?php 
-        if((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))){
+        if((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))){
             $lessa_chatak='Chatak'; }
         else{
             $lessa_chatak='Lessa';

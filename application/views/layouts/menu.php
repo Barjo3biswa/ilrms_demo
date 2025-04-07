@@ -593,26 +593,7 @@
 						
 					</div>
 	    <?php endif ?>
-            <?php if ($this->session->userdata('designation') ==  DEPARTMENT_USERCODE && NC_SETTLEMENT_OPEN == 1) : ?>
-				<button class="dropdown-btn">
-					<i class="fa fa-fw fa-angle-right"></i>NC Settlement(MB3)
-					<i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;">
-					</i>&nbsp;
-				</button>
-				<div class="dropdown-container">
-					<a href="<?php echo base_url() ?>index.php/NcSettlement/getAllCasesListByDept" class="nav-link"><i class="fa fa-fw fa-angle-right"></i>&nbsp;Pending Cases</a>
-					<a href="<?php echo base_url() ?>index.php/NcSettlement/getAllRevertedCasesListByDept" class="nav-link"><i class="fa fa-fw fa-angle-right"></i>&nbsp;Reverted Cases</a>
-					<a href="<?= base_url() . 'create-cab-id-nc' ?>" class="nav-link">
-						<i class="fa fa-fw fa-angle-right"></i>&nbsp; Create CAB ID</a>
-					<a href="<?= base_url() . 'to-be-finalize-cab-nc' ?>" class="nav-link">
-						<i class="fa fa-fw fa-angle-right"></i>&nbsp; To be Finalize</a>
-					<a href="<?= base_url() . 'finalized-cab-id-nc' ?>" class="nav-link">
-						<i class="fa fa-fw fa-angle-right"></i>&nbsp; Finalized CAB ID</a>
-					<a href="<?= base_url() . 'approved-cab-id-nc' ?>" class="nav-link">
-						<i class="fa fa-fw fa-angle-right"></i>&nbsp; Approved List</a>
-					
-				</div>
-	    <?php endif ?>
+
 
         <?php if ($this->session->userdata('designation') == NYKS_VOLUNTEER) : ?>
             <a href="<?php echo base_url() . 'Nyks/eID' ?>"><i class="fa fa-id-card" aria-hidden="true"></i>  &nbsp;e-ID</a>
@@ -665,93 +646,8 @@
              <?php endif ?>
 	     <!-- MENU FOR MB 3.0 STARTS -->
         <!-- MB 3.0 Section -->
-        <?php if (($this->session->userdata('designation') == DPT_JS) || ($this->session->userdata('designation') == ASSISTANT_USERCODE)):?>
-	        <div class="dropdown-btn" id="mb3-btn">
-	            <i class="fa-solid fa fa-check-circle"></i>&nbsp; MB 3.0
-	            <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
-	        </div>
-
-	        <!-- Tea Grant Section -->
-	        <div class="dropdown-container" id="tea-grant-section">
-	            <div class="dropdown-btn" id="tea-grant-btn">
-	                <i class="fa-solid fa fa-check-circle"></i>&nbsp; TEA GRANT
-	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
-	            </div>
-	            <div class="dropdown-container" id="tea-grant-menu">
-	                <!-- Pending Cases Link -->
-	                <a style="display: block;" href="<?php echo base_url() . 'pending-tea-grant-cases' ?>">
-	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
-	                </a>
-	            </div>
-	            <!-- Tea grant ends -->
-	            <!-- Conversion starts -->
-	            <div class="dropdown-btn" id="tea-grant-btn">
-	                <i class="fa-solid fa fa-check-circle"></i>&nbsp; CONVERSION
-	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
-	            </div>
-	            <div class="dropdown-container" id="tea-grant-menu">
-	                <!-- Pending Cases Link -->
-	                <a style="display: block;" href="<?php echo base_url() . 'pending-conversion-cases-new' ?>">
-	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
-	                </a>
-	            </div>
-	            <!-- Conversion ends -->
-	            <!-- Tenant starts -->
-	            <div class="dropdown-btn" id="tea-grant-btn">
-	                <i class="fa-solid fa fa-check-circle"></i>&nbsp;OCCUPANCY TENANT
-	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 20px;"></i>
-	            </div>
-	            <div class="dropdown-container" id="tea-grant-menu">
-	                <!-- Pending Cases Link -->
-	                <a style="display: block;" href="<?php echo base_url() . 'pending-tenant-cases' ?>">
-	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
-	                </a>
-	            </div>
-
-	            <!-- Digitalized Settlement of land to non-individual juridical entities  starts -->
-	            <div class="dropdown-btn" id="tea-grant-btn">
-	                <i class="fa-solid fa fa-check-circle"></i>&nbsp;JURIDICAL ENTITIES
-	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 20px;"></i>
-	            </div>
-	            <div class="dropdown-container" id="tea-grant-menu">
-	                <!-- Pending Cases Link -->
-	                <a style="display: block;" href="<?php echo base_url() . 'pending-juridical-cases' ?>">
-	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
-	                </a>
-	            </div>
-
-	            <!-- Offering Reclassification Suite  starts -->
-	            <div class="dropdown-btn" id="tea-grant-btn">
-	                <i class="fa-solid fa fa-check-circle"></i>&nbsp;Reclassification Suite
-	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 20px;"></i>
-	            </div>
-	            <div class="dropdown-container" id="tea-grant-menu">
-	                <!-- Pending Cases Link -->
-	                <a style="display: block;" href="<?php echo base_url() . 'pending-reclass-suite-cases' ?>">
-	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
-	                </a>
-	            </div>
-                </div>
-	    <?php endif;?>
-	    <?php if (($this->session->userdata('designation') == DPT_JS)):?>
-	            <!-- Tenant ends -->
-	            <div class="dropdown-btn" id="tea-grant-btn">
-	                <i class="fa-solid fa fa-check-circle"></i>&nbsp; CABINET
-	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
-	            </div>
-	            <div class="dropdown-container" id="cabinet-menu">
-	                <!-- Manage Cabinet Link -->
-	                <a style="display: block;" href="<?php echo base_url() . 'manage-mb3-cabinet' ?>">
-	                    <i class="fa fa-clock-o"></i>&nbsp;Manage Cabinet
-	                </a>
-	                <a style="" href="<?php echo base_url() . 'to-be-finalize-mb3-cabinet' ?>">
-	                    <i class="fa fa-caret-square-o-right"></i>&nbsp;To be Finalize Cabinet
-	                </a>
-	                <a href="<?= base_url() . 'finalized-mb3-cabinet' ?>" class="nav-link">
-	                    <i class="fa fa-hand-o-right"></i>&nbsp; Finalized Cabinet
-	                </a>
-	            </div>
-	    <?php endif;?>
+        
+	    
         <!-- MENU FOR MB 3.0 ENDS -->
         <!-- MENU FOR MB 2.0 STARTS -->
         <?php if (($this->session->userdata('designation') == DPT_JS)):?>
@@ -787,6 +683,133 @@
                         <i class="fa fa-fw fa-angle-right"></i>&nbsp; Perpetual </a>
             </div>
         <?php endif;?>
+
+
+        <?php if (($this->session->userdata('designation') == DPT_JS) || ($this->session->userdata('designation') == ASSISTANT_USERCODE)):?>
+	        <div class="dropdown-btn" id="mb3-btn">
+	            <i class="fa-solid fa fa-check-circle"></i>&nbsp; MB 3.0
+	            <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
+	        </div>
+
+            
+
+	        <!-- Tea Grant Section -->
+	        <div class="dropdown-container" id="tea-grant-section">
+
+         
+                <div class="dropdown-btn" id="nc-btn">
+	                <i class="fa-solid fa fa-check-circle"></i>&nbsp; Svmitra
+	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
+	            </div>
+                
+	            <div class="dropdown-container" id="nc-menu">
+	                <!-- Pending Cases Link -->
+                    <?php if ($this->session->userdata('designation') == DPT_JS) :?>
+                    <a href="<?php echo base_url() ?>index.php/NcSettlement/getAllCasesListByDept" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Pending Cases</a>
+                    <?php else:?>
+                        <a href="<?php echo base_url() ?>index.php/NcSettlement/getCasesListByDistrict" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Pending Cases</a>
+                    <?php endif;?>
+                    <?php if ($this->session->userdata('designation') == DPT_JS) :?>
+					    <a href="<?php echo base_url() ?>index.php/NcSettlement/getAllRevertedCasesListByDept" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Reverted Cases</a>
+                    <?php endif;?>
+                </div>
+
+	            <div class="dropdown-btn" id="tea-grant-btn">
+	                <i class="fa-solid fa fa-check-circle"></i>&nbsp; Tea Grant
+	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
+	            </div>
+                
+	            <div class="dropdown-container" id="tea-grant-menu">
+	                <!-- Pending Cases Link -->
+	                <a style="display: block;" href="<?php echo base_url() . 'pending-tea-grant-cases' ?>">
+	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
+	                </a>
+                    <?php if ($this->session->userdata('designation') == DPT_JS) :?>
+                        <a href="#" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Reverted Cases</a>
+                    <?php endif;?>
+	            </div>
+	            <!-- Tea grant ends -->
+	            <!-- Conversion starts -->
+	            <div class="dropdown-btn" id="tea-grant-btn">
+	                <i class="fa-solid fa fa-check-circle"></i>&nbsp; Conversion
+	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
+	            </div>
+	            <div class="dropdown-container" id="tea-grant-menu">
+	                <!-- Pending Cases Link -->
+	                <a style="display: block;" href="<?php echo base_url() . 'pending-conversion-cases-new' ?>">
+	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
+	                </a>
+                    <?php if ($this->session->userdata('designation') == DPT_JS) :?>
+                        <a href="<?php echo base_url() . 'reverted-mb3-cases/44' ?>" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Reverted Cases</a>
+                    <?php endif;?>
+	            </div>
+	            <!-- Conversion ends -->
+	            <!-- Tenant starts -->
+	            <div class="dropdown-btn" id="tea-grant-btn">
+	                <i class="fa-solid fa fa-check-circle"></i>&nbsp;Occupancy Tenant
+	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 20px;"></i>
+	            </div>
+	            <div class="dropdown-container" id="tea-grant-menu">
+	                <!-- Pending Cases Link -->
+	                <a style="display: block;" href="<?php echo base_url() . 'pending-tenant-cases' ?>">
+	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
+	                </a>
+                    <?php if ($this->session->userdata('designation') == DPT_JS) :?>
+                        <a href="<?php echo base_url() . 'reverted-mb3-cases/42' ?>" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Reverted Cases</a>
+                    <?php endif;?>
+	            </div>
+
+	            <!-- Digitalized Settlement of land to non-individual juridical entities  starts -->
+	            <div class="dropdown-btn" id="tea-grant-btn">
+	                <i class="fa-solid fa fa-check-circle"></i>&nbsp;Juridical Entities
+	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 20px;"></i>
+	            </div>
+	            <div class="dropdown-container" id="tea-grant-menu">
+	                <!-- Pending Cases Link -->
+	                <a style="display: block;" href="<?php echo base_url() . 'pending-juridical-cases' ?>">
+	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
+	                </a>
+                    <?php if ($this->session->userdata('designation') == DPT_JS) :?>
+                        <a href="<?php echo base_url() . 'reverted-mb3-cases/45' ?>" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Reverted Cases</a>
+                    <?php endif;?>
+                </div>
+
+	            <!-- Offering Reclassification Suite  starts -->
+	            <div class="dropdown-btn" id="tea-grant-btn">
+	                <i class="fa-solid fa fa-check-circle"></i>&nbsp;Reclassification Suite
+	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 20px;"></i>
+	            </div>
+	            <div class="dropdown-container" id="tea-grant-menu">
+	                <!-- Pending Cases Link -->
+	                <a style="display: block;" href="<?php echo base_url() . 'pending-reclass-suite-cases' ?>">
+	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
+	                </a>
+                    <?php if ($this->session->userdata('designation') == DPT_JS) :?>
+                        <a href="<?php echo base_url() . 'reverted-mb3-cases/40' ?>" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Reverted Cases</a>
+                    <?php endif;?>
+                </div>
+                </div>
+	    <?php endif;?>
+
+        <?php if (($this->session->userdata('designation') == DPT_JS)):?>
+	            <!-- Tenant ends -->
+	            <div class="dropdown-btn" id="tea-grant-btn">
+	                <i class="fa-solid fa fa-check-circle"></i>&nbsp; CABINET
+	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
+	            </div>
+	            <div class="dropdown-container" id="cabinet-menu">
+	                <!-- Manage Cabinet Link -->
+	                <a style="display: block;" href="<?php echo base_url() . 'manage-mb3-cabinet' ?>">
+	                    <i class="fa fa-clock-o"></i>&nbsp;Manage Cabinet
+	                </a>
+	                <a style="" href="<?php echo base_url() . 'to-be-finalize-mb3-cabinet' ?>">
+	                    <i class="fa fa-caret-square-o-right"></i>&nbsp;To be Finalize Cabinet
+	                </a>
+	                <a href="<?= base_url() . 'finalized-mb3-cabinet' ?>" class="nav-link">
+	                    <i class="fa fa-hand-o-right"></i>&nbsp; Finalized Cabinet
+	                </a>
+	            </div>
+	    <?php endif;?>
         </div>
     </div>
 </div>

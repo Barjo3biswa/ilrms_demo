@@ -95,6 +95,8 @@ class DeptTeaGrant extends MY_Controller
         }
         else
         {
+            $data['assistant_list'] = $this->db->query("SELECT * FROM depart_users WHERE designation=? 
+                                    AND active_deactive=?", array('ASSISTANT', 'E'))->result();
             $data['verificationType'] = JS_VERIFICATION;
             $data['_view'] = 'tea_grant/tea_grant_landing_js';
         }
@@ -149,24 +151,24 @@ class DeptTeaGrant extends MY_Controller
                 $village = "<br><small class='text-danger'>Vill:-  " . $this->utilclass->getVillageName($row->dist_code, $row->subdiv_code, $row->cir_code,$row->mouza_pargona_code,$row->lot_no,$row->vill_townprt_code) . "</small>";
 
 
-                $so_verification = $row->so_verification;
+                // $so_verification = $row->so_verification;
                 $ast_verification = $row->ast_verification;
-                $sec_verification = $row->sec_verification;
-                $ps_verification = $row->ps_verification;
+                // $sec_verification = $row->sec_verification;
+                // $ps_verification = $row->ps_verification;
 
-                if($so_verification == NULL){
-                    $so_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
-                }
-                if($so_verification == 'S'){
-                    $so_verification_status = '<small>Sent to SO <i class="fa fa-forward"></i></small>';
-                }
-                if($so_verification == 'A'){
-                    $so_verification_status = '<small class="text-success">SO Verified <i class="fa fa-check-circle"></i></small>';
+                // if($so_verification == NULL){
+                //     $so_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
+                // if($so_verification == 'S'){
+                //     $so_verification_status = '<small>Sent to SO <i class="fa fa-forward"></i></small>';
+                // }
+                // if($so_verification == 'A'){
+                //     $so_verification_status = '<small class="text-success">SO Verified <i class="fa fa-check-circle"></i></small>';
 
-                }
-                if($so_verification == 'R'){
-                    $so_verification_status = '<small class="text-danger">Revert by SO <i class="fa fa-spinner fa-spin"></i></small>';
-                }
+                // }
+                // if($so_verification == 'R'){
+                //     $so_verification_status = '<small class="text-danger">Revert by SO <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
 
                 if($ast_verification == NULL){
                     $ast_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
@@ -194,31 +196,31 @@ class DeptTeaGrant extends MY_Controller
                     $ast_verification_status = $ast_verification . $viewBtn;
                 }
 
-                if($sec_verification == NULL){
-                    $sec_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
-                }
-                if($sec_verification == 'S'){
-                    $sec_verification_status = '<small>Sent to Secretary <i class="fa fa-forward"></i></small>';
-                }
-                if($sec_verification == 'A'){
-                    $sec_verification_status = '<small class="text-success">Secretary Verified <i class="fa fa-check-circle"></i></small>';
-                }
-                if($sec_verification == 'R'){
-                    $sec_verification_status = '<small class="text-danger">Revert by Secretary <i class="fa fa-spinner fa-spin"></i></small>';
-                }
+                // if($sec_verification == NULL){
+                //     $sec_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
+                // if($sec_verification == 'S'){
+                //     $sec_verification_status = '<small>Sent to Secretary <i class="fa fa-forward"></i></small>';
+                // }
+                // if($sec_verification == 'A'){
+                //     $sec_verification_status = '<small class="text-success">Secretary Verified <i class="fa fa-check-circle"></i></small>';
+                // }
+                // if($sec_verification == 'R'){
+                //     $sec_verification_status = '<small class="text-danger">Revert by Secretary <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
 
-                if($ps_verification == NULL){
-                    $ps_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
-                }
-                if($ps_verification == 'S'){
-                    $ps_verification_status = '<small>Sent to PS <i class="fa fa-forward"></i></small>';
-                }
-                if($ps_verification == 'A'){
-                    $ps_verification_status = '<small class="text-success">PS Verified <i class="fa fa-check-circle"></i></small>';
-                }
-                if($ps_verification == 'R'){
-                    $ps_verification_status = '<small class="text-danger">Revert by PS <i class="fa fa-spinner fa-spin"></i></small>';
-                }
+                // if($ps_verification == NULL){
+                //     $ps_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
+                // if($ps_verification == 'S'){
+                //     $ps_verification_status = '<small>Sent to PS <i class="fa fa-forward"></i></small>';
+                // }
+                // if($ps_verification == 'A'){
+                //     $ps_verification_status = '<small class="text-success">PS Verified <i class="fa fa-check-circle"></i></small>';
+                // }
+                // if($ps_verification == 'R'){
+                //     $ps_verification_status = '<small class="text-danger">Revert by PS <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
 
                 $json[] = array(
                     $row->case_no,
@@ -500,6 +502,16 @@ class DeptTeaGrant extends MY_Controller
             $remarks     = $this->input->post('remarks');
             $verificationType     = $this->input->post('verificationType');
             $allSelectedList = $this->input->post('selectedList');
+            $selectAssistant    = $this->input->post('selectAssistant');
+            if(empty($selectAssistant))
+            {
+
+                echo json_encode(array(
+                    'responseType' => 1,
+                    'message'      => '#WARNING8457: Please select a assistant before forwarding',
+                ));
+                return false; 
+            }
             if (!empty($allSelectedList)) 
                 {
                     foreach ($allSelectedList as $caseN) 
@@ -508,11 +520,24 @@ class DeptTeaGrant extends MY_Controller
                         if($verificationType == 'DPT_JS_VERIFICATION')
                         {
                             $this->db2 =  $this->dbswitch2($dist_code);
+                            $checkAstAsgn = $this->db2->query("SELECT * FROM settlement_basic WHERE case_no=? AND 
+                                        assign_ast_code IS NOT NULL AND dept_js_approve=?", 
+                                            array($case_no, 'A'));
+                                       // echo $this->db2->last_query(); die;
+                            if($checkAstAsgn->num_rows() > 0)
+                            {
+                                echo json_encode(array(
+                                    'responseType' => 1,
+                                    'message'      => '#WARNING474: Case has already been verified by Assistant and returned to department !!!',
+                                ));
+                                return false;
+                            }
                             $this->db2->trans_begin();
                             $updateData = array(
                                 'dept_js_approve' => 'A',
                                 'ast_verification' => 'S',
-                                'js_approve_date' => date('Y-m-d h:i:s')
+                                'js_approve_date' => date('Y-m-d h:i:s'),
+                                'assign_ast_code'  => $selectAssistant
                             );
                             
                             //////proceeding start//////

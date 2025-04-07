@@ -281,6 +281,14 @@
             <div class="modal-header bg-success">
                 <h5 class="modal-title text-center" id="exampleModalLongTitle"></h5>
             </div>
+            <div class="form-group">
+                <select class="form-control mt-3 text-center" id="asst_id" name="asst_id">
+                    <option value="0">-- Select Assistant --</option>
+                    <?php foreach($assistant_list as $ast) { ?>
+                        <option value="<?=$ast->user_code?>"><?=$ast->name.' ('.$ast->email.')'?></option>
+                    <?php } ?>
+                </select>
+            </div>
             <div class="modal-body">
                 <div class="form-group">
                         <label for="selectedCasesTable">Selected Cases</label>
@@ -361,6 +369,7 @@
                             REVERT CASES TO DC <br>
                             <input type="hidden" value="" id="distict_code_revert" name="distict_code_revert">
                             <input type="hidden" value="" id="no_of_rows_update_form" name="no_of_rows_update_form">
+                            <input type="hidden" value="43" id="service_code" name="service_code">
                         </h5>
                 </div>
                 <div class="modal-body " style="font-size:15px">
@@ -375,7 +384,7 @@
                             <table id="reverted_case_details_table" class="table table-striped">
                                 <thead>
                                     <tr  class="bg-danger">
-                                        <th></th>
+                                        <!-- <th></th> -->
                                         <th width="30%">Case No.</th>
                                         <th width="15%">Ast Verification.</th>
                                         <th width="55%">Reverted Remarks </th>
@@ -887,25 +896,27 @@ $(document).on('click', '#confirmSubmitRevert', function(event) {
     event.preventDefault();
     var district_id = $("#distict_code_revert").val();
     var cabIdRevert = $("#cabMemoIdRevert").val();
-    var rowCount = $('#reverted_case_details_table tr').length - 1;
+    var rowCount    = $('#reverted_case_details_table tr').length - 1;
     $('#no_of_rows_update_form').val(rowCount);
+    var service_code = $("#service_code").val();
 
-    var formdata = $('#case_revert_to_dc_form').serialize();
+    var formdata    = $('#case_revert_to_dc_form').serialize();
+
     Swal.fire({
-        title: 'Are you sure?',
-        text: "Are you sure to Revert These Cases to DC!",
-        icon: 'info',
-        html: '<p class="text-danger">*** These Cases Will be Reverted Under Cab ID: ' + cabIdRevert + ' </p>',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, Revert!',
+        title : 'Are you sure?',
+        text  : "Are you sure to Revert These Cases to DC!",
+        icon  : 'info',
+        html  : '<p class="text-danger">*** These Cases Will be Reverted Under Cab ID: ' + cabIdRevert + ' </p>',
+        showCancelButton   : true,
+        confirmButtonColor : '#3085d6',
+        cancelButtonColor  : '#d33',
+        confirmButtonText  : 'Yes, Revert!',
     }).then((result) => {
         if (result.isConfirmed) {
             $('#revertToDCModal').hide();
             $('#show-Img').show();
             $.ajax({
-                url: baseurl + "DeptConversion/bulkRevertConversionCasesToDC",
+                url: baseurl + "DeptRevertController/bulkRevertDeptCasesToDC",
                 type: "POST",
                 data: formdata,
                 dataType: "json",
@@ -989,13 +1000,15 @@ $(document).on('click', '#sentForASOVerification', function() {
 $(document).on('click', '#confirmSentForVerificationASO', function() {
     var district_id = $("#selectDistrict").val();
     var remarks = $("#verification_remarks").val();
+    var selectAssistant = $('#asst_id').val();
 
     if (selectedList.length > 0) {
         const applicant = {
             selectedList: selectedList,
             district_id: district_id,
             verificationType: verificationType,
-            remarks: remarks
+            remarks: remarks,
+            selectAssistant: selectAssistant,
         };
         console.log(applicant);
 

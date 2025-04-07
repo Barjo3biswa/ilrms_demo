@@ -329,6 +329,9 @@
 
 
 <script>
+
+
+
     function report_no(dist_code,case_no,id) {
 
         $('#remarks'+id).show();

@@ -147,24 +147,24 @@ class DeptTenant extends MY_Controller
                 $village = "<br><small class='text-danger'>Vill:-  " . $this->utilclass->getVillageName($row->dist_code, $row->subdiv_code, $row->cir_code,$row->mouza_pargona_code,$row->lot_no,$row->vill_townprt_code) . "</small>";
 
 
-                $so_verification = $row->so_verification;
+                // $so_verification = $row->so_verification;
                 $ast_verification = $row->ast_verification;
-                $sec_verification = $row->sec_verification;
+                // $sec_verification = $row->sec_verification;
                 //$ps_verification = $row->ps_verification;
 
-                if($so_verification == NULL){
-                    $so_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
-                }
-                if($so_verification == 'S'){
-                    $so_verification_status = '<small>Sent to SO <i class="fa fa-forward"></i></small>';
-                }
-                if($so_verification == 'A'){
-                    $so_verification_status = '<small class="text-success">SO Verified <i class="fa fa-check-circle"></i></small>';
+                // if($so_verification == NULL){
+                //     $so_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
+                // if($so_verification == 'S'){
+                //     $so_verification_status = '<small>Sent to SO <i class="fa fa-forward"></i></small>';
+                // }
+                // if($so_verification == 'A'){
+                //     $so_verification_status = '<small class="text-success">SO Verified <i class="fa fa-check-circle"></i></small>';
 
-                }
-                if($so_verification == 'R'){
-                    $so_verification_status = '<small class="text-danger">Revert by SO <i class="fa fa-spinner fa-spin"></i></small>';
-                }
+                // }
+                // if($so_verification == 'R'){
+                //     $so_verification_status = '<small class="text-danger">Revert by SO <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
 
                 if($ast_verification == NULL){
                     $ast_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
@@ -192,18 +192,18 @@ class DeptTenant extends MY_Controller
                     $ast_verification_status = $ast_verification . $viewBtn;
                 }
 
-                if($sec_verification == NULL){
-                    $sec_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
-                }
-                if($sec_verification == 'S'){
-                    $sec_verification_status = '<small>Sent to Secretary <i class="fa fa-forward"></i></small>';
-                }
-                if($sec_verification == 'A'){
-                    $sec_verification_status = '<small class="text-success">Secretary Verified <i class="fa fa-check-circle"></i></small>';
-                }
-                if($sec_verification == 'R'){
-                    $sec_verification_status = '<small class="text-danger">Revert by Secretary <i class="fa fa-spinner fa-spin"></i></small>';
-                }
+                // if($sec_verification == NULL){
+                //     $sec_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
+                // if($sec_verification == 'S'){
+                //     $sec_verification_status = '<small>Sent to Secretary <i class="fa fa-forward"></i></small>';
+                // }
+                // if($sec_verification == 'A'){
+                //     $sec_verification_status = '<small class="text-success">Secretary Verified <i class="fa fa-check-circle"></i></small>';
+                // }
+                // if($sec_verification == 'R'){
+                //     $sec_verification_status = '<small class="text-danger">Revert by Secretary <i class="fa fa-spinner fa-spin"></i></small>';
+                // }
 
                 // if($ps_verification == NULL){
                 //     $ps_verification_status = '<small class="text-danger">Pending <i class="fa fa-spinner fa-spin"></i></small>';

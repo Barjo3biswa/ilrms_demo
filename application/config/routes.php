@@ -331,6 +331,9 @@ $route['e-khazana-manual-payment-response'] = 'EkhajanaMouzadarCFRmanualResponse
 $route['chitha-data-reports'] = 'DharController/reports';
 //Digitalized Settlement of land to non-individual juridical entities
 $route['pending-juridical-cases'] = 'DeptJuridical/landingPage';
+// $route['reverted-juridical-cases'] = 'DeptJuridical/revertPage';
+
+$route['reverted-mb3-cases/(:any)'] = 'Mb3RevertController/revertPage/$1';
 
 // Offering Reclassification Suite
 $route['pending-reclass-suite-cases'] = 'DeptReclassSuite/landingPage';

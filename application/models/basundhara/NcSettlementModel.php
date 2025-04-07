@@ -1331,7 +1331,8 @@ class NcSettlementModel extends CI_Model
         $dbb->where('sb.from_office', $from_office);
         $dbb->where('sb.cab_memo_prepared', ADD_CASES_TO_CAB_MEMO);
         // $dbb->where('sb.dept_approval IS NULL');
-        $dbb->where('sb.service_code !=', SETTLEMENT_PGR_VGR_LAND_ID);
+        // $dbb->where('sb.service_code !=', SETTLEMENT_PGR_VGR_LAND_ID);
+        $dbb->where('sb.service_code', 25);
         $dbb->where('sm.digital_sign_status', DIGITAL_SIGN_STATUS);
         $dbb->limit($length, $start);
         $query = $dbb->get();
@@ -1381,6 +1382,8 @@ class NcSettlementModel extends CI_Model
                     join  settlement_basic sb on sb.case_no = pc.case_no where ml.dist_code = ? 
                     and ml.digital_sign_status =? and sb.from_office = ? and sb.cab_memo_prepared =? and sb.service_code = ?";
         $data  = $dbb->query($sql, array($dist_code, DIGITAL_SIGN_STATUS, MB_DEPUTY_COMM, ADD_CASES_TO_CAB_MEMO,NC_SETTLEMENT_KHAS_LAND_ID));
+        // echo $dbb->last_query();
+        // die;
         return $data;
     }
 
@@ -1444,6 +1447,8 @@ class NcSettlementModel extends CI_Model
 
         $query = $dbb->get();
         // return $data;
+        // echo $dbb->last_query();
+        // die;
 
         if ($query->num_rows() > 0) {
             $data['data_results'] = $query->result();

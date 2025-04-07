@@ -329,6 +329,8 @@ class DeptMb3CabinetModel extends CI_Model
     }
 
     public function applicationStatusUpdateBulk($application_no,$case,$rmk,$status,$task,$pen){
+        // var_dump($_SERVER['SERVER_ADDR']);
+        // die;
         $apilink=API_LINK_MB3.'applicationStatusUpdateBulk';
         $curl_handle = curl_init();
         curl_setopt($curl_handle, CURLOPT_URL, $apilink);
@@ -343,10 +345,9 @@ class DeptMb3CabinetModel extends CI_Model
             'status'        => $status,
             'task'          => $task,
             'pen'           => $pen,
-            'ip'            => '10.177.7.141'
+            'ip'            => $_SERVER['SERVER_ADDR'],
         )));
         $result = curl_exec($curl_handle);
-        //var_dump(json_decode($result));
         $httpcode = curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
         curl_close($curl_handle);
         if($httpcode != 200){

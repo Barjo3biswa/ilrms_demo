@@ -3449,7 +3449,8 @@ class NcSettlement extends MY_Controller
      $this->db2 =  $this->dbswitch2($dist_code);
 
     $cases_list = $this->NcSettlementModel->getAllCasesUnderDepartmentAll($this->db2,$start, $length, $order,$service_code,$meeting_no,$verification,$pullRequest);
-
+    // var_dump($cases_list);
+    // die;
     // $total_records = $cases_list->num_rows();
 
     if(!empty($cases_list)) {
@@ -3751,7 +3752,7 @@ class NcSettlement extends MY_Controller
                 $data['cases']      = '';
                 $data['casesCount'] = 0;
                 $this->session->set_flashdata('message', 'Please Select District Before Proceed.');
-                $data['_view'] = 'SettlementView/Dept/AllPendingCaseListUnderAssistant';
+                $data['_view'] = 'SettlementView/Dept/AllPendingCaseListUnderAssistantNC';
                 $this->load->view('layouts/main', $data);
             } else {
 
@@ -3760,7 +3761,7 @@ class NcSettlement extends MY_Controller
                 $meeting = $this->NcSettlementModel->getMeetingListByDist($this->db2,$dist_code);
                 $data['meetingList']      = $meeting->result();
 
-                $data['_view'] = 'SettlementView/Dept/AllPendingCaseListUnderAssistant';
+                $data['_view'] = 'SettlementView/Dept/AllPendingCaseListUnderAssistantNC';
                 $this->load->view('layouts/main', $data);
             }
         } else {
