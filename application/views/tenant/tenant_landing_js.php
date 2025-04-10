@@ -279,6 +279,14 @@
             <div class="modal-header bg-success">
                 <h5 class="modal-title text-center" id="exampleModalLongTitle"></h5>
             </div>
+            <div class="form-group">
+                <select class="form-control mt-3 text-center" id="asst_id" name="asst_id">
+                    <option value="0">-- Select Assistant --</option>
+                    <?php foreach($assistant_list as $ast) { ?>
+                        <option value="<?=$ast->user_code?>"><?=$ast->name.' ('.$ast->email.')'?></option>
+                    <?php } ?>
+                </select>
+            </div>
             <div class="modal-body">
                 <div class="form-group">
                         <label for="selectedCasesTable">Selected Cases</label>
@@ -989,13 +997,15 @@ $(document).on('click', '#sentForASOVerification', function() {
 $(document).on('click', '#confirmSentForVerificationASO', function() {
     var district_id = $("#selectDistrict").val();
     var remarks = $("#verification_remarks").val();
+    var selectAssistant = $('#asst_id').val();
 
     if (selectedList.length > 0) {
         const applicant = {
             selectedList: selectedList,
             district_id: district_id,
             verificationType: verificationType,
-            remarks: remarks
+            remarks: remarks,
+            selectAssistant: selectAssistant,
         };
         console.log(applicant);
 

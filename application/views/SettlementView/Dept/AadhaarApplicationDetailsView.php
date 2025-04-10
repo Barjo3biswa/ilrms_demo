@@ -72,6 +72,7 @@
               </tr>
 
               <?php  if ($settlement_basic['service_code'] != SETTLEMENT_KHAS_LAND_ID) : ?>
+                <?php if(isset($backup_under_tribe_belts)): ?>
                   <tr>
                       <th>Whether land prayed for is within tribal belt/block</th>
                       <td>
@@ -82,6 +83,7 @@
                           <?php } ?>
                       </td>
                   </tr>
+                  <?php  endif; ?>
               <?php  endif; ?>
 
               <!-- Aadhaar Wise Application Applicant-->

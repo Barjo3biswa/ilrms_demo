@@ -168,48 +168,59 @@
 
             <div class="reza-body">
                     <div class="row" id="searchBox">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label for="selectDistrict">District</label>
-                                <!-- <select class="form-select districtselect1" aria-label="Default select example" name="selectDistrict" id="" required>
-                                    <option disabled selected>Select District (Total Case)</option>
-                                    <?php foreach ($user_dist as $dist) :  ?>
-                                        <option value='<?php echo $dist->dist_code; ?>'><?= $this->utilclass->getDistrictNameOnLanding($dist->dist_code) ?> (<?=$dist->case_count;?>)</option>
-                                    <?php endforeach; ?>
-                                </select> -->
-									<select class="form-control districtselect1 reset" name='dist_code' id="selectDistrict" required>
-										<option disabled selected>Select District</option>
-										<option value='10'>ছিৰাং ( Chirang )</option>
-										<option value='06'>নলবাৰী ( Nalbari )</option>
-										<option value='08'>দৰং ( Darrang )</option>
-										<option value='07'>কামৰূপ ( Kamrup )</option>
-										<option value='33'>নগাওঁ ( Nagaon )</option>
-										<option value='14'>গোলাঘাট ( Golaghat )</option>
-										<option value='01'>কোকৰাঝাৰ (Kokrajhar)</option>
-										<option value='02'>ধুবুৰী ( Dhubri )</option>
-										<option value='03'>গোৱালপাৰা ( Goalpara )</option>
-										<option value='05'>বৰপেটা ( Barpeta )</option>
-										<option value='13'>বঙাইগাঁও ( Bongaigaon )</option>
-										<option value='15'>যোৰহাট ( Jorhat )</option>
-										<option value='17'>ডিব্ৰুগড় ( Dibrugarh )</option>
-										<option value='21'>করিমগঞ্জ ( Karimganj )</option>
-										<option value='24'>কামৰূপ মহানগৰ ( Kamrup Metro )</option>
-										<option value='32'>মৰিগাওঁ ( Morigaon )</option>
-										<option value='36'>হোজাই ( Hojai )</option>
-										<option value='38'>দক্ষিণ শালমাৰা ( South Salmara )</option>
-										<option value='39'>বজালী ( Bajali )</option>
-										<option value='22'>Hailakandi</option>
-										<option value='23'>Cachar</option>
-										<option value='27'>Udalguri</option>
-										<option value='12'>লক্ষীমপূৰ ( Lakhimpur )</option>
-										<option value='16'>শিৱসাগৰ ( Sibsagar )</option>
-										<option value='18'>তিনিচুকীয়া ( Tinsukia )</option>
-										<option value='34'>মাজুলী ( Majuli )</option>
-										<option value='37'>চৰাইদেউ ( Charaideo )</option>
-										<option value='11'>শোণিতপুৰ ( Sonitpur )</option>
-										<option value='25'>ধেমাজি ( Dhemaji )</option>
-										<option value='35'>বিশ্বনাথ ( Biswanath )</option>
-									</select>
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="selectDistrict">District</label>
+                                        <!-- <select class="form-select districtselect1" aria-label="Default select example" name="selectDistrict" id="" required>
+                                            <option disabled selected>Select District (Total Case)</option>
+                                            <?php foreach ($user_dist as $dist) :  ?>
+                                                <option value='<?php echo $dist->dist_code; ?>'><?= $this->utilclass->getDistrictNameOnLanding($dist->dist_code) ?> (<?=$dist->case_count;?>)</option>
+                                            <?php endforeach; ?>
+                                        </select> -->
+                                            <select class="form-control districtselect1 reset" name='dist_code' id="selectDistrict" required>
+                                                <option disabled selected>Select District</option>
+                                                <option value='10'>ছিৰাং ( Chirang )</option>
+                                                <option value='06'>নলবাৰী ( Nalbari )</option>
+                                                <option value='08'>দৰং ( Darrang )</option>
+                                                <option value='07'>কামৰূপ ( Kamrup )</option>
+                                                <option value='33'>নগাওঁ ( Nagaon )</option>
+                                                <option value='14'>গোলাঘাট ( Golaghat )</option>
+                                                <option value='01'>কোকৰাঝাৰ (Kokrajhar)</option>
+                                                <option value='02'>ধুবুৰী ( Dhubri )</option>
+                                                <option value='03'>গোৱালপাৰা ( Goalpara )</option>
+                                                <option value='05'>বৰপেটা ( Barpeta )</option>
+                                                <option value='13'>বঙাইগাঁও ( Bongaigaon )</option>
+                                                <option value='15'>যোৰহাট ( Jorhat )</option>
+                                                <option value='17'>ডিব্ৰুগড় ( Dibrugarh )</option>
+                                                <option value='21'>করিমগঞ্জ ( Karimganj )</option>
+                                                <option value='24'>কামৰূপ মহানগৰ ( Kamrup Metro )</option>
+                                                <option value='32'>মৰিগাওঁ ( Morigaon )</option>
+                                                <option value='36'>হোজাই ( Hojai )</option>
+                                                <option value='38'>দক্ষিণ শালমাৰা ( South Salmara )</option>
+                                                <option value='39'>বজালী ( Bajali )</option>
+                                                <option value='22'>Hailakandi</option>
+                                                <option value='23'>Cachar</option>
+                                                <option value='27'>Udalguri</option>
+                                                <option value='12'>লক্ষীমপূৰ ( Lakhimpur )</option>
+                                                <option value='16'>শিৱসাগৰ ( Sibsagar )</option>
+                                                <option value='18'>তিনিচুকীয়া ( Tinsukia )</option>
+                                                <option value='34'>মাজুলী ( Majuli )</option>
+                                                <option value='37'>চৰাইদেউ ( Charaideo )</option>
+                                                <option value='11'>শোণিতপুৰ ( Sonitpur )</option>
+                                                <option value='25'>ধেমাজি ( Dhemaji )</option>
+                                                <option value='35'>বিশ্বনাথ ( Biswanath )</option>
+                                            </select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label style="color: #666">Select Juridical Category</label>
+                                        <select class="form-select" aria-label="Default select example" id="juridical_cat" name="juridical_cat" required>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -421,8 +432,14 @@
 
     $('#dist_select_btn_submit').on('click', () => {
             var dist_code = $('.districtselect1').val();
+            var juridical_cat  = $('#juridical_cat').val();
             if (dist_code === null) {
                 alert("Please Select District !!!");
+                return;
+            }
+            // alert(juridical_cat);
+            if (juridical_cat == 0) {
+                alert("Please Select Juridical Category !!!");
                 return;
             }
             $.blockUI({
@@ -435,7 +452,7 @@
             $.ajax({
                 url: baseurl + "DeptJuridical/viewPendingJuridicalCases" ,
                 type: "POST",
-                data : {dist_code : dist_code},
+                data : {dist_code : dist_code, juridical_cat:juridical_cat},
                 error: function() {
                     $.unblockUI();
                     Swal.fire({
@@ -1069,5 +1086,21 @@ $(document).on('click', '#confirmSentForVerificationASO', function() {
         showWarningMessage("Please Select Case Before Sent to Verification");
     }
 });
+
+
+$.ajax({
+        url: baseurl + "DeptJuridical/getInsMasterList",
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        success: function (data) {
+          $('.ins_master_cat').show();
+          var option = '<option value="0" selected>Select Juridical Category</option>';
+          $.each(data.result, function (i, val){
+            option += "<option value='"+ val["id"] +"'>"+val["category_name"]+"</option>";
+          });
+          $('#juridical_cat').html(option);
+        },      
+      });
 
 </script>

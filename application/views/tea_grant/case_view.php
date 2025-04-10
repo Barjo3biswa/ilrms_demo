@@ -311,7 +311,7 @@
 </style>
 <div class="col-lg-10 offset-1 mb-5">
     <?php 
-        if((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))){
+        if((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))){
             $lessa_chatak='Chatak'; }
         else{
             $lessa_chatak='Lessa';
@@ -661,7 +661,7 @@
                                 <th class="text-center">Bigha</th>
                                 <th class="text-center">Katha</th>
                                 <th class="text-center"><?=$lessa_chatak?></th>
-                                <?php if ((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))): ?>
+                                <?php if ((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))): ?>
                                 <th class="text-center">Ganda</th>
                                 <th class="text-center">Kranti</th>
                                 <?php endif; ?>
@@ -689,7 +689,7 @@
                                     <strong><?=$all_dags->dag_area_lc?></strong>
                                     <input type="hidden" readonly style="text-align: center;" name="dag_area_lc" class="form-control input-sm" value="<?=$all_dags->dag_area_lc?>" >
                                 </td>
-                                <?php if((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))): ?>
+                                <?php if((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))): ?>
                                     <td style="text-align: center;">
                                         <strong><?=$all_dags->dag_area_g?></strong>
                                         <input type="hidden" readonly style="text-align: center;" value="<?=$all_dags->dag_area_g?>" class="form-control input-sm" name="dag_area_g" >
@@ -725,7 +725,7 @@
                                     <strong><?=$all_dags->s_dag_area_lc?></strong>
                                     <input type="hidden" style="text-align: center;" name="home_lc" value="<?=$all_dags->s_dag_area_lc?>" class="form-control input-sm home_lc" readonly>
                                 </td>
-                                <?php if ((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))): ?>
+                                <?php if ((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))): ?>
                                     <td class="settlement-area-color" style="text-align:center">
                                         <strong><?=$all_dags->s_dag_area_g?></strong>
                                         <input type="hidden" style="text-align: center;" value="<?=$all_dags->s_dag_area_g?>" class="form-control input-sm s_dag_area_g" name="home_g" readonly>
@@ -759,7 +759,7 @@
                                     $total_applied_kranti = $total_applied_kranti + $all_dags->s_dag_area_kr;
                                 }
 
-                                if((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))) 
+                                if((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))) 
                                 {
                                     $convert_area = floor(($total_applied_bigha * 6400) + ($total_applied_katha * 320) + 
                                         ($total_applied_lessa * 20) + 
@@ -809,7 +809,7 @@
                                     <strong><?=$total_applied_lessa?></strong>
                                     <input type="hidden" style="text-align: center;" name="tot_applied_lc" value="<?=$total_applied_lessa?>" class="form-control input-sm tot_applied_lc" id="tot_applied_lc" readonly>
                                 </td>
-                                <?php if ((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))): ?>
+                                <?php if ((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))): ?>
                                     <td class="settlement-area-color text-danger" style="text-align:center">
                                         <strong><?=$total_applied_ganda?></strong>
                                         <input type="hidden" style="text-align: center;" value="<?=$total_applied_ganda?>" class="form-control input-sm tot_applied_g" name="tot_applied_g"
@@ -901,7 +901,7 @@
                                         <span class="input-group-addon">Lessa</span>
                                         <input type="text" style="text-align: center;" name="a_lessa" class="form-control input-sm" value="<?=$adp->lessa?>" readonly>
                                     </td>
-                                    <?php if((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))): ?>
+                                    <?php if((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))): ?>
                                         <td>
                                             <span class="input-group-addon">Ganda</span>
                                             <input type="text" style="text-align: center;" value="<?=$adp->ganda?>" class="form-control input-sm" name="a_ganda" readonly>
@@ -1575,7 +1575,7 @@
                                                             <input disabled type="text" style="text-align: center;" value="<?=$reserv_road->lessa?>" class="form-control input-sm" name="reserved_lessa<?=$reserv_road->dag_no?>" id="reserved_lessa" >
                                                         </div>
                                                     </div>
-                                                    <?php if ((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))): ?>
+                                                    <?php if ((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))): ?>
                                                         <div class="form-group row mt-2">
                                                             <div class="col-4">
                                                                 <span class="input-group-addon">Ganda</span>
@@ -1629,7 +1629,7 @@
                                                             <input disabled type="text" style="text-align: center;" value="<?=$reserv->lessa?>" class="form-control input-sm" name="reserved_lessa_family<?=$reserv->dag_no?>" id="reserved_lessa_family" >
                                                         </div>
                                                     </div>
-                                                    <?php if ((in_array($this->session->userdata("dist_code"), json_decode(BARAK_VALLEY)))): ?>
+                                                    <?php if ((in_array($this->session->userdata("dist_code"), BARAK_VALLEY))): ?>
                                                         <div class="form-group row mt-2">
                                                             <div class="col-4">
                                                                 <span class="input-group-addon">Ganda</span>

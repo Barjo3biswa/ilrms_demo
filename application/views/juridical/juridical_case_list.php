@@ -36,11 +36,13 @@
             <div class="col-lg-12 " align="right">
                 <div class="table-responsive">
                     <input type="hidden" name="dist_code" id="dist_code" value="<?=$dist_code?>">
+                    <input type="hidden" name="juridical_cat" id="juridical_cat" value="<?=$juridical_cat?>">
                     <table class="datatable table table-stripped" id='datatableJuridicalCaseList'>
                         <thead >
                             <tr>
                                 <th class="center text-white" width="5%">All <input type="checkbox" class="checkBoxD " value="all" id="checkedAll"> </th>
                                 <th class="text-white" width="20%">Case No</th>
+                                <th class="text-white" width="20%">Juridical Category</th>
                                 <th class="text-white" width="20%">Location</th>
                                 <!-- <th class="text-white" width="15%">SO Verify</th> -->
                                 <th class="text-white" width="15%">ASO Verify</th>
@@ -128,6 +130,7 @@
           type:'POST',
           data: {
                         dist_code : $("#dist_code").val(),
+                        juridical_cat: $("#juridical_cat").val()
                     },
           deferLoading: 57,
         },

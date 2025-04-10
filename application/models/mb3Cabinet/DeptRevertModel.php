@@ -37,6 +37,7 @@ class DeptRevertModel extends CI_Model
     {
        $sql = $dbb->query("SELECT * FROM $table WHERE (ast_verification IS NULL OR ast_verification!=?) AND case_no IN ($commaSeparatedCases)", 
                 array('A'));
+                
        return $sql->num_rows();
     }
 

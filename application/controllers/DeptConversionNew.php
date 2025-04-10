@@ -958,7 +958,8 @@ class DeptConversionNew extends MY_Controller
 
                     $ast_verification = '<small class="text-danger">Reverted by AST </small></br>';
                     $viewBtn = "<a href='".$url."' class='btn btn-sm btn-danger' target='_viewAstVerificationDetails'>view ASO Checklist Report</a>";
-                    $ast_verification_status = $ast_verification . $viewBtn;
+                    // $ast_verification_status = $ast_verification . $viewBtn;
+                    $ast_verification_status = $ast_verification;
                 }
 
                 if($sec_verification == NULL){

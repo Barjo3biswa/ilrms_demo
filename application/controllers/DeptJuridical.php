@@ -101,6 +101,8 @@ class DeptJuridical extends MY_Controller
         }
         else
         {
+            // var_dump("ok");
+            // die;
             $data['verificationType'] = JS_VERIFICATION;
             $data['_view'] = 'juridical/landing_page_joint_sec';
         }
@@ -120,8 +122,12 @@ class DeptJuridical extends MY_Controller
     public function viewPendingJuridicalCases()
     {
         $dist_code   = $this->input->post('dist_code');
+        $juridical_cat = $this->input->post('juridical_cat');
+               
         $data = array();
         $data['dist_code'] =$dist_code;
+        $data['juridical_cat'] =$juridical_cat;
+        
         $data['dist_name'] = $this->utilclass->getDistrictName($dist_code);
         $this->db2 =  $this->dbswitch2($dist_code);
         $data['status'] = true;
@@ -136,10 +142,13 @@ class DeptJuridical extends MY_Controller
         $length = intval($this->input->post('length'));
         $order = $this->input->post('order');
         $dist_code = $this->input->post('dist_code');
+        $juridical_cat = $this->input->post('juridical_cat');
         $searchByCol_0 = trim($this->input->post('search')['value']);
         $this->db2 =  $this->dbswitch2($dist_code);
         // echo "<pre>"; var_dump($this->db2); die;
-        $case_list = $this->DeptJuridicalModel->getPendingCaseListDetails($this->db2,$start, $length, $order,$dist_code,$searchByCol_0);
+        $case_list = $this->DeptJuridicalModel->getPendingCaseListDetails($this->db2,$start, $length, $order,$dist_code,$searchByCol_0,$juridical_cat);
+        $juridical_category = $this->db->query("SELECT category_name FROM ins_master_category WHERE id=$juridical_cat", 
+        array(1))->row()->category_name;
         // echo $this->db->last_query(); die;
 
         if(!empty($case_list)) {
@@ -200,6 +209,7 @@ class DeptJuridical extends MY_Controller
                 $json[] = array(
                     $row->case_no,
                     $case_no,
+                    $juridical_category,
                     $circle . $mouza . $village,
                     $ast_verification_status,
                     '<small class="text-default"><i class="fa fa-calendar"></i> '. date("d M, Y", strtotime($row->submission_date)) .' </small>',

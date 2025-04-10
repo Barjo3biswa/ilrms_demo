@@ -44,6 +44,10 @@ class DeptReclassSuiteModel extends CI_Model
         $dbb->where('pending_office', 'DPT');
         $dbb->where('service_code', '40');
         $dbb->where('status', 'W');
+        $dbb->group_start();
+        $dbb->where('add_cases_to_memo', 'N');
+        $dbb->or_where('add_cases_to_memo IS NULL', null, false);
+        $dbb->group_end();
 
         // Apply limit and offset
         $dbb->limit($length, $start);
@@ -66,6 +70,10 @@ class DeptReclassSuiteModel extends CI_Model
             $dbb->where('pending_office', 'DPT');
             $dbb->where('status', 'W');
             $dbb->where('service_code', '40');
+            $dbb->group_start();
+            $dbb->where('add_cases_to_memo', 'N');
+            $dbb->or_where('add_cases_to_memo IS NULL', null, false);
+            $dbb->group_end();
             if ($searchByCol_0 != null) {
                 $dbb->like('case_no', $searchByCol_0);
             }

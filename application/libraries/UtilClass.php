@@ -473,7 +473,12 @@ class UtilClass
 		$CI->db2 = $this->dbswitch($dist_code);
 
 		$applid = $CI->db2->query("select applid from settlement_basic where case_no ='$case_no'");
-		return $applid->row()->applid;
+		if ($applid->num_rows() > 0) {
+			return $applid->row()->applid;
+		} else {
+			return "NA";
+		}
+		
 	}
 
 	public function getDeptApprovalStatusFromSettlementBasic($dist_code, $case_no)
@@ -811,7 +816,12 @@ class UtilClass
 			$CI->db2 = $this->dbswitch($dist_code);
 
 			$remarks = $CI->db2->query("select * from settlement_proceeding where case_no= '$case_no' and office_from ='DPT' and office_to ='DC' and status='R' order by id desc");
-			return $remarks->row()->note_on_order;
+			// return $remarks->row()->note_on_order;
+			if ($remarks->num_rows() > 0) {
+				return $remarks->row()->note_on_order;
+			} else {
+				return "NA";
+			}
 		}
 
 		public function getVGRRevertedRemarksByCaseNo($dist_code, $case_no)

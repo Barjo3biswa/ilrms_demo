@@ -3509,7 +3509,7 @@ class NcSettlement extends MY_Controller
             $deptRevertedStatus = "<small class='bg-success'></small>";
             }
 
-          $link = base_url() . "index.php/Basundhara/settlementBasu/?app=".$application_no . "&dist_code=" .$dist_code;
+          $link = base_url() . "index.php/Basundhara/settlementBasuNew/?app=".$application_no . "&dist_code=" .$dist_code;
           $view_case = "<a href=".$link." class='btn btn-sm btn-primary' target='_blank'><i class='fa fa-eye'></i> &nbsp;Details</a>";
 
           $button = $view_case;

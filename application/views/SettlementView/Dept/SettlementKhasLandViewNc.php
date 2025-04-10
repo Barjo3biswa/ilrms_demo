@@ -237,7 +237,7 @@
                   <!-- Tribal Belt -->
                   <div class="row p-2 px-5">
                     <div class="col-md-6">
-                      <label for="formGroupExampleInput"><strong><?= $sl_count++ ?>.</strong> Wheather the Proposed Land falls under Triibal Belt/Block
+                      <label for="formGroupExampleInput"><strong><?= $sl_count++ ?>.</strong>Whether the proposed land falls under Tribal Belt/ Block
                         occupation?</label>
                     </div>
                     <div class="col-md-6">
@@ -469,7 +469,7 @@
                   <!-- Family Reservation -->
                   <div class="row p-2 px-5">
                     <div class="col-md-6">
-                      <label for="formGroupExampleInput"><strong><?= $sl_count++ ?>.</strong>Whether applicant family has occupied any land in the lot ?</label>
+                      <label for="formGroupExampleInput"><strong><?= $sl_count++ ?>.</strong>Whether applicant and his/her family has occupied any land in the state ?</label>
                     </div>
                     <div class="col-md-6">
                       <div class="form-check form-check-inline">

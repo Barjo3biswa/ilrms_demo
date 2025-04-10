@@ -1211,6 +1211,10 @@ class Basundharamodel extends CI_Model
     {
         $sql = "truncate table cab_id_list, cab_memo_list";
         $data  = $this->db->query($sql);
+        
+        $sql = "truncate table mb3_cabinet_list, mb3_case_list";
+        $data  = $this->db->query($sql);
+        
         return $data;
     }
 

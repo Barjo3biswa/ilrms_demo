@@ -94,6 +94,8 @@ class DeptTenant extends MY_Controller
         }
         else
         {
+            $data['assistant_list'] = $this->db->query("SELECT * FROM depart_users WHERE designation=? 
+                                    AND active_deactive=?", array('ASSISTANT', 'E'))->result();
             $data['verificationType'] = JS_VERIFICATION;
             $data['_view'] = 'tenant/tenant_landing_js';
         }
@@ -180,7 +182,9 @@ class DeptTenant extends MY_Controller
 
                     $ast_verification = '<small class="text-success">AST Verified</small></br>';
                     $viewBtn = "<a href='".$url."' class='btn btn-sm btn-success' target='_viewAstVerificationDetails'>view ASO Checklist Report</a>";
-                    $ast_verification_status = $ast_verification . $viewBtn;
+                    // $ast_verification_status = $ast_verification . $viewBtn;
+                    $asst_remarks = $row->ast_remarks;
+                    $ast_verification_status = $ast_verification . 'Remark: '.$asst_remarks;
                 }
                 if($ast_verification == 'R'){
                     $url = base_url('DeptTenant/viewAssistantVerificationDetails');
@@ -189,7 +193,8 @@ class DeptTenant extends MY_Controller
 
                     $ast_verification = '<small class="text-danger">Reverted by AST </small></br>';
                     $viewBtn = "<a href='".$url."' class='btn btn-sm btn-danger' target='_viewAstVerificationDetails'>view ASO Checklist Report</a>";
-                    $ast_verification_status = $ast_verification . $viewBtn;
+                    // $ast_verification_status = $ast_verification . $viewBtn;
+                    $ast_verification_status = $ast_verification ;
                 }
 
                 // if($sec_verification == NULL){
@@ -435,6 +440,16 @@ class DeptTenant extends MY_Controller
             $remarks     = $this->input->post('remarks');
             $verificationType     = $this->input->post('verificationType');
             $allSelectedList = $this->input->post('selectedList');
+            $selectAssistant    = $this->input->post('selectAssistant');
+            if(empty($selectAssistant))
+            {
+
+                echo json_encode(array(
+                    'responseType' => 1,
+                    'message'      => '#WARNING8457: Please select a assistant before forwarding',
+                ));
+                return false; 
+            }
             if (!empty($allSelectedList)) 
                 {
                     foreach ($allSelectedList as $caseN) 
@@ -443,6 +458,18 @@ class DeptTenant extends MY_Controller
                         if($verificationType == 'DPT_JS_VERIFICATION')
                         {
                             $this->db2 =  $this->dbswitch2($dist_code);
+                            $checkAstAsgn = $this->db2->query("SELECT * FROM settlement_basic WHERE case_no=? AND 
+                                        assign_ast_code IS NOT NULL AND dept_js_approve=?", 
+                                            array($case_no, 'A'));
+                                       // echo $this->db2->last_query(); die;
+                            if($checkAstAsgn->num_rows() > 0)
+                            {
+                                echo json_encode(array(
+                                    'responseType' => 1,
+                                    'message'      => '#WARNING474: Case has already been verified by Assistant and returned to department !!!',
+                                ));
+                                return false;
+                            }
                             $this->db2->trans_begin();
                             $updateData = array(
                                 'dept_js_approve' => 'A',

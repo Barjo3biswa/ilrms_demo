@@ -73,7 +73,7 @@ class DeptJuridicalModel extends CI_Model
         return $cases->result();
     }
 
-    public function getPendingCaseListDetails($dbb, $start, $length, $order, $dist_code, $searchByCol_0)
+    public function getPendingCaseListDetails($dbb, $start, $length, $order, $dist_code, $searchByCol_0,$juridical_cat)
     {
         // Determine column and direction for ordering
         $col = 0;
@@ -98,12 +98,19 @@ class DeptJuridicalModel extends CI_Model
 
         // Build the query to fetch data
         $dbb->select('*');
-        $dbb->from('settlement_basic');
-        $dbb->where('dist_code', $dist_code);
-        $dbb->where('pending_officer', 'DPT');
-        $dbb->where('pending_office', 'DPT');
-        $dbb->where('service_code', '45');
-        $dbb->where('status', 'W');
+        $dbb->from('settlement_basic sb');
+        $dbb->join('settlement_institution_details si', 'sb.case_no = si.case_no');
+        $dbb->where('sb.dist_code', $dist_code);
+        $dbb->where('sb.pending_officer', 'DPT');
+        $dbb->where('sb.pending_office', 'DPT');
+        $dbb->where('sb.service_code', '45');
+        $dbb->where('sb.status', 'W');
+        $dbb->where('si.ins_cat_type_co', $juridical_cat);
+        $dbb->group_start();
+        $dbb->where('add_cases_to_memo', 'N');
+        $dbb->or_where('add_cases_to_memo IS NULL', null, false);
+        $dbb->group_end();
+
 
         // Apply limit and offset
         $dbb->limit($length, $start);
@@ -112,20 +119,24 @@ class DeptJuridicalModel extends CI_Model
         }
         $query = $dbb->get();
 
-        // echo $dbb->last_query(); die;
-
         // Check if there are results
         if ($query->num_rows() > 0) {
             $data['data_results'] = $query->result();
 
             // Build the query to count total records
             $dbb->select('*');
-            $dbb->from('settlement_basic');
+            $dbb->from('settlement_basic sb');
+            $dbb->join('settlement_institution_details si', 'sb.case_no = si.case_no');
             $dbb->where('dist_code', $dist_code);
             $dbb->where('pending_officer', 'DPT');
             $dbb->where('pending_office', 'DPT');
             $dbb->where('status', 'W');
-            $dbb->where('service_code', '45');
+            $dbb->where('sb.service_code', '45');
+            $dbb->where('si.ins_cat_type_co', $juridical_cat);
+            $dbb->group_start();
+            $dbb->where('add_cases_to_memo', 'N');
+            $dbb->or_where('add_cases_to_memo IS NULL', null, false);
+            $dbb->group_end();
 
             if ($searchByCol_0 != null) {
                 $dbb->like('case_no', $searchByCol_0);

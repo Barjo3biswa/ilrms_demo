@@ -18,8 +18,8 @@
 
                       <!-- Bhumi Alt -->
                       <div class="col-md-4">
-                            <?php if(($settlement_basic['bhumiputra_confirmation']   == 'YES') || ($settlement_basic['bhumiputra_confirmation']   == 'Yes')){ ?>
-                                    <i class="fa fa-link" aria-hidden="true"></i>
+                            <?php if(($bhumi->bhumiputra_confirmation == "Yes") || ($bhumi->bhumiputra_confirmation == "YES")){ ?>
+                                    <!-- <i class="fa fa-link" aria-hidden="true"></i>
                                     <a href="<?php echo base_url();?>index.php/Basundhara/bhumiPutra?<?php
                                     if(trim($settlement_basic['bhumiputra_certificate_type']) == 'CERT'){
                                         echo "cer_number=".$settlement_basic['bhumiputra_certificate_no'];
@@ -27,7 +27,7 @@
                                         echo "ack_number=".$settlement_basic['bhumiputra_certificate_no'];
                                     }?>" target="BhumiPutra">
                                         <u><span class="text-primary" style="font-size:16px;">View Certificate</span></u>
-                                    </a>
+                                    </a> -->
                             <?php } else{ ?>
                                         <span for="" class="bg-warning"><b>Certificate Not Available!</b></span>
                             <?php } ?>

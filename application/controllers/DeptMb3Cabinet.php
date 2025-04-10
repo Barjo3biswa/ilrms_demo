@@ -9,6 +9,8 @@ class DeptMb3Cabinet extends MY_Controller
         $this->load->helper('download');
         $this->load->model('mb3Cabinet/DeptMb3CabinetModel');
         $this->load->model('basundhara/Basundharamodel');
+        $this->load->model('mb3Cabinet/DeptRevertModel');
+        
         $this->db2 = NULL;
     }
 
@@ -435,6 +437,7 @@ class DeptMb3Cabinet extends MY_Controller
         $this->form_validation->set_rules('district_id', 'District ID', 'trim|required|is_natural');
         $this->form_validation->set_rules('cabinet_id', 'Cabinet ID', 'required');
 
+        
 
         if ($this->form_validation->run() == FALSE) 
         {
@@ -461,28 +464,56 @@ class DeptMb3Cabinet extends MY_Controller
             else 
             {
                 if (!empty($allSelectedList)) 
-                    // $all_service_name = array();
-                    // foreach($allSelectedList as $cases){
-                    //     $service = $this->DeptMb3CabinetModel->getserviceFromCaseNo($cases); 
-                    //     array_push($all_service_name,$service);
-                    // }
-                
-                    // $unique_arr = array_unique($all_service_name);
-                    // if(count($unique_arr) != 1){
-                    //     echo json_encode(array(
-                    //         'responseType' => 1,
-                    //         'message' => 'Please add the same Services in the Cabinet Only',
-        
-                    //     )); 
-                    // }
-
-                    // var_dump($allSelectedList); die;
-
-
                     {
+                        $dharDB = $this->dbswitch2($dist_code);
                         foreach ($allSelectedList as $caseN) 
                         {
+
+                            $ins_id2 = $this->db->query("select ins_cat, service_code from mb3_cabinet_list where cab_id = ?",array($cabmemo_id))->row();
+                            $service_code = $ins_id2->service_code;
                             $case_no =$caseN;
+                            if($service_code == '45'){
+                                $ins_id = $dharDB->query("select ins_cat_type_co from settlement_institution_details where case_no = ?",array($case_no))->row()->ins_cat_type_co;
+                                // $ins_id2 = $this->db->query("select ins_cat, service_code from mb3_cabinet_list where cab_id = ?",array($cabmemo_id))->row();
+                                $test = 'settlement_institution_details: '.$ins_id.', mb3_cabinet_list: '.$ins_id2->ins_cat;
+    
+                                if($ins_id != $ins_id2->ins_cat){
+                                    log_message('error', "#MISMATCH_INS_ID: Please select correct CAB memo : $test");
+                                    echo json_encode(array(
+                                        'responseType' => 1,
+                                        'message' => '#ERR495: The cabinet ID you selected does not match the one associated with the selected case(s)',
+                                    ));
+                                    return false;
+                                }
+                            }
+                            
+                            
+                            
+                            $table='settlement_basic';
+                            if($service_code == '40'){
+                            $table= 'reclass_suite_basic';
+                            }else if($service_code == '44'){
+                                $table= 'petition_basic';
+                            }
+                            // var_dump($table);
+                            // die;
+
+                            $checkForAsstVerify = $dharDB->query("SELECT * FROM $table WHERE (ast_verification IS NULL OR ast_verification!=?) 
+                                                        AND case_no=?", array('A', $caseN))->num_rows();
+
+                            if($checkForAsstVerify == 1){
+                                log_message('error', "#ERR490: Asst verification pending : ". $dharDB->last_query());
+                                echo json_encode(array(
+                                    'responseType' => 1,
+                                    'message' => '#ERR490: Add to cabinet is not possible because the assistant verification for a few selected case(s) is still pending',
+
+                                ));
+                                return false;
+                            }
+
+
+                            
+                            
                             $service = $this->DeptMb3CabinetModel->getserviceFromCaseNo($case_no);
                             $this->db->trans_begin();
 
