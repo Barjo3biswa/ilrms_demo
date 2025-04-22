@@ -645,7 +645,7 @@
                 <small class="case-no-bg"><?= $_GET['app'] ?>, <?= $case_no ?></small> )
               </h5>
               <?php
-              include(APPPATH . "views/SettlementView/Dept/DepartmentView.php");
+              include(APPPATH . "views/SettlementView/Dept/DepartmentViewNC.php");
               ?>
             </div>
             <!-- Department end -->

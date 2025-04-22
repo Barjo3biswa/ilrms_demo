@@ -293,6 +293,8 @@ class DeptMb3Cabinet extends MY_Controller
                 $service_name ='Reclassification';
             }elseif($service_select == '42'){
                 $service_name ='Occupancy tenant';
+            }elseif($service_select == '25'){
+                $service_name ='Svamitra';
             }elseif($service_select == '45'){
                 $cat_name = $this->db->query("SELECT abbr FROM ins_master_category WHERE id=?", array($row->ins_cat))->row()->abbr;
                 $service_name ='Non Individual Juridical Entities<br>('.$cat_name.')';
@@ -577,11 +579,11 @@ class DeptMb3Cabinet extends MY_Controller
                                     $this->db2 =  $this->dbswitch2($dist_code);
 
                                     $this->db2->trans_begin();
-
+                                    //NCKH
                                     $updateData = array(
                                         'add_cases_to_memo' => 'Y',
                                     );
-                                    if($service == 'TGPP'){
+                                    if($service == 'TGPP' || $service == 'NCKH'){
                                         $updatePetBasicStatus = $this->DeptMb3CabinetModel->updateSettlementBasicForCab($this->db2,$case_no, $dist_code, $updateData);
                                     }elseif($service == 'CONV'){
                                         $updatePetBasicStatus = $this->DeptMb3CabinetModel->updatePetitionBasicForCab($this->db2,$case_no, $dist_code, $updateData);
@@ -599,6 +601,8 @@ class DeptMb3Cabinet extends MY_Controller
                                             'message' => 'SERVICE_NOT_DEFINED: Failed to Add Cases to Cabinet Memo',
     
                                         ));  
+                                        return false;
+
                                     }   
 
                                     $table = $service == 'RECL' ? 'reclass_suite_basic' : 'settlement_basic';
@@ -617,8 +621,8 @@ class DeptMb3Cabinet extends MY_Controller
 
                                     }else{
 
-                                    $this->db2->trans_commit();
-                                    $this->db->trans_commit();
+                                        $this->db2->trans_commit();
+                                        $this->db->trans_commit();
 
                                     }
 
@@ -816,6 +820,8 @@ class DeptMb3Cabinet extends MY_Controller
                 }
             }elseif($service_code == '40'){ // reclassification
                 $this->load->view('mb3Cabinet/mb3_memo_document_reclass_suite', $data);  
+            }elseif($service_code == '25'){
+                $this->load->view('mb3Cabinet/mb3_memo_document_tenant', $data);  
             }else{
                 echo "Service not Found";
                 exit;
@@ -1668,6 +1674,8 @@ class DeptMb3Cabinet extends MY_Controller
             $this->load->view('mb3Cabinet/notification_juridical', $data);  
         }elseif($service_code == '40'){ // reclassification
             $this->load->view('mb3Cabinet/notification_reclass_suite', $data);  
+        }elseif($service_code == '25'){ // nc
+            $this->load->view('mb3Cabinet/notification_NC_svamitra', $data);  
         }else{
             echo "Service not Found";
             exit;
@@ -1933,7 +1941,7 @@ class DeptMb3Cabinet extends MY_Controller
             $data['dist_name_slash'] = $slashSeparatedDistName;
         }
         // var_dump($service_code);
-        // die;
+        // die; application/views/mb3Cabinet/notification_for_sign_nc copy.php
         if($service_code == '43'){
             $this->load->view('mb3Cabinet/notification_for_sign_tea_grant', $data);  
         }elseif($service_code == '44'){
@@ -1946,6 +1954,9 @@ class DeptMb3Cabinet extends MY_Controller
         }elseif($service_code == '40'){
             $data['ins_cat_name']=$this->insMasterCategory($cab_data->ins_cat);
             $this->load->view('mb3Cabinet/notification_for_sign_reclass', $data);  
+        }elseif($service_code == '25'){
+            $data['ins_cat_name']=$this->insMasterCategory($cab_data->ins_cat);
+            $this->load->view('mb3Cabinet/notification_for_sign_nc', $data);  
         }else{
             echo "Service not Found";
             exit;
@@ -2234,7 +2245,7 @@ class DeptMb3Cabinet extends MY_Controller
                 $case_no = $caseDist->case_no;
                 $service = $this->DeptMb3CabinetModel->getserviceFromCaseNo($case_no);
                 // var_dump($service);exit;
-                if($service == 'TGPP' || $service == 'SOTU' || $service == 'SLIJ'){
+                if($service == 'TGPP' || $service == 'SOTU' || $service == 'SLIJ' || $service == 'NCKH'){
                     $applid[] = $this->utilclass->getApplidFromCaseNo($caseDist->dist_code,$caseDist->case_no);
                 }elseif($service == 'CONV'  || $service == 'RECL'){
                     $applid[] = $this->utilclass->getApplidFromCaseNoBasundharApplications($caseDist->dist_code,$caseDist->case_no);
@@ -2353,7 +2364,7 @@ class DeptMb3Cabinet extends MY_Controller
                         {
                             
                             $caseListForFinalSubmitByDist = $this->DeptMb3CabinetModel->getCaseListDetailsForFinalSubmit($this->db,$cabinet_id,$user_code,$dist->dist_code)->result();
-
+                            $dc_user_code = $this->db2->query("select * from loginuser_table where user_code like 'DC%' and user_code not like 'DCN%' and dist_code='$dist->dist_code' and dis_enb_option ='E'")->row()->user_code;
                             if (!empty($caseListForFinalSubmitByDist)) 
                             {
                                 $this->db2 = $this->dbswitch2($dist->dist_code);
@@ -2365,7 +2376,7 @@ class DeptMb3Cabinet extends MY_Controller
                                 {
                                     $case_no = $row->case_no;
                                     $service = $this->DeptMb3CabinetModel->getserviceFromCaseNo($case_no);
-                                    if($service == 'TGPP' || $service == 'SOTU' || $service == 'SLIJ'){
+                                    if($service == 'TGPP' || $service == 'SOTU' || $service == 'SLIJ' || $service == 'NCKH'){
                                         $basic_table_name = 'settlement_basic';
                                         $proceeding_table_name = 'settlement_proceeding';
                                     }elseif($service == 'CONV'){
@@ -2387,8 +2398,21 @@ class DeptMb3Cabinet extends MY_Controller
                                     // Update in Settlement Basic
                                     if($final_status == TEMP_APPROVE_BY_DEPT)
                                     {
-                                        $pending_officer = $service == 'SLIJ' ? MB_DEPUTY_COMM : MB_CIRCLE_OFFICER;
-                                        $pending_office = $service == 'SLIJ' ? MB_DEPUTY_COMM : MB_CIRCLE_OFFICER;
+                                        
+                                        if($service =='SOTU')
+                                        {
+                                            $pending_officer = MB_DEPUTY_COMM;
+                                            $pending_office = MB_DEPUTY_COMM;
+                                            $status = MB_PENDING;
+                                        }
+                                        else
+                                        {
+                                            $pending_officer = MB_CIRCLE_OFFICER;
+                                            $pending_office = MB_CIRCLE_OFFICER;
+                                            $status = MB_PAYMENT_REQUEST;
+                                        }
+
+                                
                                         // $pending_officer = MB_CIRCLE_OFFICER;
                                         // $pending_office = MB_CIRCLE_OFFICER;
 
@@ -2398,15 +2422,15 @@ class DeptMb3Cabinet extends MY_Controller
                                                 'case_no'           => $case_no,
                                                 'status'            => 'P',
                                                 'dept_note_yn'      => 'Y',
-                                                'co_user_code '     => 'DC',
-                                                'new_status'        =>'DPDCA',
-                                                'add_off_desig'     =>'DC',
+                                                'co_user_code '     => $dc_user_code,
+                                                'new_status'        => 'DPDCA',
+                                                'add_off_desig'     => 'DC',
                                             ];
                                         }elseif($service == 'RECL'){
 
                                             $updateBasicData[] = [
                                                 'case_no'         => $case_no,
-                                                'status'          => MB_PAYMENT_REQUEST,
+                                                'status'          => $status,
                                                 'pending_officer' => $pending_officer,
                                                 'pending_office'  => $pending_office,
                                                 'dept_code'       => $user_code,
@@ -2419,9 +2443,11 @@ class DeptMb3Cabinet extends MY_Controller
                                         }
                                         else{
 
+
+
                                             $updateBasicData[] = [
                                                 'case_no'         => $case_no,
-                                                'status'          => MB_PAYMENT_REQUEST,
+                                                'status'          => $status,
                                                 'pending_officer' => $pending_officer,
                                                 'pending_office'  => $pending_office,
                                                 'dept_code'       => $user_code,
@@ -2485,8 +2511,8 @@ class DeptMb3Cabinet extends MY_Controller
 
                                 $this->db2->trans_begin();
                                 $updateBasicStatus = $this->db2->update_batch($basic_table_name,$updateBasicData,'case_no');
-                                echo $this->db2->last_query();
-                                die;
+                                // echo $this->db2->last_query();
+                                // die;
                                 if($updateBasicStatus<=0 || $this->db2->affected_rows() <= 0)
                                 {
                                     $this->db2->trans_rollback();

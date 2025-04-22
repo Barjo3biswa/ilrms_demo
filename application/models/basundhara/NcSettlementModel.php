@@ -1334,6 +1334,10 @@ class NcSettlementModel extends CI_Model
         // $dbb->where('sb.service_code !=', SETTLEMENT_PGR_VGR_LAND_ID);
         $dbb->where('sb.service_code', 25);
         $dbb->where('sm.digital_sign_status', DIGITAL_SIGN_STATUS);
+        $dbb->group_start()
+            ->where('add_cases_to_memo', 'N')
+            ->or_where('add_cases_to_memo IS NULL', null, false)
+            ->group_end();
         $dbb->limit($length, $start);
         $query = $dbb->get();
         if ($query->num_rows() > 0) {
@@ -2824,5 +2828,13 @@ class NcSettlementModel extends CI_Model
         }
     }
 
+    public function getSettlementVgrReservation($case)
+    {
+        $applicants = $this->db2->select()
+            ->where('case_no', $case)
+            // ->where('type', RESERVE_VGR)
+            ->get('settlement_vgr_pgr_reservation');
+        return $applicants->result();
+    }
 
 }

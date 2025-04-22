@@ -2636,6 +2636,7 @@ class NcSettlement extends MY_Controller
             } else {
                 $updateData = array(
                     'verified_by_asst'  => 2,
+                    'ast_verification' => 'A',
                     'user_code' => $user_code,
                     'verified_ast_remarks' => $verification_remarks
                 );
@@ -3509,13 +3510,14 @@ class NcSettlement extends MY_Controller
             $deptRevertedStatus = "<small class='bg-success'></small>";
             }
 
-          $link = base_url() . "index.php/Basundhara/settlementBasuNew/?app=".$application_no . "&dist_code=" .$dist_code;
+          $link = base_url() . "index.php/NcSettlement/settlementBasuNew/?app=".$application_no . "&dist_code=" .$dist_code;
           $view_case = "<a href=".$link." class='btn btn-sm btn-primary' target='_blank'><i class='fa fa-eye'></i> &nbsp;Details</a>";
 
           $button = $view_case;
           
           $json[] = array(
-            $row->case_no . '@' . $row->meeting_id . '@' . $row->proposal_id,
+            // $row->case_no . '@' . $row->meeting_id . '@' . $row->proposal_id,
+            $row->case_no,
             $case_no . $app_no .$deptRevertedStatus,
             '<small>' .$service .'</small>',
             $proposal_name . $meeting_name . $view_minute,
@@ -3548,6 +3550,225 @@ class NcSettlement extends MY_Controller
       echo json_encode($response);
     }
   }
+
+
+
+  function settlementBasuNew()
+    {
+        $settlement['application_no'] = $application_no = $this->input->get('app');
+
+        $dist_code = $this->input->get('dist_code');
+
+        $this->db2 = $this->dbswitch2($dist_code);
+        $sql = "Select case_no from settlement_basic where applid='$application_no' ";
+        $settlement['case_no'] = $case_no = $this->db2->query($sql)->row()->case_no;
+        $settlement['settlement_basic'] = $this->NcSettlementModel->getSettlementBasic($case_no);
+        $settlement['settlement_applicant']  = $this->NcSettlementModel->getSettlementApplicant($case_no);
+        //var_dump($settlement['settlement_applicant']);die();
+        $settlement['settlement_dag_details'] = $this->NcSettlementModel->getSettlementDagDetails($case_no);
+        $settlement['settlement_dag_area'] = $this->NcSettlementModel->getSettlementDagArea($case_no);
+        $settlement['settlement_proceeding'] = $this->NcSettlementModel->getSettlementProceeding($case_no);
+        $settlement['settlement_ap_lmnote'] = $this->NcSettlementModel->getSettlementLmNote($case_no);
+        $settlement['supportive_document'] = $this->NcSettlementModel->getSupportiveDocuments($case_no);
+        $settlement['proceedings']   = $this->NcSettlementModel->getSettlementProceeding($case_no);
+        // Newly added on 08/09/2022
+        $settlement['applicants_buyers']   = $this->NcSettlementModel->getAllApplicantBuyers($case_no);
+        $settlement['applicants_owners']   = $this->NcSettlementModel->getAllApplicantOwners($case_no);
+        $settlement['applicants_encroacher']   = $this->NcSettlementModel->getAllApplicantEncroacher($case_no);
+        $settlement['applicants_riotee_nok']   = $this->NcSettlementModel->getAllApplicantRioteeNok($case_no);
+
+        // New Added Settlemet Reservation Details
+        $settlement['roadside_reservation']   = $this->NcSettlementModel->getSettlementRoadsideReservation($case_no);
+        $settlement['family_reservation']   = $this->NcSettlementModel->getSettlementFamilyReservation($case_no);
+        $settlement['vgr_reservation']   = $this->NcSettlementModel->getSettlementVgrReservation($case_no);
+
+        // Premium Calculation Details
+        if($settlement['settlement_basic']["service_code"] != SETTLEMENT_SPECIAL_CULTIVATORS_ID)
+        {
+            $this->db2->trans_begin();
+            $settlement_premium_insertion = $this->NcSettlementModel->premiumReCalculation($this->db2,$case_no);
+
+            if($settlement_premium_insertion != null)
+            {   
+                $data['old_dag_flag_message'] = false;
+                if($settlement_premium_insertion['status'] == 3)
+                {
+                    log_message('error', '#ERRLOGPREMIUM: Old dag area flag found for this case, please check premium amount and area, if found accurate then proceed. Case No '. $case_no. 'and query is '.$this->db2->last_query());
+                    // $settlement['old_dag_flag_message'] = '<h6 class="alert-danger text-danger text-center">Old dag area flag found for this case, please check premium amount and area, if found accurate then proceed. If you want to update the premium, you can use modification request</h6>';
+                }
+                else
+                {
+                    if($settlement_premium_insertion!=null && $settlement_premium_insertion['status'] == 1)
+                    {
+                        $this->db2->trans_rollback();
+                        log_message('error', '#ERROR99003: Unable to re calculate premium. Case No '. $case_no. 'and query is '.$this->db2->last_query());
+                    }
+                }
+               
+            }
+            if($this->db2->trans_status() === FALSE)
+            {
+                $this->db2->trans_rollback();
+            }else{
+                $this->db2->trans_commit();
+            }
+
+        }
+        // Premium Calculation Details End
+
+        // Premium Calculation Details for Cultivator
+        if($settlement['settlement_basic']["service_code"] == SETTLEMENT_SPECIAL_CULTIVATORS_ID)
+        {
+            $this->db2->trans_begin();
+            $settlement_premium_insertion = $this->NcSettlementModel->premiumReCalculationTea($this->db2,$case_no);
+
+            if($settlement_premium_insertion != null)
+            {   
+                $data['old_dag_flag_message'] = false;
+                if($settlement_premium_insertion['status'] == 3)
+                {
+                    log_message('error', '#ERRLOGPREMIUMTEA: Old dag area flag found for this case, please check premium amount and area, if found accurate then proceed. Case No '. $case_no. 'and query is '.$this->db2->last_query());
+                }
+                else
+                {
+                    if($settlement_premium_insertion!=null && $settlement_premium_insertion['status'] == 1)
+                    {
+                        $this->db2->trans_rollback();
+                        log_message('error', '#ERRLOGPREMIUMTEA2: Unable to re calculate premium. Case No '. $case_no. 'and query is '.$this->db2->last_query());
+                    }
+                }
+               
+            }
+            if($this->db2->trans_status() === FALSE)
+            {
+                $this->db2->trans_rollback();
+            }else{
+                $this->db2->trans_commit();
+            }
+
+        }
+        // Premium Calculation Details for Cultivator End
+
+        $settlement['premium_data']  = $this->NcSettlementModel->getSettlementPremium($case_no);
+        $settlement['landmark_data'] = $this->NcSettlementModel->getSettlementDagArea($case_no);
+        $settlement['possession_data']   = $this->NcSettlementModel->getAllPossessionDetails($case_no);
+
+
+        //*******getting the deleted settlement_dag_details data from settlement_deleted_data table */
+        $deletedEnc=$this->NcSettlementModel->getDeletedEncroacher($case_no);
+        $deletedEncArray = array();
+        foreach($deletedEnc as $encroacherDeleted_data)
+        {
+            $deletedEncArray[] = json_decode($encroacherDeleted_data->table_data);
+        }
+        $settlement['deleted_encroacher'] = $deletedEncArray;
+
+        //***********getting the settlement_applicant occupiers data from settlement_deleted_data table */
+        $deletedDags=$this->NcSettlementModel->getDeletedDags($case_no);
+        $deletedData = array();
+        foreach($deletedDags as $deleteDag){
+            $deletedData[] = json_decode($deleteDag->table_data);
+        }
+        $settlement['deleted_dags'] = $deletedData;
+        
+
+         //****getting tribe cat and under tribal belt data from backup */
+        $getJsonBackup = $this->NcSettlementModel->getJsonDataFromBackup($case_no);
+        if(isset($getJsonBackup))
+        {
+            if($getJsonBackup)
+            {
+                $json_settlement =  json_decode($getJsonBackup->data);
+
+                foreach($json_settlement->settlements as $jsonSettle)
+                {
+                    if($jsonSettle->is_applicant == 1)
+                    {
+                        $settlement['backup_tribe_category'] = $jsonSettle->tribe_category;
+                        $settlement['backup_under_tribe_belts'] = $jsonSettle->under_tribe_belts;
+                    }
+                }
+            }
+        }
+
+        //calling API for Aadhaar photo 
+        $curl_handle = curl_init();
+        curl_setopt($curl_handle, CURLOPT_URL, API_LINK_MB3 . "getApplicantPhoto");
+
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST,  2);
+        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query(array(
+            'application_no'             => $application_no,
+
+        )));
+        $get_aadhaar_photo = curl_exec($curl_handle);
+        curl_close($curl_handle);
+
+
+        if ($get_aadhaar_photo != 'n') {
+            $settlement['aadhaar_b64_decoded'] = "<img src = data:" . $this->imageDecodeBase64($get_aadhaar_photo) . ";base64," . $get_aadhaar_photo . " class='img-thumbnail' alt='Adhar Photo' width='170' height='200'>";
+        }
+
+        //calling API for Aadhaar photo end
+
+        //   calling API for self declaration data
+        $sql = "Select basundhara from basundhar_application where dharitree='$case_no' ";
+        $settlement['rtps_app_no'] = $basundhara = $this->db2->query($sql)->row();
+
+        $url = API_LINK_MB3 . "serviceResponseBasu?application_no=" . $application_no;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,  2);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        // var_dump($output);
+        // die;
+        $output = json_decode($output);
+
+        $settlement['documents'] = $output->documents;
+        $settlement['query'] = $output->query;
+        $settlement['property'] = $output->property;
+        $settlement['aadhar'] = $output->aadhar;
+
+        $settlement['nextKin'] = $output->nextKin;
+        foreach ($output->selfDeclaration as $selfDec) {
+            $settlement['selfDeclarationDetails'] = json_decode($selfDec->dec_details);
+        }
+
+        if (isset($case_no)) {
+
+            if ($output->application->service_code == SETTLEMENT_TENANT_ID) {
+                $settlement['service_name'] = 'SETTLEMENT TENANT';
+                $settlement['_view'] = 'SettlementView/Dept/SettlementTenantView';
+            } elseif ($output->application->service_code == SETTLEMENT_AP_TRANSFER_ID) {
+                $settlement['service_name'] = 'SETTLEMENT AP TRANSFER LAND';
+                $settlement['_view'] = 'SettlementView/Dept/SettlementApTransferredView';
+            } elseif ($output->application->service_code == SETTLEMENT_TRIBAL_COMMUNITY_ID) {
+                $settlement['service_name'] = 'SETTLEMENT TRIBAL COMMUNITY';
+                $settlement['_view'] = 'SettlementView/Dept/SettlementTribalCommunityView';
+            } elseif ($output->application->service_code == SETTLEMENT_KHAS_LAND_ID) {
+                $settlement['service_name'] = 'SETTLEMENT KHAS LAND';
+                $settlement['_view'] = 'SettlementView/Dept/SettlementKhasLandView';
+            } elseif ($output->application->service_code == SETTLEMENT_PGR_VGR_LAND_ID) {
+                $settlement['service_name'] = 'SETTLEMENT VGR PGR LAND';
+                $settlement['_view'] = 'SettlementView/Dept/SettlementPgrVgrView';
+            } elseif ($output->application->service_code == SETTLEMENT_SPECIAL_CULTIVATORS_ID) {
+                $settlement['service_name'] = 'SETTLEMENT SPECIAL CULTIVATORS';
+                $settlement['_view'] = 'SettlementView/Dept/SettlementSpecialCultivatorsView';
+	    } elseif ($output->application->service_code == SETTLEMENT_NC_KHAS_LAND_ID) {
+                $settlement['service_name'] = 'SETTLEMENT NC KHAS LAND';
+                $settlement['_view'] = 'SettlementView/Dept/SettlementKhasLandViewNc';
+            }
+        } else {
+            $settlement['_view'] = 'SettlementView/Dept/CaseNotFound';
+        }
+        $this->load->view('layouts/main', $settlement);
+    }
 
 
 
@@ -3611,7 +3832,7 @@ class NcSettlement extends MY_Controller
             $verify = "<small class='text-warning'>Sent to Reverify</small>";
             }
 
-          $link = base_url() . "index.php/Basundhara/settlementBasu/?app=".$application_no . "&dist_code=" .$dist_code;
+          $link = base_url() . "index.php/NcSettlement/settlementBasuNew/?app=".$application_no . "&dist_code=" .$dist_code;
           $view_case = "<a href=".$link." class='btn btn-sm btn-warning' target='_blank'><i class='fa fa-eye'></i> &nbsp;Details</a>";
 
           $button = $view_case;

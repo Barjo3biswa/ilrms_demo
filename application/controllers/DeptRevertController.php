@@ -110,6 +110,8 @@ class DeptRevertController extends MY_Controller
             } else {
                 $table = 'reclass_suite_basic';
             }
+
+            
             $checkForAsstVerify = $this->DeptRevertModel->checkForAsstVerification($dbb,$commaSeparatedCases,$table);
             echo json_encode(array(
                 'revertedCases' => $revertedCases,

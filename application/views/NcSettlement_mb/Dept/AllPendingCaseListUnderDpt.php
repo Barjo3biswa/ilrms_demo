@@ -265,7 +265,7 @@
 
 <!-- Modal for Adding Cases to CAB Memo -->
 <div class="modal" role="dialog" id="bulkRecommendedModal" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog" role="document">
+    <!-- <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header  bg-primary">
                 <h6 class="modal-title text-center" id="exampleModalLongTitle">
@@ -297,6 +297,41 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary btn-sm" id="verifyModalClose">NO</button>
                 <button type="button" class="btn btn-primary btn-sm" id="markAndRecommendedWithoutVerify">Yes Add</button>
+            </div>
+        </div>
+    </div> -->
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title text-center" id="exampleModalLongTitle"></h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="selectDistrict">Select Cabinet Memo </label>
+                    <select class="form-select" aria-label="Default select example" name="selectCabMemo" id="cabinetMemo" required>
+                    </select>
+                </div>
+                <div class="form-group">
+                        <label for="selectedCasesTable">Selected Cases</label>
+                        <div style="height: 200px; overflow-y: auto;">
+                            <table id="selectedCasesTable" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Sl No.</th>
+                                        <th>Case No.</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Selected cases will be displayed here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" id="verifyModalClose">NO</button>
+                <button type="button" class="btn btn-primary btn-sm" id="confirmAddCasesToMemo">Yes Add</button>
             </div>
         </div>
     </div>
@@ -438,6 +473,65 @@
 <script>
     $(document).on('click', '#bulkRecommendedByDepartment', function() {
         $('#bulkRecommendedModal').modal('show');
+        var district_id = $("#selectDistrict").val();
+        var service_code = '25';
+        selectedList = [];
+        $('.selectMark:checked').each(function(i) {
+            selectedList[i] = $(this).val();
+        });
+
+        if (selectedList.length > 0) {
+            $.ajax({
+                // url: baseurl + "DeptConversion/getCabMemos",
+                url: baseurl + "DeptMb3Cabinet/getCabMemos",
+                type: 'POST',
+                data: {
+                    district_id: district_id,
+                    service_code: service_code
+                },
+                dataType: 'json',
+                success: function(data) {
+                    var select = $('#cabinetMemo');
+                    select.empty();
+                    select.append('<option disabled selected>-------------Select MB 3.0 Cab Memo----------------</option>');
+                    if (data.message) {
+                        showWarningMessage(data.message);
+                    } else {
+                        console.log(data);
+                        $.each(data, function(index, cab) {
+                            var option = $('<option></option>')
+                                .attr('value', cab.cab_id)
+                                .text(cab.cab_memo_name + ' ( Cab ID: ' + cab.cab_id + ' )' + ' ( Service: ' + cab.service_name + ' )');
+                            select.append(option);
+                        });
+
+                        // Display the selected cases in the table within the modal
+                        var selectedCasesTableBody = $('#selectedCasesTable tbody');
+                        selectedCasesTableBody.empty();
+                        $.each(selectedList, function(i, caseId) {
+                            var row = $('<tr></tr>');
+                            row.append($('<td></td>').html( (i + 1))); // Serial number with icon
+                            row.append($('<td class="text-gradient"></td>').text(caseId));
+                            row.append($('<td></td>').html(`
+                                <button class="btn btn-danger btn-sm remove-case-btn">
+                                    <i class="fas fa-trash-alt"></i> Remove
+                                </button>`));
+                            selectedCasesTableBody.append(row);
+                        });
+
+                        // Update the modal header with the total number of selected cases
+                        $('#markAddCasesToMemoModal .modal-title').text('Add Cases to Cabinet Memo (Total Selected Cases: ' + selectedList.length + ')');
+                        $('#markAddCasesToMemoModal').modal('show');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error: ' + status + error);
+                    showWarningMessage("An error occurred while loading the cabinet memos");
+                }
+            });
+        } else {
+            showWarningMessage("Please Select Case Before Add To Memo");
+        }
     });
 
     $(document).on('click', '#verifyModalClose', function () {
@@ -1133,4 +1227,57 @@
     });
 });
 
+
+$(document).on('click', '#confirmAddCasesToMemo', function() {
+        var district_id = $("#selectDistrict").val();
+        var cabinet_id = $("#cabinetMemo").val();
+
+        if (selectedList.length > 0) {
+            const applicant = {
+                selectedList: selectedList,
+                district_id: district_id,
+                cabinet_id: cabinet_id,
+            };
+            console.log(applicant);
+
+            $.ajax({
+                url: baseurl + "DeptMb3Cabinet/addMb3CasesToCabMemo",
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                success: function(data) {
+                    if (data.responseType == 1) {
+                        showErrorMessage(data.message);
+                    } else if (data.responseType == 2) {              
+                        Swal.fire({
+                            backdrop:true,
+                            allowOutsideClick: false,
+                            text: data.message,
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                actions: 'my-actions',
+                                confirmButton: 'order-2',
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload(true);
+                            }
+                        });
+                    } else if (data.responseType == 3) {
+                        Swal.fire({
+                            html: data.message,
+                            icon: "warning",
+                            confirmButtonColor: "#3085d6",
+                            confirmButtonText: "OK"
+                        });
+                    } else {
+                        showErrorMessage("List Not Generated.");
+                    }
+                },
+                data: JSON.stringify(applicant)
+            });
+        } else {
+            showWarningMessage("Please Select Case Before Adding to Cabinet Memo");
+        }
+    });
 </script>

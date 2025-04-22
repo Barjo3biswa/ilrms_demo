@@ -356,6 +356,8 @@ class UtilClass
 			return  'SETTLEMENT SPECIAL CULTIVATORS';
 		} elseif ($service_code == OFFLINE_SETTLEMENT_ID) {
 			return  'OFFLINE SETTLEMENT KHAS LAND';
+		} elseif ($service_code == SETTLEMENT_NC_KHAS_LAND_ID) {
+			return  'SETTLEMENT NC KHAS LAND';
 		}
 	}
         function getLmNote($lm_note)
