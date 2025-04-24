@@ -846,5 +846,32 @@ class DeptJuridical extends MY_Controller
     }
 
 
+    public function decodeBase64($encoded_string)
+    {
+        $file_data = base64_decode($encoded_string);
+        $file = finfo_open();
+        $mime_type = finfo_buffer($file, $file_data, FILEINFO_MIME_TYPE);
+
+        $file_type = explode('/', $mime_type)[0];
+        $extension = explode('/', $mime_type)[1];
+
+        $acceptable_mimetypes = [
+            'application/pdf',
+            'image/jpg',
+            'image/jpeg',
+            'image/png',
+        ];
+
+
+        if (!in_array($mime_type, $acceptable_mimetypes)) {
+            log_message("error", "error occured" . json_encode($mime_type));
+            throw new \Exception('File mime type not acceptable');
+        }
+        log_message("error", "No error occured" . json_encode($mime_type));
+        return array('content_type' => $mime_type, 'extension' => $extension);
+    }
+
+
+
 }
 

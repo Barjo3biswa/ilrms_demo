@@ -1759,8 +1759,14 @@
                         <?php foreach($dhardocuments as $docs): ?>
                             <tr>
                                 <th>
-                                    <a target='download'
+                                    <!-- <a target='download'
                                     href="<?php echo base_url()?>index.php/DeptTeaGrant/downloadDocument?doc_id=<?=$docs->id?>&dist_code=<?=$basic['dist_code']?>"><i class="fa fa-paperclip"></i> <?=$docs->file_name;?>
+                                        <?php if(isset($docs->dag_no)){ ?>
+                                            <span class="alert-danger"><small> for Dag no: <strong><?=$docs->dag_no?></strong></small></span>
+                                        <?php }?>
+                                    </a> -->
+                                    <a target='download'
+                                    href="<?php echo base_url()?>index.php/DeptTeaGrant/viewDharitreeDocument?dist_code=<?=$basic['dist_code']?>&doc_id=<?=$docs->id?>"><i class="fa fa-paperclip"></i> <?=$docs->file_name;?>
                                         <?php if(isset($docs->dag_no)){ ?>
                                             <span class="alert-danger"><small> for Dag no: <strong><?=$docs->dag_no?></strong></small></span>
                                         <?php }?>
@@ -1822,7 +1828,7 @@
                         const docContainer = $('#apidoc');
                         for (var x = 0; x < arr.document.length; x++) {
                             const doclink = $('<a>', {
-                                href: baseurl + 'DeptTeaGrant/document/' + arr.document[x].name,
+                                href: baseurl + 'Basundhara/document3/' + arr.document[x].name,
                                 text: '' + arr.document[x].file_details,
                                 target: '_blank'
                             });

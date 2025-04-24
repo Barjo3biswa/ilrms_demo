@@ -81,7 +81,18 @@ class Mb3RevertController extends MY_Controller
         $service_code  = $param;
         // var_dump($service_code);
         // die;
-        $service_name = $this->db->query("select name from services where id = $service_code limit 1")->row();
+        // $service_name = $this->db->query("select name from services where id = $service_code limit 1")->row()->name;
+        if($service_code=='43'){//tea grant
+            $service_name = "Limited Conversion of Tea grant land to periodic patta";
+        }else if($service_code=='44'){//conversion
+            $service_name = "AP to PP Conversion";
+        }else if($service_code=='45'){//juridical 
+            $service_name = "Non individual Juridical Entities";
+        }else if($service_code=='40'){//reclassification suite
+            $service_name = "Reclassification suite";
+        }else if($service_code=='42'){//occupancy tenants
+            $service_name = "Occupancy tenants";
+        }
         // var_dump($service_name);
         // die;
         $dist_code     = trim($this->input->post('selectDistrict'));
@@ -98,7 +109,7 @@ class Mb3RevertController extends MY_Controller
     public function getViewLink($service_code,$dist_code,$case_no){
         $link = '#';
         if($service_code=='43'){//tea grant
-
+            $link = base_url() . "index.php/DeptTeaGrant/teaGrantCaseDetails/?dist_code=" . urlencode($dist_code) . "&case_no=" . urlencode($case_no);
         }else if($service_code=='44'){//conversion
             $link = base_url() . "index.php/DeptConversionNew/conversionCaseDetails/?dist_code=" . $dist_code . "&case_no=" . $case_no;
         }else if($service_code=='45'){//juridical 

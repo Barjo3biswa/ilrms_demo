@@ -857,6 +857,62 @@ class DeptTeaGrant extends MY_Controller
 
     }
 
+    public function viewDharitreeDocument($dist_code, $doc_id)
+    {
+
+        $url = 'http://172.16.3.95/dharrtpsapi/index.php/DharRtpsApi/downloadDocument';
+       // $url = 'http://' . $this->getApiIp($dist_code) . '/dharrtpsapi/index.php/DharRtpsApi/downloadDocument';
+
+        $curl_handle = curl_init();
+        curl_setopt($curl_handle, CURLOPT_URL, $url);
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query(array(
+            'dist_code' => $dist_code,
+            'doc_id'    => $doc_id,
+        )));
+        $result = curl_exec($curl_handle);
+        curl_close($curl_handle);
+        //echo json_encode($result); 
+        // log_message("error", "Not Getting API Data :" . json_encode($result));
+        if (!$result || $result == null) {
+            log_message("error", "Not Getting API Data :" . json_encode($result));
+            return null;
+        }
+        $document_info = $this->decodeBase64($result)['content_type'];
+        $decoded = base64_decode($result);
+        header('Content-type: ' . $document_info . ';charset=utf-8');
+        echo $decoded;
+    }
+
+
+    public function decodeBase64($encoded_string)
+    {
+        $file_data = base64_decode($encoded_string);
+        $file = finfo_open();
+        $mime_type = finfo_buffer($file, $file_data, FILEINFO_MIME_TYPE);
+
+        $file_type = explode('/', $mime_type)[0];
+        $extension = explode('/', $mime_type)[1];
+
+        $acceptable_mimetypes = [
+            'application/pdf',
+            'image/jpg',
+            'image/jpeg',
+            'image/png',
+        ];
+
+
+        if (!in_array($mime_type, $acceptable_mimetypes)) {
+            log_message("error", "error occured" . json_encode($mime_type));
+            throw new \Exception('File mime type not acceptable');
+        }
+        log_message("error", "No error occured" . json_encode($mime_type));
+        return array('content_type' => $mime_type, 'extension' => $extension);
+    }
+
 
 }
 

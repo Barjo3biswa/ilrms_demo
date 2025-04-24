@@ -412,223 +412,7 @@ class Basundhara extends MY_Controller
 
 
 
-    function settlementBasuNew()
-    {
-        $settlement['application_no'] = $application_no = $this->input->get('app');
-
-        $dist_code = $this->input->get('dist_code');
-
-        $this->db2 = $this->dbswitch2($dist_code);
-        $sql = "Select case_no from settlement_basic where applid='$application_no' ";
-        $settlement['case_no'] = $case_no = $this->db2->query($sql)->row()->case_no;
-        $settlement['settlement_basic'] = $this->basundharamodel->getSettlementBasic($case_no);
-        $settlement['settlement_applicant']  = $this->basundharamodel->getSettlementApplicant($case_no);
-        //var_dump($settlement['settlement_applicant']);die();
-        $settlement['settlement_dag_details'] = $this->basundharamodel->getSettlementDagDetails($case_no);
-        $settlement['settlement_dag_area'] = $this->basundharamodel->getSettlementDagArea($case_no);
-        $settlement['settlement_proceeding'] = $this->basundharamodel->getSettlementProceeding($case_no);
-        $settlement['settlement_ap_lmnote'] = $this->basundharamodel->getSettlementLmNote($case_no);
-        $settlement['supportive_document'] = $this->basundharamodel->getSupportiveDocuments($case_no);
-        $settlement['proceedings']   = $this->basundharamodel->getSettlementProceeding($case_no);
-        // Newly added on 08/09/2022
-        $settlement['applicants_buyers']   = $this->basundharamodel->getAllApplicantBuyers($case_no);
-        $settlement['applicants_owners']   = $this->basundharamodel->getAllApplicantOwners($case_no);
-        $settlement['applicants_encroacher']   = $this->basundharamodel->getAllApplicantEncroacher($case_no);
-        $settlement['applicants_riotee_nok']   = $this->basundharamodel->getAllApplicantRioteeNok($case_no);
-
-        // New Added Settlemet Reservation Details
-        $settlement['roadside_reservation']   = $this->basundharamodel->getSettlementRoadsideReservation($case_no);
-        $settlement['family_reservation']   = $this->basundharamodel->getSettlementFamilyReservation($case_no);
-        $settlement['vgr_reservation']   = $this->basundharamodel->getSettlementVgrReservation($case_no);
-
-        // Premium Calculation Details
-        if($settlement['settlement_basic']["service_code"] != SETTLEMENT_SPECIAL_CULTIVATORS_ID)
-        {
-            $this->db2->trans_begin();
-            $settlement_premium_insertion = $this->basundharamodel->premiumReCalculation($this->db2,$case_no);
-
-            if($settlement_premium_insertion != null)
-            {   
-                $data['old_dag_flag_message'] = false;
-                if($settlement_premium_insertion['status'] == 3)
-                {
-                    log_message('error', '#ERRLOGPREMIUM: Old dag area flag found for this case, please check premium amount and area, if found accurate then proceed. Case No '. $case_no. 'and query is '.$this->db2->last_query());
-                    // $settlement['old_dag_flag_message'] = '<h6 class="alert-danger text-danger text-center">Old dag area flag found for this case, please check premium amount and area, if found accurate then proceed. If you want to update the premium, you can use modification request</h6>';
-                }
-                else
-                {
-                    if($settlement_premium_insertion!=null && $settlement_premium_insertion['status'] == 1)
-                    {
-                        $this->db2->trans_rollback();
-                        log_message('error', '#ERROR99003: Unable to re calculate premium. Case No '. $case_no. 'and query is '.$this->db2->last_query());
-                    }
-                }
-               
-            }
-            if($this->db2->trans_status() === FALSE)
-            {
-                $this->db2->trans_rollback();
-            }else{
-                $this->db2->trans_commit();
-            }
-
-        }
-        // Premium Calculation Details End
-
-        // Premium Calculation Details for Cultivator
-        if($settlement['settlement_basic']["service_code"] == SETTLEMENT_SPECIAL_CULTIVATORS_ID)
-        {
-            $this->db2->trans_begin();
-            $settlement_premium_insertion = $this->basundharamodel->premiumReCalculationTea($this->db2,$case_no);
-
-            if($settlement_premium_insertion != null)
-            {   
-                $data['old_dag_flag_message'] = false;
-                if($settlement_premium_insertion['status'] == 3)
-                {
-                    log_message('error', '#ERRLOGPREMIUMTEA: Old dag area flag found for this case, please check premium amount and area, if found accurate then proceed. Case No '. $case_no. 'and query is '.$this->db2->last_query());
-                }
-                else
-                {
-                    if($settlement_premium_insertion!=null && $settlement_premium_insertion['status'] == 1)
-                    {
-                        $this->db2->trans_rollback();
-                        log_message('error', '#ERRLOGPREMIUMTEA2: Unable to re calculate premium. Case No '. $case_no. 'and query is '.$this->db2->last_query());
-                    }
-                }
-               
-            }
-            if($this->db2->trans_status() === FALSE)
-            {
-                $this->db2->trans_rollback();
-            }else{
-                $this->db2->trans_commit();
-            }
-
-        }
-        // Premium Calculation Details for Cultivator End
-
-        $settlement['premium_data']  = $this->basundharamodel->getSettlementPremium($case_no);
-        $settlement['landmark_data'] = $this->basundharamodel->getSettlementDagArea($case_no);
-        $settlement['possession_data']   = $this->basundharamodel->getAllPossessionDetails($case_no);
-
-
-        //*******getting the deleted settlement_dag_details data from settlement_deleted_data table */
-        $deletedEnc=$this->basundharamodel->getDeletedEncroacher($case_no);
-        $deletedEncArray = array();
-        foreach($deletedEnc as $encroacherDeleted_data)
-        {
-            $deletedEncArray[] = json_decode($encroacherDeleted_data->table_data);
-        }
-        $settlement['deleted_encroacher'] = $deletedEncArray;
-
-        //***********getting the settlement_applicant occupiers data from settlement_deleted_data table */
-        $deletedDags=$this->basundharamodel->getDeletedDags($case_no);
-        $deletedData = array();
-        foreach($deletedDags as $deleteDag){
-            $deletedData[] = json_decode($deleteDag->table_data);
-        }
-        $settlement['deleted_dags'] = $deletedData;
-        
-
-         //****getting tribe cat and under tribal belt data from backup */
-        $getJsonBackup = $this->basundharamodel->getJsonDataFromBackup($case_no);
-        if(isset($getJsonBackup))
-        {
-            if($getJsonBackup)
-            {
-                $json_settlement =  json_decode($getJsonBackup->data);
-
-                foreach($json_settlement->settlements as $jsonSettle)
-                {
-                    if($jsonSettle->is_applicant == 1)
-                    {
-                        $settlement['backup_tribe_category'] = $jsonSettle->tribe_category;
-                        $settlement['backup_under_tribe_belts'] = $jsonSettle->under_tribe_belts;
-                    }
-                }
-            }
-        }
-
-        //calling API for Aadhaar photo 
-        $curl_handle = curl_init();
-        curl_setopt($curl_handle, CURLOPT_URL, API_LINK_MB3 . "getApplicantPhoto");
-
-        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST,  2);
-        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query(array(
-            'application_no'             => $application_no,
-
-        )));
-        $get_aadhaar_photo = curl_exec($curl_handle);
-        curl_close($curl_handle);
-
-
-        if ($get_aadhaar_photo != 'n') {
-            $settlement['aadhaar_b64_decoded'] = "<img src = data:" . $this->imageDecodeBase64($get_aadhaar_photo) . ";base64," . $get_aadhaar_photo . " class='img-thumbnail' alt='Adhar Photo' width='170' height='200'>";
-        }
-
-        //calling API for Aadhaar photo end
-
-        //   calling API for self declaration data
-        $sql = "Select basundhara from basundhar_application where dharitree='$case_no' ";
-        $settlement['rtps_app_no'] = $basundhara = $this->db2->query($sql)->row();
-
-        $url = API_LINK_MB3 . "serviceResponseBasu?application_no=" . $application_no;
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,  2);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        // var_dump($output);
-        // die;
-        $output = json_decode($output);
-
-        $settlement['documents'] = $output->documents;
-        $settlement['query'] = $output->query;
-        $settlement['property'] = $output->property;
-        $settlement['aadhar'] = $output->aadhar;
-
-        $settlement['nextKin'] = $output->nextKin;
-        foreach ($output->selfDeclaration as $selfDec) {
-            $settlement['selfDeclarationDetails'] = json_decode($selfDec->dec_details);
-        }
-
-        if (isset($case_no)) {
-
-            if ($output->application->service_code == SETTLEMENT_TENANT_ID) {
-                $settlement['service_name'] = 'SETTLEMENT TENANT';
-                $settlement['_view'] = 'SettlementView/Dept/SettlementTenantView';
-            } elseif ($output->application->service_code == SETTLEMENT_AP_TRANSFER_ID) {
-                $settlement['service_name'] = 'SETTLEMENT AP TRANSFER LAND';
-                $settlement['_view'] = 'SettlementView/Dept/SettlementApTransferredView';
-            } elseif ($output->application->service_code == SETTLEMENT_TRIBAL_COMMUNITY_ID) {
-                $settlement['service_name'] = 'SETTLEMENT TRIBAL COMMUNITY';
-                $settlement['_view'] = 'SettlementView/Dept/SettlementTribalCommunityView';
-            } elseif ($output->application->service_code == SETTLEMENT_KHAS_LAND_ID) {
-                $settlement['service_name'] = 'SETTLEMENT KHAS LAND';
-                $settlement['_view'] = 'SettlementView/Dept/SettlementKhasLandView';
-            } elseif ($output->application->service_code == SETTLEMENT_PGR_VGR_LAND_ID) {
-                $settlement['service_name'] = 'SETTLEMENT VGR PGR LAND';
-                $settlement['_view'] = 'SettlementView/Dept/SettlementPgrVgrView';
-            } elseif ($output->application->service_code == SETTLEMENT_SPECIAL_CULTIVATORS_ID) {
-                $settlement['service_name'] = 'SETTLEMENT SPECIAL CULTIVATORS';
-                $settlement['_view'] = 'SettlementView/Dept/SettlementSpecialCultivatorsView';
-	    } elseif ($output->application->service_code == SETTLEMENT_NC_KHAS_LAND_ID) {
-                $settlement['service_name'] = 'SETTLEMENT NC KHAS LAND';
-                $settlement['_view'] = 'SettlementView/Dept/SettlementKhasLandViewNc';
-            }
-        } else {
-            $settlement['_view'] = 'SettlementView/Dept/CaseNotFound';
-        }
-        $this->load->view('layouts/main', $settlement);
-    }
-    //////////////////////////
+    
 
     // Document View API From RTPS
     function document($doc)
@@ -5262,6 +5046,30 @@ class Basundhara extends MY_Controller
             }
         } else {
             echo "User Not Authorized to View this Page";
+        }
+    }
+
+    function document3($doc)
+    {
+        $curl_handle = curl_init();
+        curl_setopt($curl_handle, CURLOPT_URL, API_LINK_MB3 . "attachment");
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query(array(
+            'name' => $doc
+        )));
+        $result = curl_exec($curl_handle);
+        $result = json_decode($result);
+        $output = $result->raw_data;
+        $content_type = $result->mime_type;
+        $check = explode("/", $content_type);
+        if ($check[1] == 'pdf') {
+            $output = base64_decode($output);
+            header('Content-type: application/pdf');
+            echo $output;
+        } else {
+            echo '<img src="data:' . $content_type . ';base64,' . $output . '" />';
         }
     }
     

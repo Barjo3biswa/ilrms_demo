@@ -286,7 +286,7 @@ class DeptJuridicalModel extends CI_Model
         //     ->where('is_final', 1)
         //     ->get('settlement_premium');
         // return $premium->row();
-        $premium = "SELECT sp.*,spa.area,spl.land_type,spr.house_type,spr.rate_type as ratetype FROM settlement_premium sp inner join settlement_premium_area spa on spa.paid=sp.area_name inner join settlement_premium_land_type spl on spl.plid=sp.land_type inner join settlement_premium_rate spr on spr.prid=sp.rate_type where case_no='$case' and is_final=1";
+        $premium = "SELECT * FROM settlement_premium  where case_no='$case' and is_final=1";
         $data = $db->query($premium);
         return $data->result();
     }

@@ -1222,6 +1222,31 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row p-2" >
+                            <div class="col-md-6">
+                                <span><strong><?=$sl_count++?>.</strong> Whether the land prayed for wetland ?</span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-check-inline">
+                                    <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="wetland_area"
+                                            value="YES" disabled <?php if (trim($lmnote->wetland_area) == YES){ echo "checked"; } ?>
+                                    />
+                                    <label class="form-check-label" for="inlineRadio1">YES</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input
+                                            class="form-check-input"
+                                            type="radio"
+                                            name="wetland_area"
+                                            value="NO" disabled <?php if (trim($lmnote->wetland_area) == NO){ echo "checked"; } ?>
+                                    />
+                                    <label class="form-check-label" for="inlineRadio2">No</label>
+                                </div>
+                            </div>
+                        </div>
 
                             <?php
                             $display_old_nature=0;
@@ -1549,7 +1574,7 @@
                             <tr>
                                 <th>
                                     <a target='download'
-                                    href="<?php echo base_url()?>index.php/DeptJuridical/viewDharitreeDocument?doc_id=<?=$docs->id?>&dist_code=<?=$basic['dist_code']?>"><i class="fa fa-paperclip"></i> <?=$docs->file_name;?>
+                                    href="<?php echo base_url()?>index.php/DeptJuridical/viewDharitreeDocument/<?=$docs->id?>/<?=$basic['dist_code']?>"><i class="fa fa-paperclip"></i> <?=$docs->file_name;?>
                                         <?php if(isset($docs->dag_no)){ ?>
                                             <span class="alert-danger"><small> for Dag no: <strong><?=$docs->dag_no?></strong></small></span>
                                         <?php }?>
@@ -1619,7 +1644,7 @@
                         {
                             for (var x = 0; x < arr.document.length; x++) {
                                 const doclink = $('<a>', {
-                                    href: baseurl + 'DeptJuridical/document/' + arr.document[x].name,
+                                    href: baseurl + 'Basundhara/document3/' + arr.document[x].name,
                                     text: '' + arr.document[x].file_details,
                                     target: '_blank'
                                 });
@@ -2179,8 +2204,37 @@
                                             value="<?=$dagsprem->zonal_valuation?>" readonly/>
                                 </div>
                             </div>
-
                             <div class="row">
+                            <?php if($dagsprem->ins_reclass_proposed != null){ ?>
+                                
+                                    <div class="form-group col-md-6 ">
+                                        <label>Reclassification Premium for dag no <strong><span id="dag_prem"><?=$dagsprem->dag_no?></span></strong></label>
+
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <input type="text" class="form-control" id="reclass_prem" name='reclass_prem<?=$dagsprem->dag_no?>' value="<?=$dagsprem->ins_reclass_amount?>" readonly>
+
+                                    </div>
+                                    
+                            <?php } ?>
+                            </div> 
+                            <div class="row">
+                            <?php if($instituteDetails->ins_cat_type_co == 10 || $instituteDetails->ins_cat_type_co == 11){ ?>
+                                
+                                    <div class="form-group col-md-6 ">
+                                        <label>Land revenue for dag no <strong><span id="dag_prem"><?=$dagsprem->dag_no?></span></strong></label>
+
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <input type="text" class="form-control" id="landrevenue_prem" name='landrevenue_prem<?=$dagsprem->dag_no?>' value="<?=$dagsprem->land_revenue_years?>" readonly>
+
+                                    </div>
+                                    
+                            <?php } ?>
+                            </div> 
+                            
+
+                            <!-- <div class="row">
                                 <div class="form-group col-md-6 ">
                                     <label>Selected Area</label>
 
@@ -2189,8 +2243,8 @@
                                     <input type="text" class="form-control" id="prem_area" name='area<?=$dagsprem->dag_no?>' value="<?=$dagsprem->area?>" readonly>
 
                                 </div>
-                            </div>
-                            <div class="row">
+                            </div> -->
+                            <!-- <div class="row">
                                 <div class="form-group col-md-6 ">
                                     <label for="title">Purpose of Land</label>
 
@@ -2198,8 +2252,8 @@
                                 <div class="form-group col-md-6 ">
                                     <input type="text" class="form-control" name='land_type<?=$dagsprem->dag_no?>' value="<?=$dagsprem->land_type?>" readonly>
                                 </div>
-                            </div>
-                            <div class="row">
+                            </div> -->
+                            <!-- <div class="row">
                                 <div class="form-group col-md-6 ">
                                     <label for="title">Encroached land type</label>
 
@@ -2208,10 +2262,10 @@
                                     <input type="text" class="form-control" id="prem_landtype" name='rate_type<?=$dagsprem->dag_no?>' value="<?=$dagsprem->house_type?>" readonly>
 
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="row" id="percentage<?=$dagsprem->dag_no?>">
                             </div>
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="form-group col-md-6 ">
                                     <label for="title">Is ST/SC/Widows/Person with disabilities?</label>
                                 </div>
@@ -2224,7 +2278,7 @@
                                     <br>
                                 </div>
 
-                            </div>
+                            </div> -->
                             <div class="row">
                                 <div class="form-group col-md-6 ">
                                     <label for="title">Total amount for dag no <strong><span id="dag_prem"><?=$dagsprem->dag_no?></span></strong></label>
@@ -2233,9 +2287,7 @@
                                     <input id="finalper<?=$dagsprem->dag_no?>" type="hidden" class="finalper<?=$dagsprem->dag_no?>" value="" name="finalper<?=$dagsprem->dag_no?>" />
                                     <input id="total_lessa<?=$dagsprem->dag_no?>" type="hidden" class="total_lessa<?=$dagsprem->dag_no?>" value="" name="total_lessa<?=$dagsprem->dag_no?>" />
                                     <input type="text" class="totalamount form-control" value="<?=$dagsprem->amount_dag?>" name="amount<?=$dagsprem->dag_no?>" readonly />
-                                    <?php if($dagsprem->ratetype=='R') { ?>
-                                        <span><b>(Amount: Rs @100/bigha based on above selected area)</b></span>
-                                    <?php }?>
+                                    
                                 </div>
                             </div>
                         <?php }?>
@@ -2251,21 +2303,19 @@
 
                             </div>
 
-                            <div class="row">
+                            <!--  <div class="row">
                                 <div class="form-group col-md-6 ">
                                     <label for="title">Payment Mode</label>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <?php if($dagsprem->is_full_pay =='YES') { ?>
+                                
                                         <label for="html">Full Payment</label>
-                                    <?php } else if ($dagsprem->is_full_pay =='NO') { ?>
-                                        <label for="css">30% Down Payment</label>
-                                    <?php } ?>
+                                    
 
                                     <br>
                                 </div>
 
-                            </div>
+                            </div> -->
 
                             <div class="row">
                                 <div class="form-group col-md-6 text-danger">
