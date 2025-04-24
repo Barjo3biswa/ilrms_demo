@@ -714,6 +714,24 @@
                     <?php endif;?>
                 </div>
 
+
+                <div class="dropdown-btn" id="nc-btn">
+	                <i class="fa-solid fa fa-check-circle"></i>&nbsp; Bhoodan 
+	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
+	            </div>
+                
+	            <div class="dropdown-container" id="nc-menu">
+	                <!-- Pending Cases Link -->
+                    <?php if ($this->session->userdata('designation') == DPT_JS) :?>
+                    <a href="<?php echo base_url() ?>index.php/Bhoodan/getAllCasesListByDept" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Pending Cases</a>
+                    <?php else:?>
+                        <a href="<?php echo base_url() ?>index.php/Bhoodan/getCasesListByDistrict" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Pending Cases</a>
+                    <?php endif;?>
+                    <?php if ($this->session->userdata('designation') == DPT_JS) :?>
+					    <a href="<?php echo base_url() ?>index.php/Bhoodan/getAllRevertedCasesListByDept" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Reverted Cases</a>
+                    <?php endif;?>
+                </div>
+
 	            <div class="dropdown-btn" id="tea-grant-btn">
 	                <i class="fa-solid fa fa-check-circle"></i>&nbsp; Tea Grant
 	                <i class="fa fa-fw fa-caret-down" style="padding-top: 15px; padding-right: 40px;"></i>
@@ -725,7 +743,7 @@
 	                    <i class="fa fa-clock-o"></i>&nbsp;Pending Cases
 	                </a>
                     <?php if ($this->session->userdata('designation') == DPT_JS) :?>
-                        <a href="#" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Reverted Cases</a>
+                        <a href="<?php echo base_url() . 'reverted-mb3-cases/43' ?>" class="nav-link"><i class="fa-solid fa fa-check-circle"></i>&nbsp;Reverted Cases</a>
                     <?php endif;?>
 	            </div>
 	            <!-- Tea grant ends -->
