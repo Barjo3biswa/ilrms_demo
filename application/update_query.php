@@ -15,3 +15,5 @@ alter table reclass_suite_basic add column add_off_desig varchar(5);
 
 alter table petition_basic add column dept_revert integer default 0;
 alter table petition_basic add column add_off_desig varchar(5);
+
+application\controllers\DeptTenant.php->getSelfDocApi:371

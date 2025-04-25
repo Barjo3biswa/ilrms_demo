@@ -190,13 +190,41 @@ class DeptRevertController extends MY_Controller
           $revert_remarks = strtok('(@)');
 
           //Update Array for Basic
-          $updateData[] = [
-            'case_no'         => $case_no,
-            'dept_js_approve' => 'N',
-            'status'          => 'R',
-            'add_off_desig'   => 'DC',
-            'dept_revert'   => 1,
-          ];
+
+          if($service_code == '40'){
+            $updateData[] = array(
+              'case_no'=> $case_no,
+              'status' => MB_REVERT,
+              'pending_officer' => MB_DEPUTY_COMM,
+              'dept_code' => MB_DEPARTMENT,
+              'dept_approval' => DPT_REVERTED,
+              'from_office'     => MB_DEPARTMENT,
+              'dept_revert' => 1,
+              'dept_js_approve' => 'N',
+              'pending_office' => 'DC'
+            );
+          }else if($service_code == '44'){
+            $updateData[] = [
+              'case_no'         => $case_no,
+              'dept_js_approve' => 'N',
+              'status'          => 'R',
+              'add_off_desig'   => 'DC',
+              'dept_revert'   => 1,
+            ];
+          }
+          else{
+            $updateData[] = array(
+              'case_no'=> $case_no,
+              'status' => MB_REVERT,
+              'pending_officer' => MB_DEPUTY_COMM,
+              'dept_code' => MB_DEPARTMENT,
+              'dept_approval' => DPT_REVERTED,
+              'from_office'     => MB_DEPARTMENT,
+              'dept_revert' => 1,
+              'dept_js_approve' => 'N',
+              'pending_office' => 'DC'
+            );
+          }
 
           $proceedingTable = $service_code == 44 ? 'petition_proceeding_dc_adc' : 'settlement_proceeding '; // 44 - conversion
 
@@ -206,6 +234,7 @@ class DeptRevertController extends MY_Controller
           if ($proceeding_id == null) {
             $proceeding_id = 1;
           }
+
 
           $proceeding_details = $this->db2->query("SELECT * FROM $proceedingTable WHERE case_no=? ORDER BY 
                                   proceeding_id DESC LIMIT 1", array($case_no))->row();
@@ -272,7 +301,7 @@ class DeptRevertController extends MY_Controller
                 'case_no'         => $case_no,
                 'proceeding_id'   => $proceeding_id,
                 'date_of_hearing' => date('Y-m-d h:i:s'),
-                'status'          => 'Revert',
+                'status'          => 'R',
                 'user_code'       => $user_code,
                 'co_order'        => $proceeding_details->co_order,
                 'note_on_order'   => $revert_remarks,
@@ -290,11 +319,11 @@ class DeptRevertController extends MY_Controller
                 'case_no'             => $case_no,
                 'date_of_hearing'     => date('Y-m-d h:i:s'),
                 'note_on_order'       => $revert_remarks,
-                'status'              => 'REVERT',
+                'status'              => 'R',
                 'user_code'           => $user_code,
                 'date_entry'          => date('Y-m-d h:i:s'),
                 'operation'           => 'E',
-                'office_from'         => 'DEPT',
+                'office_from'         => 'DPT',
                 'office_to'           => 'DC',
                 'operation'           => 'E',
                 'proceeding_id'       => $proceeding_id,
@@ -315,7 +344,44 @@ class DeptRevertController extends MY_Controller
               return;
             }else
             {
+              if(in_array($service_code,['45','39','40','25','42']))
+              {
+                $updateProposalData = array(
+                  'dept_status' => DEPT_PROPOSAL_CASE_REVERT,
+                );
+                if ($this->DeptRevertModel->updateProposalData($this->db2,$case_no, $updateProposalData) <= 0) {
+                    $this->db2->trans_rollback();
+                    log_message('error', '#ERRDUPDATE0001: Updation failed in settlement_proposal_cases for bulk Revert');
+                    log_message('error', $this->db2->last_query());
+                    echo json_encode(array(
+                        'responseType' => 1,
+                        'message' => '#ERRDUPDATE0001: Updation failed in settlement_proposal_cases. Kindly contact System Administrator',
+  
+                    ));
+                    return false;
+                }
+              }
+              
               $this->db2->trans_commit();
+              $this->load->model('basundhara/Basundharamodel');
+              $application_no = $this->Basundharamodel->getApplicationNoByCaseNo($this->db2,$case_no)->applid;
+              $rmk            = 'Revert to DC';
+              $status         = 'M';
+              $task           = MB_DEPUTY_COMM;
+              $pen            = MB_DEPUTY_COMM;
+              $case           = $case_no;
+              $rtps_status    = $this->Basundharamodel->postApiBasundharaMb3($application_no,$case,$rmk,$status,$task,$pen);
+              $rtps_status    = json_decode($rtps_status);
+
+              if(trim($rtps_status) != "y")
+              {
+                log_message("error", "#Error329: postApiBasundharaMb3 for case no $case_no !!!". json_encode($rtps_status));
+                echo json_encode(array(
+                  'responseType' => 1,
+                  'message' => "Error329: Failed to revert the case from department for case no $case_no !!!",
+                ));
+                return;
+              }
               echo json_encode(array(
                 'responseType' => 2,
                 'message' => 'Cases Reverted  to DC Successfully',

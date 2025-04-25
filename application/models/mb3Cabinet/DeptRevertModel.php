@@ -41,6 +41,16 @@ class DeptRevertModel extends CI_Model
        return $sql->num_rows();
     }
 
+    // update settlement Basic table
+    public function updateProposalData($dbb,$caseNo, $data)
+    {
+        $dbb->where('case_no', $caseNo);
+        $dbb->update('settlement_proposal_cases', $data);
+        return $dbb->affected_rows();
+    }
+
+
+
 
 
 

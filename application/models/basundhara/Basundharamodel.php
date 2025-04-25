@@ -3328,4 +3328,39 @@ public function getZoneSubclassDetailsByDagLocation($subdiv_code,$cir_code,$mouz
             ->get('villagewise_zone_info');
         return $zonalValue->result();
     }
+
+    function postApiBasundharaMb3($rtpsno, $case, $rmk, $status, $task, $pen)
+    {
+        $curl_handle = curl_init();
+        curl_setopt($curl_handle, CURLOPT_URL, API_LINK_MB3 . "applicationStatusUpdate");
+        curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl_handle, CURLOPT_SSL_VERIFYHOST,  2);
+        curl_setopt($curl_handle, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl_handle, CURLOPT_POSTFIELDS, http_build_query(array(
+            'application' => $rtpsno,
+            'dharitree' => $case,
+            'rmk' => $rmk,
+            'status' => $status,
+            'task' => $task,
+            'pen' => $pen,
+            'ip' => '10.177.7.141'
+        )));
+        $result = curl_exec($curl_handle);
+        $httpcode = curl_getinfo($curl_handle, CURLINFO_HTTP_CODE);
+        if ($httpcode != 200) {
+            log_message("error", " Curl-Error in api: " . API_LINK_MB3 . "applicationStatusUpdate with json_data: "
+                . json_encode(array(
+                    'application' => $rtpsno,
+                    'dharitree' => $case,
+                    'rmk' => $rmk,
+                    'status' => $status,
+                    'task' => $task,
+                    'pen' => $pen
+                )));
+            return false;
+        }
+        curl_close($curl_handle);
+        return $result;
+    }
 }
